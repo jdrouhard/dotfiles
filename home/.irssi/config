@@ -32,6 +32,14 @@ servers = (
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "no";
+  },
+  {
+    address = "localhost";
+    chatnet = "bitlbee";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "no";
   }
 );
 
@@ -41,12 +49,19 @@ chatnets = {
   bitlbee = { type = "IRC"; };
   tcoppi = { type = "IRC"; };
   lexmark = { type = "IRC"; };
+  "tcoppi-proxy" = { type = "IRC"; };
 };
 
 channels = (
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#hack"; chatnet = "tcoppi"; autojoin = "yes"; },
+  {
+    name = "&bitlbee";
+    chatnet = "bitlbee";
+    autojoin = "yes";
+    autosendcmd = "/say identify; /oper";
+  },
   { name = "#EA"; chatnet = "lexmark"; autojoin = "yes"; }
 );
 
