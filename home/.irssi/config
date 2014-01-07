@@ -9,25 +9,45 @@ servers = (
     autoconnect = "yes";
   },
   {
+    address = "colorscience.lpdev.prtdev.lexmark.com";
+    chatnet = "lexmark";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "no";
+  },
+  {
     address = "irc.tcoppi.net";
     chatnet = "tcoppi";
     port = "6697";
     use_ssl = "yes";
     ssl_verify = "no";
-    autoconnect = "yes";
+    autoconnect = "no";
   },
+  {
+    address = "localhost";
+    chatnet = "tcoppi-proxy";
+    port = "2777";
+    password = "proxypass";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "no";
+  }
 );
 
 chatnets = {
   Ubuntu = { type = "IRC"; };
   freenode = { type = "IRC"; };
+  bitlbee = { type = "IRC"; };
   tcoppi = { type = "IRC"; };
+  lexmark = { type = "IRC"; };
 };
 
 channels = (
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#hack"; chatnet = "tcoppi"; autojoin = "yes"; },
+  { name = "#EA"; chatnet = "lexmark"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -230,6 +250,10 @@ settings = {
     neat_colorize = "yes";
     neat_allow_shrinking = "yes";
   };
+  proxy = {
+    irssiproxy_password = "proxypass";
+    irssiproxy_ports = "tcoppi=2777";
+  };
 };
 keyboard = (
   { key = "^[[5;3~"; id = "command"; data = "nicklist scroll -10"; },
@@ -246,7 +270,7 @@ ignores = (
   {
     level = "JOINS PARTS QUITS";
     exception = "yes";
-    channels = ( "#hack" );
+    channels = ( "#hack", "#EA" );
   }
 );
 hilights = (
