@@ -239,10 +239,7 @@ statusbar = {
   };
 };
 settings = {
-  core = {
-    real_name = "John Drouhard";
-    user_name = "jdrouhard";
-  };
+  core = { real_name = "John Drouhard"; user_name = "jdrouhard"; };
   "fe-text" = { actlist_sort = "refnum"; };
   "fe-common/core" = {
     theme = "pbrisbin";
@@ -279,13 +276,9 @@ ignores = (
   { mask = "*zzz*"; level = "NICKS"; },
   { mask = "*afk*"; level = "NICKS"; },
   { mask = "*away*"; level = "NICKS"; },
-  { level = "JOINS QUITS"; },
-  { level = "ACTIONS PARTS"; },
-  { level = "MODES"; channels = ( "&bitlbee" ); },
   {
-    level = "JOINS PARTS QUITS";
-    exception = "yes";
-    channels = ( "#hack", "#EA" );
+    level = "ACTIONS JOINS PARTS QUITS MODES";
+    channels = ( "&bitlbee" );
   }
 );
 hilights = (

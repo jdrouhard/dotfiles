@@ -1,1 +1,0 @@
-/opt/irssi-libnotify/notify.pl
