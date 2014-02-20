@@ -6,6 +6,8 @@ export IVY_BACKUP_LOCATION=/source/ThirdParty
 
 export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
+export PATH=/opt/play:$PATH
+
 function gvim() { (/usr/bin/gvim -f "$@" &) }
 
 . ~/.vim/bundle/powerline/powerline/bindings/bash/powerline.sh
@@ -27,6 +29,4 @@ function tmup() {
     unset IFS;
     echo "Done"
 }
-
-export TFSPROXY=http://tfsproxy.pvi.com:8081
 

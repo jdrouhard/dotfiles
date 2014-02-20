@@ -62,7 +62,8 @@ channels = (
     autojoin = "yes";
     autosendcmd = "/say identify; /oper";
   },
-  { name = "#EA"; chatnet = "lexmark"; autojoin = "yes"; }
+  { name = "#EA"; chatnet = "lexmark"; autojoin = "yes"; },
+  { name = "#deployment"; chatnet = "lexmark"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -176,11 +177,10 @@ statusbar = {
         #user = { };
         window = { };
         window_empty = { };
-        # lag = { priority = "-1"; };
-        # more = { priority = "-1"; alignment = "right"; };
+        #lag = { priority = "-1"; };
+        #more = { priority = "-1"; alignment = "right"; };
         # typing_notice = { alignment = "right"; };
-        typing_notice = { };
-        # barend = { priority = "100"; alignment = "right"; };
+        #barend = { priority = "100"; alignment = "right"; };
       };
     };
 
@@ -229,6 +229,7 @@ statusbar = {
         # topicbarend = { priority = "100"; alignment = "right"; };
       };
     };
+
     awl_0 = {
       items = {
         barstart = { priority = "100"; };
@@ -239,17 +240,24 @@ statusbar = {
   };
 };
 settings = {
-  core = { real_name = "John Drouhard"; user_name = "jdrouhard"; };
-  "fe-text" = { actlist_sort = "refnum"; };
+  core = {
+    real_name = "John Drouhard";
+    user_name = "jdrouhard";
+    nick = "jdrouhard";
+  };
   "fe-common/core" = {
     theme = "pbrisbin";
     autolog = "yes";
     autolog_path = "~/.irssi/logs/$tag/$0/%Y-%m-%d.log";
     hilight_act_color = "%Y";
+    autoclose_windows = "yes";
+    term_charset = "utf-8";
+    window_history = "yes";
+    windows_auto_renumber = "yes";
   };
   "perl/core/scripts" = {
     nicklist_width = "31";
-    nicklist_height = "60";
+    nicklist_height = "68";
     awl_display_key = "$Q%K|$N%n$H$C$S ";
     awl_display_key_active = "$Q%K|$N%n$H%G%_$C%n$S ";
     awl_display_nokey = "[$N]$H$C$S ";
@@ -261,6 +269,7 @@ settings = {
     neat_left_actions = "no";
     neat_colorize = "yes";
     neat_allow_shrinking = "yes";
+    neat_colors = "rRgGybBmMcC";
   };
   proxy = {
     irssiproxy_password = "proxypass";
@@ -278,7 +287,7 @@ ignores = (
   { mask = "*away*"; level = "NICKS"; },
   {
     level = "ACTIONS JOINS PARTS QUITS MODES";
-    channels = ( "&bitlbee" );
+    servertag = "bitlbee";
   }
 );
 hilights = (
