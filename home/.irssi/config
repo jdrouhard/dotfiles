@@ -180,6 +180,7 @@ statusbar = {
         #lag = { priority = "-1"; };
         #more = { priority = "-1"; alignment = "right"; };
         # typing_notice = { alignment = "right"; };
+        typing_notice = { };
         #barend = { priority = "100"; alignment = "right"; };
       };
     };
