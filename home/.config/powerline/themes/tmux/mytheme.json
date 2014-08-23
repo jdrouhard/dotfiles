@@ -1,15 +1,6 @@
 {
 	"default_module": "powerline.segments.common",
 	"segment_data": {
-		"uptime": {
-			"before": "⇑  "
-		},
-		"external_ip": {
-			"before": "ⓦ  "
-		},
-		"date": {
-			"before": "⌚ "
-		},
 		"system_load": {
 			"args": {
 				"format": "{avg:.2f}"

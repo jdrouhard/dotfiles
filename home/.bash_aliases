@@ -6,14 +6,17 @@ export IVY_BACKUP_LOCATION=/source/ThirdParty
 
 export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
-export PATH=/opt/play:$PATH
+export PATH=/opt/activator:$PATH
 
 function gvim() { (/usr/bin/gvim -f "$@" &) }
 
+powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
 . ~/.vim/bundle/powerline/powerline/bindings/bash/powerline.sh
 
 alias tmux="TERM=screen-256color-bce tmux"
-alias vim="vim --servername vim"
+#alias vim="vim --servername vim"
 
 function tmup() {
     echo -n "Updating to latest tmux environment...";
