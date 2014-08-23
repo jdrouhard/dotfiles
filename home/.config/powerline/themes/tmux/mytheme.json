@@ -5,12 +5,6 @@
 			"args": {
 				"format": "{avg:.2f}"
 			}
-		},
-		"weather": {
-			"args": {
-				"unit": "F",
-				"location_query": "66226"
-			}
 		}
 	},
 	"segments": {
@@ -33,7 +27,11 @@
 			},
 			{
 				"name": "weather",
-				"priority": 50
+				"priority": 50,
+				"args": {
+					"unit": "F",
+					"location_query": "66226"
+				}
 			},
 			{
 				"name": "date"
