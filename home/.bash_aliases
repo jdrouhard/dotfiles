@@ -6,7 +6,7 @@ export IVY_BACKUP_LOCATION=/source/ThirdParty
 
 export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
-export PATH=/opt/play:$PATH
+export PATH=/opt/play:$HOME/bin:$PATH
 
 function gvim() { (/usr/bin/gvim -f "$@" &) }
 
