@@ -1,12 +1,9 @@
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 
-export IVY_REPO_PATH=/source/ThirdParty
-export IVY_BACKUP_LOCATION=/source/ThirdParty
+#export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
-
-export PATH=/opt/activator:$PATH
+export EDITOR=vim
 
 function gvim() { (/usr/bin/gvim -f "$@" &) }
 
