@@ -1,7 +1,6 @@
 {
-	"default_module": "powerline.segments.common",
 	"segment_data": {
-		"system_load": {
+		"powerline.segments.common.sys.system_load": {
 			"args": {
 				"format": "{avg:.2f}"
 			}
@@ -10,41 +9,42 @@
 	"segments": {
 		"right": [
 			{
-				"name": "uptime",
+				"function": "powerline.segments.common.sys.uptime",
 				"priority": 50
 			},
 			{
-				"name": "external_ip",
+				"function": "powerline.segments.common.net.external_ip",
 				"priority": 50
 			},
 			{
-				"name": "network_load",
+				"function": "powerline.segments.common.net.network_load",
 				"priority": 50
 			},
 			{
-				"name": "system_load",
+				"function": "powerline.segments.common.sys.system_load",
 				"priority": 50
 			},
 			{
-				"name": "weather",
+				"function": "powerline.segments.common.wthr.weather",
 				"priority": 50,
 				"args": {
 					"unit": "F",
-					"location_query": "66226"
+					"location_query": "66061"
 				}
 			},
 			{
-				"name": "date"
+				"function": "powerline.segments.common.time.date"
 			},
 			{
-				"name": "date",
+				"function": "powerline.segments.common.time.date",
+				"name": "time",
 				"args": {
 					"format": "%H:%M",
 					"istime": true
 				}
 			},
 			{
-				"name": "hostname"
+				"function": "powerline.segments.common.net.hostname"
 			}
 		]
 	}
