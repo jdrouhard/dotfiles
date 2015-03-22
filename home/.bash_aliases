@@ -1,7 +1,7 @@
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 
-#export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 export EDITOR=vim
 

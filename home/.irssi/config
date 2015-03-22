@@ -35,8 +35,17 @@ servers = (
   },
   {
     address = "localhost";
-    chatnet = "bitlbee";
+    chatnet = "ngircd";
+    port = "6697";
+    use_ssl = "yes";
+    ssl_verify = "no";
+    autoconnect = "no";
+  },
+  {
+    address = "irc.twitch.tv";
+    chatnet = "twitch";
     port = "6667";
+    password = "oauth:4ur5te5qkau03arcvr2t3061gc9h587";
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "no";
@@ -46,24 +55,19 @@ servers = (
 chatnets = {
   Ubuntu = { type = "IRC"; };
   freenode = { type = "IRC"; };
-  bitlbee = { type = "IRC"; };
+  ngircd = { type = "IRC"; };
   tcoppi = { type = "IRC"; };
   lexmark = { type = "IRC"; };
   "tcoppi-proxy" = { type = "IRC"; };
+  twitch = { type = "IRC"; nick = "mazadin"; };
 };
 
 channels = (
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#hack"; chatnet = "tcoppi"; autojoin = "yes"; },
-  {
-    name = "&bitlbee";
-    chatnet = "bitlbee";
-    autojoin = "yes";
-    autosendcmd = "/say identify; /oper";
-  },
-  { name = "#EA"; chatnet = "lexmark"; autojoin = "yes"; },
-  { name = "#deployment"; chatnet = "lexmark"; autojoin = "yes"; }
+  { name = "#deployment"; chatnet = "lexmark"; autojoin = "yes"; },
+  { name = "#adamhorton"; chatnet = "twitch"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -276,6 +280,7 @@ settings = {
     irssiproxy_password = "proxypass";
     irssiproxy_ports = "tcoppi=2777";
   };
+  "fe-text" = { actlist_sort = "refnum"; };
 };
 keyboard = (
   { key = "^[[5;3~"; id = "command"; data = "nicklist scroll -10"; },
@@ -286,7 +291,7 @@ ignores = (
   { mask = "*zzz*"; level = "NICKS"; },
   { mask = "*afk*"; level = "NICKS"; },
   { mask = "*away*"; level = "NICKS"; },
-  {
+  { 
     level = "ACTIONS JOINS PARTS QUITS MODES";
     servertag = "bitlbee";
   }
