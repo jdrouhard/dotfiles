@@ -26,7 +26,7 @@ function tmup() {
         if [[ $line == -* ]]; then
             unset $(echo $line | cut -c2-);
         else
-            export $line;
+            export "$line";
         fi;
     done;
     unset IFS;

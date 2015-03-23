@@ -7,11 +7,13 @@
 	postBuffer = 524288000
 [diff]
 	tool = vimdiff
+	guitool = meld
 [merge]
-    tool = vimdiff
+	tool = vimdiff
 [difftool]
 	prompt = false
 [alias]
-    meld = !dbus-launch ~/source/git-meld/git-meld.pl
-    l = log --graph --all --pretty=format:'%C(auto)%h%d %s %C(green)(%ar)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    addnw = !sh -c 'git diff -w --no-color "$@" | git apply --cached --ignore-whitespace' - && git status
+	l = log --graph --all --pretty=format:'%C(auto)%h%d %s %C(green)(%ar)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	addnw = !sh -c 'git diff -w --no-color "$@" | git apply --cached --ignore-whitespace' - && git status
+[core]
+	autocrlf = false
