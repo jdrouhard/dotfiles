@@ -6,7 +6,7 @@ servers = (
     port = "6667";
     use_ssl = "no";
     ssl_verify = "no";
-    autoconnect = "yes";
+    autoconnect = "no";
   },
   {
     address = "colorscience.lpdev.prtdev.lexmark.com";
@@ -40,6 +40,23 @@ servers = (
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "no";
+  },
+  {
+    address = "localhost";
+    chatnet = "ngircd";
+    port = "6697";
+    use_ssl = "yes";
+    ssl_verify = "no";
+    autoconnect = "no";
+  },
+  {
+    address = "irc.twitch.tv";
+    chatnet = "twitch";
+    port = "6667";
+    password = "oauth:t1kriyaa8h4r2xhzy2d6v1f93e1ejmd";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "no";
   }
 );
 
@@ -48,8 +65,10 @@ chatnets = {
   freenode = { type = "IRC"; };
   bitlbee = { type = "IRC"; };
   tcoppi = { type = "IRC"; };
-  lexmark = { type = "IRC"; };
+  lexmark = { type = "IRC"; nick = "John"; };
+  ngircd = { type = "IRC"; nick = "John"; };
   "tcoppi-proxy" = { type = "IRC"; };
+  twitch = { type = "IRC"; nick = "mazadin"; };
 };
 
 channels = (
@@ -62,8 +81,8 @@ channels = (
     autojoin = "yes";
     autosendcmd = "/say identify; /oper";
   },
-  { name = "#EA"; chatnet = "lexmark"; autojoin = "yes"; },
-  { name = "#deployment"; chatnet = "lexmark"; autojoin = "yes"; }
+  { name = "#deployment"; chatnet = "lexmark"; autojoin = "yes"; },
+  { name = "#adamhorton"; chatnet = "twitch"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -276,6 +295,7 @@ settings = {
     irssiproxy_password = "proxypass";
     irssiproxy_ports = "tcoppi=2777";
   };
+  "fe-text" = { actlist_sort = "refnum"; };
 };
 keyboard = (
   { key = "^[[5;3~"; id = "command"; data = "nicklist scroll -10"; },
@@ -286,12 +306,12 @@ ignores = (
   { mask = "*zzz*"; level = "NICKS"; },
   { mask = "*afk*"; level = "NICKS"; },
   { mask = "*away*"; level = "NICKS"; },
-  {
+  { 
     level = "ACTIONS JOINS PARTS QUITS MODES";
     servertag = "bitlbee";
   }
 );
 hilights = (
   { text = "jdrouhard"; nick = "yes"; word = "yes"; },
-  { text = "azadin"; nick = "yes"; word = "yes"; }
+  { text = "m?azadin"; nick = "yes"; word = "yes"; }
 );
