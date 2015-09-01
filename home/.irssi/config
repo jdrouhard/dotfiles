@@ -9,14 +9,6 @@ servers = (
     autoconnect = "no";
   },
   {
-    address = "colorscience.lpdev.prtdev.lexmark.com";
-    chatnet = "lexmark";
-    port = "6667";
-    use_ssl = "no";
-    ssl_verify = "no";
-    autoconnect = "no";
-  },
-  {
     address = "irc.tcoppi.net";
     chatnet = "tcoppi";
     port = "6697";
@@ -34,8 +26,8 @@ servers = (
     autoconnect = "no";
   },
   {
-    address = "localhost";
-    chatnet = "ngircd";
+    address = "irc.jmdtech.org";
+    chatnet = "linode";
     port = "6697";
     use_ssl = "yes";
     ssl_verify = "no";
@@ -49,15 +41,14 @@ servers = (
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "no";
-  },
+  }
 );
 
 chatnets = {
   Ubuntu = { type = "IRC"; };
   freenode = { type = "IRC"; };
   tcoppi = { type = "IRC"; };
-  lexmark = { type = "IRC"; nick = "John"; };
-  ngircd = { type = "IRC"; nick = "John"; };
+  linode = { type = "IRC"; nick = "John"; };
   "tcoppi-proxy" = { type = "IRC"; };
   twitch = { type = "IRC"; nick = "mazadin"; };
 };
@@ -66,7 +57,7 @@ channels = (
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#hack"; chatnet = "tcoppi"; autojoin = "yes"; },
-  { name = "#deployment"; chatnet = "lexmark"; autojoin = "yes"; },
+  { name = "#/dev/null"; chatnet = "linode"; autojoin = "yes"; },
   { name = "#adamhorton"; chatnet = "twitch"; autojoin = "yes"; }
 );
 
@@ -249,6 +240,7 @@ settings = {
     real_name = "John Drouhard";
     user_name = "jdrouhard";
     nick = "jdrouhard";
+    use_proxy = "no";
   };
   "fe-common/core" = {
     theme = "pbrisbin";
@@ -291,7 +283,7 @@ ignores = (
   { mask = "*zzz*"; level = "NICKS"; },
   { mask = "*afk*"; level = "NICKS"; },
   { mask = "*away*"; level = "NICKS"; },
-  {
+  { 
     level = "ACTIONS JOINS PARTS QUITS MODES";
     servertag = "bitlbee";
   }
