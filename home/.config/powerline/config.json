@@ -17,7 +17,7 @@
 			"theme": "default"
 		},
 		"shell": {
-			"colorscheme": "default",
+			"colorscheme": "solarized",
 			"theme": "mytheme",
 			"local_themes": {
 				"continuation": "continuation",
@@ -25,11 +25,11 @@
 			}
 		},
 		"tmux": {
-			"colorscheme": "default",
+			"colorscheme": "solarized",
 			"theme": "mytheme"
 		},
 		"vim": {
-			"colorscheme": "default",
+			"colorscheme": "solarized",
 			"theme": "default",
 			"local_themes": {
 				"__tabline__": "tabline",
@@ -45,7 +45,7 @@
 			}
 		},
 		"wm": {
-			"colorscheme": "default",
+			"colorscheme": "solarized",
 			"theme": "default"
 		}
 	}

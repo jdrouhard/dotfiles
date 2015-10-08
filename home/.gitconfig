@@ -3,6 +3,9 @@
 	email = john@jmdtech.org
 [color]
 	ui = true
+[color "decorate"]
+    head = cyan reverse
+    branch = green reverse
 [http]
 	postBuffer = 524288000
 [diff]
@@ -13,7 +16,7 @@
 [difftool]
 	prompt = false
 [alias]
-	l = log --graph --all --pretty=format:'%C(auto)%h%d %s %C(green)(%ar)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	l = log --graph --all --pretty=format:'%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset' --abbrev-commit --date=relative
 	addnw = !sh -c 'git diff -w --no-color "$@" | git apply --cached --ignore-whitespace' - && git status
 [core]
 	autocrlf = false
