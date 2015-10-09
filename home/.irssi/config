@@ -243,10 +243,10 @@ settings = {
     use_proxy = "no";
   };
   "fe-common/core" = {
-    theme = "pbrisbin";
+    theme = "solarized-universal";
     autolog = "yes";
     autolog_path = "~/.irssi/logs/$tag/$0/%Y-%m-%d.log";
-    hilight_act_color = "%Y";
+    hilight_act_color = "= %R";
     autoclose_windows = "yes";
     term_charset = "utf-8";
     window_history = "yes";
@@ -254,10 +254,11 @@ settings = {
   };
   "perl/core/scripts" = {
     nicklist_width = "31";
-    nicklist_height = "68";
-    awl_display_key = "$Q%K|$N%n$H$C$S ";
-    awl_display_key_active = "$Q%K|$N%n$H%G%_$C%n$S ";
-    awl_display_nokey = "[$N]$H$C$S ";
+    nicklist_height = "60";
+    awl_display_key_active = "%k%4[$N:$C]%n";
+    awl_display_nokey_active = "%k%4[$N:$C]%n";
+    awl_display_key = "[$Q:$H$C$S]";
+    awl_display_nokey = "[$N:$H$C$S]";
     awl_sbar_maxlength = "no";
     awl_maxlines = "3";
     bitlbee_typing_allwin = "yes";

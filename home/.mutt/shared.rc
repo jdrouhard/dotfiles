@@ -45,7 +45,7 @@ set edit_headers=yes
 set sidebar_width=35
 set sidebar_visible=no
 set sidebar_sort=yes
-set sidebar_folderindent=yes
+#set sidebar_folderindent=yes
 set sidebar_shortpath=yes
 
 bind index \Ch sidebar-prev
