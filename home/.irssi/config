@@ -254,9 +254,9 @@ settings = {
   };
   "perl/core/scripts" = {
     nicklist_width = "31";
-    nicklist_height = "60";
-    awl_display_key_active = "%k%4[$N:$C]%n";
-    awl_display_nokey_active = "%k%4[$N:$C]%n";
+    nicklist_height = "73";
+    awl_display_key_active = "%k%3[$N:$C]%n";
+    awl_display_nokey_active = "%k%3[$N:$C]%n";
     awl_display_key = "[$Q:$H$C$S]";
     awl_display_nokey = "[$N:$H$C$S]";
     awl_sbar_maxlength = "no";
@@ -267,7 +267,7 @@ settings = {
     neat_left_actions = "no";
     neat_colorize = "yes";
     neat_allow_shrinking = "yes";
-    neat_colors = "rRgGybBmMcC";
+    neat_colors = "rRgymMcw";
   };
   proxy = {
     irssiproxy_password = "proxypass";
