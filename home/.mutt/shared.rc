@@ -48,68 +48,43 @@ set sidebar_sort=yes
 #set sidebar_folderindent=yes
 set sidebar_shortpath=yes
 
-bind index \Ch sidebar-prev
-bind index \Cl sidebar-next
-bind index \Co sidebar-open
-bind pager \Ch sidebar-prev
-bind pager \Cl sidebar-next
-bind pager \Co sidebar-open
+bind index,pager \Ch sidebar-prev
+bind index,pager \Cl sidebar-next
+bind index,pager \Co sidebar-open
 
 macro index <F2> '<enter-command>toggle sidebar_visible<enter><refresh>'
 macro pager <F2> '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 
 # vim stuff
-set editor = vim
+set editor = "vim '+8'"
+
+bind index,pager / search
+bind index,pager ? search-reverse
+bind index,pager n search-next
+bind index,pager N search-opposite
+
+bind index,pager \Cb half-up
+bind index,pager \Cf half-down
+
+#bind index,pager l collapse-thread
+#bind index,pager z collapse-all
+
+bind index,pager r reply
+bind index,pager a group-reply
+bind index,pager L list-reply
+
+bind index,pager <F1> help
+
 bind index j next-entry
 bind index k previous-entry
 bind index J next-thread
 bind index K previous-thread
-
-bind index / search
-bind index ? search-reverse
-bind index n search-next
-bind index N search-opposite
-
 bind index gg first-entry
 bind index G last-entry
 
-bind index \Cb half-up
-bind index \Cf half-down
-
-#bind index l collapse-thread
-#bind index z collapse-all
-
-bind index r reply
-bind index a group-reply
-bind index L list-reply
-
-bind index h limit
-bind index <F1> help
-
 bind pager j next-line
 bind pager k previous-line
-
 bind pager <down> next-line
 bind pager <up> previous-line
-
-bind pager / search
-bind pager ? search-reverse
-bind pager n search-next
-bind pager N search-opposite
-
 bind pager gg top
 bind pager G bottom
-
-bind pager \Cb half-up
-bind pager \Cf half-down
-
-#bind pager l collapse-thread
-#bind pager z collapse-all
-
-bind pager r reply
-bind pager a group-reply
-bind pager l list-reply
-bind pager L list-reply
-
-bind pager <F1> help
-
