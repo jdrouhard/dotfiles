@@ -1,0 +1,3 @@
+# vim:filetype=ruby
+system('ln -nfs ~/.homesick/repos/dotfiles/dircolors-solarized/dircolors.ansi-dark ~/.dircolors')
+system('bash ~/.homesick/repos/dotfiles/fonts/install.sh')
