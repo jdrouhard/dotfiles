@@ -267,7 +267,7 @@ settings = {
     neat_left_actions = "no";
     neat_colorize = "yes";
     neat_allow_shrinking = "yes";
-    neat_colors = "rRgymMcw";
+    neat_colors = "rRgymMcb";
   };
   proxy = {
     irssiproxy_password = "proxypass";

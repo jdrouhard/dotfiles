@@ -1,3 +1,5 @@
+# vim:ft=sh
+
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 
@@ -5,7 +7,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 export EDITOR=vim
 
-function gvim() { (/usr/bin/gvim -f "$@" &) }
+#function gvim() { (/usr/bin/gvim -f "$@" &) }
 
 powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1

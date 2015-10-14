@@ -6,6 +6,7 @@
 [color "decorate"]
     head = cyan reverse
     branch = green reverse
+    tag = yellow reverse
 [http]
 	postBuffer = 524288000
 [diff]

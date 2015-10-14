@@ -21,7 +21,7 @@ set message_cachedir = "~/.mutt/cache/bodies"
 set move = no
 
 # by default, don't ask to recall postponed message at compose-time
-set recall = no
+#set recall = no
 
 # use a more standard format date (to my lights)
 set date_format = "%a %Y-%m-%d %H:%M:%S"
