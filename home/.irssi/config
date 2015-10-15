@@ -253,8 +253,6 @@ settings = {
     windows_auto_renumber = "yes";
   };
   "perl/core/scripts" = {
-    nicklist_width = "31";
-    nicklist_height = "73";
     awl_display_key_active = "%k%3[$N:$C]%n";
     awl_display_nokey_active = "%k%3[$N:$C]%n";
     awl_display_key = "[$Q:$H$C$S]";
@@ -275,10 +273,6 @@ settings = {
   };
   "fe-text" = { actlist_sort = "refnum"; };
 };
-keyboard = (
-  { key = "^[[5;3~"; id = "command"; data = "nicklist scroll -10"; },
-  { key = "^[[6;3~"; id = "command"; data = "nicklist scroll +10"; }
-);
 logs = { };
 ignores = (
   { mask = "*zzz*"; level = "NICKS"; },
@@ -287,7 +281,8 @@ ignores = (
   { 
     level = "ACTIONS JOINS PARTS QUITS MODES";
     servertag = "bitlbee";
-  }
+  },
+  { level = "MODES"; channels = ( "&bitlbee" ); }
 );
 hilights = (
   { text = "jdrouhard"; nick = "yes"; word = "yes"; },
