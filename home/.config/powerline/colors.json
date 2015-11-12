@@ -77,7 +77,25 @@
 		"solarized:violet": [13, "6c71c4"],
 		"solarized:blue": [4, "268bd2"],
 		"solarized:cyan": [6, "2aa198"],
-		"solarized:green": [2, "859900"]
+		"solarized:green": [2, "859900"],
+
+		"base16:base00": [0, "2d2d2d"],
+		"base16:base01": [18, "393939"],
+		"base16:base02": [19, "515151"],
+		"base16:base03": [8, "747369"],
+		"base16:base04": [20, "a09f93"],
+		"base16:base05": [7, "d3d0c8"],
+		"base16:base06": [21, "e8e6df"],
+		"base16:base07": [15, "f2f0ec"],
+		"base16:base08": [1, "f2777a"],
+		"base16:base09": [16, "f99157"],
+		"base16:base0A": [3, "ffcc66"],
+		"base16:base0B": [2, "99cc99"],
+		"base16:base0C": [6, "66cccc"],
+		"base16:base0D": [4, "6699cc"],
+		"base16:base0E": [5, "cc99cc"],
+		"base16:base0F": [17, "d27b53"]
+
 	},
 	"gradients": {
 		"dark_GREEN_Orange_red": [

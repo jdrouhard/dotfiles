@@ -3,16 +3,20 @@
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-
 export EDITOR=vim
 
 #function gvim() { (/usr/bin/gvim -f "$@" &) }
 
-powerline-daemon -q
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
-. ~/.vim/bundle/powerline/powerline/bindings/bash/powerline.sh
+if hash pip 2>/dev/null && hash powerline-daemon 2>/dev/null; then
+    POWERLINE_DIR=$(pip show powerline-status | grep Location | cut -d' ' -f2);
+
+    powerline-daemon -q
+    POWERLINE_BASH_CONTINUATION=1
+    POWERLINE_BASH_SELECT=1
+    . $POWERLINE_DIR/powerline/bindings/bash/powerline.sh
+fi
+
+. $HOME/.config/base16-shell/base16-solarized.dark.sh
 
 alias tmux="TERM=screen-256color-bce tmux"
 #alias vim="vim --servername vim"
