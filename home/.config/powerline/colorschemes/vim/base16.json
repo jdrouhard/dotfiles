@@ -31,7 +31,10 @@
 		"attached_clients":         { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] },
 		"error":                    { "fg": "base16:base07", "bg": "base16:base08", "attrs": ["bold"] },
 		"warning":                  { "fg": "base16:base07", "bg": "base16:base09", "attrs": ["bold"] },
-		"current_tag":              { "fg": "base16:base07", "bg": "base16:base01", "attrs": ["bold"] }
+		"current_tag":              { "fg": "base16:base07", "bg": "base16:base01", "attrs": ["bold"] },
+		"tab:background":           { "fg": "base16:base07", "bg": "base16:base01", "attrs": [] },
+		"tab_nc:modified_indicator":{ "fg": "base16:base0A", "bg": "base16:base01", "attr": ["bold"] },
+		"tab_nc:file_directory":    { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] }
 	},
 	"mode_translations": {
 		"nc": {
@@ -69,7 +72,10 @@
 				"position_gradient":      { "fg": "base16:base07", "bg": "base16:base04", "attrs": [] },
 				"line_current":           { "fg": "base16:base00", "bg": "base16:base07", "attrs": ["bold"] },
 				"line_current_symbol":    { "fg": "base16:base00", "bg": "base16:base07", "attrs": [] },
-				"col_current":            { "fg": "base16:base04", "bg": "base16:base07", "attrs": [] }
+				"col_current":            { "fg": "base16:base04", "bg": "base16:base07", "attrs": [] },
+				"tab:background":           { "fg": "base16:base07", "bg": "base16:base01", "attrs": [] },
+				"tab_nc:modified_indicator":{ "fg": "base16:base0A", "bg": "base16:base01", "attr": ["bold"] },
+				"tab_nc:file_directory":    { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] }
 			}
 		},
 		"v": {
