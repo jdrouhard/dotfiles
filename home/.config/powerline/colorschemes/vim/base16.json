@@ -33,8 +33,25 @@
 		"warning":                  { "fg": "base16:base07", "bg": "base16:base09", "attrs": ["bold"] },
 		"current_tag":              { "fg": "base16:base07", "bg": "base16:base01", "attrs": ["bold"] },
 		"tab:background":           { "fg": "base16:base07", "bg": "base16:base01", "attrs": [] },
-		"tab_nc:modified_indicator":{ "fg": "base16:base0A", "bg": "base16:base01", "attr": ["bold"] },
-		"tab_nc:file_directory":    { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] }
+		"tab:divider":              { "fg": "base16:base03", "bg": "base16:base01", "attrs": [] },
+		"tab_nc:modified_indicator":{ "fg": "base16:base0A", "bg": "base16:base01", "attrs": ["bold"] },
+		"tab_nc:file_directory":    { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] },
+
+		"buf_nc_mod:modified_indicator":   { "fg": "base16:base0A", "bg": "base16:base0F", "attrs": ["bold"] },
+		"buf_nc_mod:file_name":            { "fg": "base16:base06", "bg": "base16:base0F", "attrs": [] },
+		"buf_nc_mod:bufnr":                { "fg": "base16:base06", "bg": "base16:base0F", "attrs": [] },
+
+		"buf_mod:modified_indicator":      { "fg": "base16:base0A", "bg": "base16:base0D", "attrs": ["bold"] },
+		"buf_mod:file_name":               { "fg": "base16:base06", "bg": "base16:base0D", "attrs": ["bold"] },
+		"buf_mod:bufnr":                   { "fg": "base16:base06", "bg": "base16:base0D", "attrs": [] },
+
+		"buf_nc:modified_indicator": { "fg": "base16:base0A", "bg": "base16:base01", "attrs": ["bold"] },
+		"buf_nc:file_name":          { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] },
+		"buf_nc:bufnr":              { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] },
+
+		"buf:modified_indicator":    { "fg": "base16:base0A", "bg": "base16:base02", "attrs": ["bold"] },
+		"buf:file_name":             { "fg": "base16:base07", "bg": "base16:base02", "attrs": ["bold"] },
+		"buf:bufnr":                 { "fg": "base16:base07", "bg": "base16:base02", "attrs": ["bold"] }
 	},
 	"mode_translations": {
 		"nc": {
