@@ -5,7 +5,7 @@ export LC_ALL="$LANG"
 
 export EDITOR=vim
 
-BASE16_THEME_DEFAULT="base16-atelierforest.dark"
+BASE16_THEME_DEFAULT="atelierforest"
 
 #function gvim() { (/usr/bin/gvim -f "$@" &) }
 
@@ -37,11 +37,23 @@ function tmup() {
 }
 
 function theme() {
-    local theme_path="$HOME/.config/base16-shell/$1.sh"
+    local theme_name=${1}
+    local variant=${2:-dark}
+    local theme_paths=("$HOME/.config/base16-shell/base16-$theme_name.$variant.sh" \
+                       "$HOME/.config/base16-shell/$theme_name.$variant.sh")
+    local found=false
 
-    if [ -f "$theme_path" ]; then
-        ln -sf $theme_path $HOME/.theme
-        . $HOME/.theme
+    for path in "${theme_paths[@]}"; do
+        if [ -f "$path" ]; then
+            ln -sf $path $HOME/.theme
+            . $HOME/.theme
+            found=true
+            break
+        fi
+    done
+
+    if [ "$found" != true ]; then
+        echo "Could not find theme base16-$theme_name.$variant.sh or $theme_name.$variant.sh"
     fi
 }
 
