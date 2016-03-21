@@ -8,11 +8,16 @@ function shell_theme -a name variant
                        "$HOME/.config/base16-shell/$name.$variant.sh"
 
     for path in $theme_paths
-        if [ -f "$path" ]
-            ln -sf $path $HOME/.theme
+        if test -e "$path"
+            ln -sf "$path" $HOME/.theme
             eval sh $HOME/.theme
+            set found "true"
             break
         end
+    end
+
+    if test -z $found
+        return 1
     end
 end
 
