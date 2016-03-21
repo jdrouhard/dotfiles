@@ -13,7 +13,9 @@
 	tool = vimdiff
 	guitool = meld
 [merge]
-	tool = vimdiff
+	tool = fugitive
+[mergetool "fugitive"]
+    cmd = vim -f -c "Gvdiff" "$MERGED"
 [difftool]
 	prompt = false
 [alias]
