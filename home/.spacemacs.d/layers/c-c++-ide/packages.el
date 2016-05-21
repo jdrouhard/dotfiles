@@ -14,6 +14,7 @@
         xcscope
         helm-cscope
         gdb-mi
+        f
         ))
 
 (defun c-c++-ide/init-cc-mode ()
@@ -57,8 +58,9 @@
       (add-hook 'c++-mode-hook 'irony-mode))
     :config
     (progn
-      ;; (setq irony-user-dir (f-slash (f-join user-home-directory ".irony" "irony")))
-      ;; (setq irony-server-install-prefix irony-user-dir)
+      (require 'f)
+      (setq irony-user-dir (f-slash (f-join user-home-directory ".irony")))
+      (setq irony-server-install-prefix irony-user-dir)
       (add-hook 'c-mode-hook (lambda () (setq irony-additional-clang-options '("-std=c++11"))))
       (add-hook 'c++-mode-hook (lambda () (setq irony-additional-clang-options '("-std=c++11"))))
       (defun irony/irony-mode-hook ()

@@ -259,7 +259,7 @@ you should place your code here."
    evil-escape-key-sequence "jk"
 
    ;; font-lock-maximum-decoration 2
-   jit-lock-defer-time 0.05
+   ;; jit-lock-defer-time 0.05
    ;; jit-lock-stealth-time 5
    c-default-style "bsd"
    c-basic-offset 4
