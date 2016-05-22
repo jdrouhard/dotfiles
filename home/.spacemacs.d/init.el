@@ -30,7 +30,7 @@ values."
      ;; c-c++
      c-c++-ide
      ;; semantic
-     ;; markdown
+     markdown
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -107,7 +107,8 @@ values."
                          ;;solarized-light
                          ;; leuven
                          monokai
-                         zenburn)
+                         ;; zenburn
+                         )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -282,6 +283,8 @@ you should place your code here."
     (menu-bar-mode 1))
 
   (spacemacs/set-leader-keys "d" 'my-gdb-other-frame)
+  (add-to-list 'custom-theme-load-path "~/.spacemacs.d/themes")
+  (load-theme 'base16)
 
   ;; (defun on-frame-open (&optional frame)
   ;;   (unless (display-graphic-p frame)
@@ -297,6 +300,9 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("06dc569aaa4b6025640afee96ddf78b901f0470e4ec529ff71690c07f94b2e39" default)))
  '(magit-fetch-arguments (quote ("--prune")))
  '(package-selected-packages
    (quote
