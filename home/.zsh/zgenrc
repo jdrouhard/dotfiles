@@ -4,6 +4,7 @@ if ! zgen saved; then
     zgen oh-my-zsh
 
     zgen load zsh-users/zsh-syntax-highlighting
+    zgen load zsh-users/zsh-history-substring-search
 
     # Load some oh-my-zsh plugins
     zgen oh-my-zsh plugins/pip
@@ -14,6 +15,7 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/python
     zgen oh-my-zsh plugins/rsync
     zgen oh-my-zsh plugins/screen
+    zgen oh-my-zsh plugins/tmux
     zgen oh-my-zsh plugins/vi-mode
 
     if [ $(uname -a | grep -ci Darwin) = 1 ]; then
@@ -38,4 +40,5 @@ if ! zgen saved; then
     zgen save
 fi
 
-
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down

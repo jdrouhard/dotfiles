@@ -106,6 +106,7 @@ values."
                          ;;solarized-dark
                          ;;solarized-light
                          ;; leuven
+                         base16
                          monokai
                          ;; zenburn
                          )
@@ -247,6 +248,7 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (add-to-list 'custom-theme-load-path "~/.spacemacs.d/themes")
   )
 
 (defun dotspacemacs/user-config ()
@@ -283,8 +285,6 @@ you should place your code here."
     (menu-bar-mode 1))
 
   (spacemacs/set-leader-keys "d" 'my-gdb-other-frame)
-  (add-to-list 'custom-theme-load-path "~/.spacemacs.d/themes")
-  (load-theme 'base16)
 
   ;; (defun on-frame-open (&optional frame)
   ;;   (unless (display-graphic-p frame)

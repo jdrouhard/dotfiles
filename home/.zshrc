@@ -16,13 +16,13 @@ export LESS=-MIRXF
 # Update tmux
 function tmup() {
     echo -n "Updating to latest tmux environment..."
-    export IFS=","
-    for line in $(tmux showenv -t $(tmux display -p "#S") | tr "\n" ",");
+    for line in $(tmux showenv -t $(tmux display -p "#S"));
     do
         if [[ $line == -* ]]; then
             unset $(echo $line | cut -c2-);
         else
-            export "$line";
+            echo $line
+            export "$line"
         fi;
     done;
     unset IFS;
