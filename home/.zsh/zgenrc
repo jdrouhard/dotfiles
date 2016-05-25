@@ -1,5 +1,7 @@
 # vim:ft=zsh
 
+source ~/.zsh/zgen/zgen.zsh
+
 if ! zgen saved; then
     zgen oh-my-zsh
 
@@ -14,7 +16,7 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/github
     zgen oh-my-zsh plugins/python
     zgen oh-my-zsh plugins/rsync
-    zgen oh-my-zsh plugins/screen
+    #zgen oh-my-zsh plugins/screen
     zgen oh-my-zsh plugins/tmux
     zgen oh-my-zsh plugins/vi-mode
 
@@ -24,18 +26,16 @@ if ! zgen saved; then
         zgen oh-my-zsh plugins/osx
     fi
 
-    # A set of shell functions to make it easy to install small apps and
-    # utilities distributed with pip.
-    zgen load sharat87/pip-app
-
     zgen load chrissicool/zsh-256color
 
     # Load more completion files for zsh from the zsh-lovers github repo
     zgen load zsh-users/zsh-completions src
 
+    zgen load rupa/z
     zgen load rimraf/k
 
     zgen oh-my-zsh themes/flazz
+    #zgen load frmendes/geometry
 
     zgen save
 fi

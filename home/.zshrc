@@ -1,5 +1,4 @@
 # Plugins
-source ~/.zsh/zgen/zgen.zsh
 source ~/.zsh/zgenrc
 
 zstyle ':completion:*' accept-exact '*(N)'
@@ -16,16 +15,15 @@ export LESS=-MIRXF
 # Update tmux
 function tmup() {
     echo -n "Updating to latest tmux environment..."
-    for line in $(tmux showenv -t $(tmux display -p "#S"));
+    for line in $(tmux showenv -t $(tmux display -p "#S"))
     do
         if [[ $line == -* ]]; then
-            unset $(echo $line | cut -c2-);
+            unset $(echo $line | cut -c2-)
         else
             echo $line
             export "$line"
-        fi;
-    done;
-    unset IFS;
+        fi
+    done
     echo "Done"
 }
 
@@ -42,7 +40,8 @@ function theme() {
                        "$HOME/.config/base16-shell/$theme_name.$variant.sh")
     found=false
 
-    for theme_path in "${theme_paths[@]}"; do
+    for theme_path in "${theme_paths[@]}"
+    do
         if [ -f "$theme_path" ]; then
             ln -sfn $theme_path $HOME/.theme
             source $HOME/.theme
@@ -63,8 +62,6 @@ else
 fi
 
 # Set up vi mode
-bindkey -v
-bindkey -v '^?' backward-delete-char
 bindkey -M viins 'jk' vi-cmd-mode
 
 # Options
@@ -99,3 +96,42 @@ export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 REPORTTIME=2
 TIMEFMT="%U user %S system %P cpu %*Es total"
 
+
+# Honor old .zshrc.local customizations, but print depecation warning.
+if [ -f ~/.zshrc.local ]; then
+  source ~/.zshrc.local
+  echo ".zshrc.local is deprecated - use files in ~/.zshrc.d instead"
+fi
+
+# Make it easy to append your own customizations that override the above by
+# loading all files from .zshrc.d directory
+mkdir -p ~/.zshrc.d
+if [ -n "$(ls ~/.zshrc.d)" ]; then
+  for dotfile in ~/.zshrc.d/*
+  do
+    if [ -r "${dotfile}" ]; then
+      source "${dotfile}"
+    fi
+  done
+fi
+
+# In case a plugin adds a redundant path entry, remove duplicate entries
+# from PATH
+#
+# This snippet is from Mislav Marohnić <mislav.marohnic@gmail.com>'s
+# dotfiles repo at https://github.com/mislav/dotfiles
+
+dedupe_path() {
+  typeset -a paths result
+  paths=($path)
+
+  while [[ ${#paths} -gt 0 ]]; do
+    p="${paths[1]}"
+    shift paths
+    [[ -z ${paths[(r)$p]} ]] && result+="$p"
+  done
+
+  export PATH=${(j+:+)result}
+}
+
+dedupe_path
