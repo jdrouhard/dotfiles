@@ -1,10 +1,23 @@
+# Options
+setopt correct
+unsetopt correctall
+
+# Path
+export PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
+
+for path_candidate in /opt/local/sbin \
+    /opt/bats/bin \
+    /opt/local/bin \
+    ~/.local/bin \
+    ~/bin
+do
+    if [ -d ${path_candidate}  ]; then
+        export PATH=${path_candidate}:${PATH}
+    fi
+done
+
 # Plugins
 source ~/.zsh/zgenrc
-
-zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
-zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)*==34=34}:${(s.:.)LS_COLORS}")';
 
 # Environment variables
 export LANG=en_US.utf-8
@@ -12,62 +25,10 @@ export LC_ALL="$LANG"
 export EDITOR=vim
 export LESS=-MIRXF
 
-# Update tmux
-function tmup() {
-    echo -n "Updating to latest tmux environment..."
-    for line in $(tmux showenv -t $(tmux display -p "#S"))
-    do
-        if [[ $line == -* ]]; then
-            unset $(echo $line | cut -c2-)
-        else
-            echo $line
-            export "$line"
-        fi
-    done
-    echo "Done"
-}
-
-# Color theme
-BASE16_THEME_DEFAULT="atelierheath"
-
-function theme() {
-    local theme_name variant found
-    local -a theme_paths
-
-    theme_name=${1}
-    variant=${2:-dark}
-    theme_paths=("$HOME/.config/base16-shell/base16-$theme_name.$variant.sh" \
-                       "$HOME/.config/base16-shell/$theme_name.$variant.sh")
-    found=false
-
-    for theme_path in "${theme_paths[@]}"
-    do
-        if [ -f "$theme_path" ]; then
-            ln -sfn $theme_path $HOME/.theme
-            source $HOME/.theme
-            found=true
-            break
-        fi
-    done
-
-    if [ "$found" != true ]; then
-        echo "Could not find theme base16-$theme_name.$variant.sh or $theme_name.$variant.sh"
-    fi
-}
-
-if [ ! -f "$HOME/.theme" ]; then
-    theme $BASE16_THEME_DEFAULT
-else
-    source $HOME/.theme
-fi
-
 # Set up vi mode
 bindkey -M viins 'jk' vi-cmd-mode
 
-# Options
-setopt correct
-unsetopt correctall
-
+# set some history options
 setopt append_history
 setopt extended_history
 setopt hist_expire_dups_first
@@ -96,6 +57,11 @@ export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 REPORTTIME=2
 TIMEFMT="%U user %S system %P cpu %*Es total"
 
+# Completion
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)*==34=34}:${(s.:.)LS_COLORS}")';
 
 # Honor old .zshrc.local customizations, but print depecation warning.
 if [ -f ~/.zshrc.local ]; then
