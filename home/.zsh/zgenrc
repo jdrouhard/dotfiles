@@ -35,7 +35,6 @@ if ! zgen saved; then
 
     # Lastly, theme
     zgen oh-my-zsh themes/flazz
-    #zgen load frmendes/geometry
 
     zgen save
 fi
