@@ -25,8 +25,22 @@ export LC_ALL="$LANG"
 export EDITOR=vim
 export LESS=-MIRXF
 
-# Set up vi mode
+# Set up bindings
 bindkey -M viins 'jk' vi-cmd-mode
+bindkey -M vivis 'jk' vi-visual-exit
+bindkey -M vivli 'jk' vi-visual-exit
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+bindkey -M menuselect '[Z' reverse-menu-complete
+
+# Aliases
+function exists {
+    whence -w $1 >/dev/null
+}
+exists _zsh_tmux_plugin_run && tmux_func="_zsh_tmux_plugin_run" || tmux_func="tmux"
+alias tmux="TERM=screen-256color-bce $tmux_func" # honestly I have no idea why the bce is necessary
+alias ec='emacsclient -t'
+alias ecgui='emacsclient -c'
 
 # set some history options
 setopt append_history
@@ -39,10 +53,6 @@ setopt hist_reduce_blanks
 setopt hist_save_no_dups
 setopt hist_verify
 
-# Share your history across all your terminal windows
-setopt share_history
-#setopt noclobber
-
 # set some more options
 setopt pushd_ignore_dups
 
@@ -54,8 +64,8 @@ export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 
 # Long running processes should return time after they complete. Specified
 # in seconds.
-REPORTTIME=2
-TIMEFMT="%U user %S system %P cpu %*Es total"
+#REPORTTIME=2
+#TIMEFMT="%U user %S system %P cpu %*Es total"
 
 # Completion
 zstyle ':completion:*' accept-exact '*(N)'
