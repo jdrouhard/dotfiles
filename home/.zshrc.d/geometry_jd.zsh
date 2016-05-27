@@ -14,6 +14,21 @@ GIT_REBASE="\uE0A0"
 GIT_UNPULLED="⇣"
 GIT_UNPUSHED="⇡"
 
+_separator() {
+    echo "%{$fg_bold[magenta]%}::%{$reset_color%}"
+}
+
+_vi_mode_indicator() {
+    case ${KEYMAP} in
+        (main|viins) TEXT="INSERT"; COLOR="cyan" ;;
+        (vicmd)      TEXT="NORMAL"; COLOR="yellow" ;;
+        (vivis)      TEXT="VISUAL"; COLOR="magenta" ;;
+        (vivli)      TEXT="V-LINE"; COLOR="magenta" ;;
+        (*)          TEXT=""; COLOR="" ;;
+    esac
+    echo "%{$fg_bold[$COLOR]%}$TEXT%{$reset_color%}"
+}
+
 _git_branch() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || return
@@ -59,45 +74,22 @@ _git_symbol() {
 
 _git_info() {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    echo "$(_git_symbol)%F{242}$(_git_branch)%{$reset_color%} :: $(_git_dirty)"
+      echo "$(_git_symbol)%F{242}$(_git_branch)%{$reset_color%} $(_separator) $(_git_dirty)"
   fi
 }
 
-_print_title() {
-  print -n '\e]0;'
-  print -Pn $1
-  print -n '\a'
-}
-
-# Show current command in title
-_set_cmd_title() {
-  _print_title "${2} @ %m"
-}
-
-# Prevent command showing on title after ending
-_set_title() {
-  _print_title '%~'
-}
-
-NORMAL_INDICATOR="%{$fg_bold[green]%}NORMAL%{$reset_color%} "
-VISUAL_INDICATOR="%{$fg_bold[magenta]%}VISUAL%{$reset_color%} "
-VLINE_INDICATOR="%{$fg_bold[magenta]%}V-LINE%{$reset_color%} "
-INSERT_INDICATOR=""
-
-function _vi_mode_indicator() {
-    echo "${${${${KEYMAP/vivli/$VLINE_INDICATOR}/vivis/$VISUAL_INDICATOR}/vicmd/$NORMAL_INDICATOR}/(main|viins)/$INSERT_INDICATOR}"
-}
-
 geometry_prompt() {
-  autoload -U add-zsh-hook
-
-  add-zsh-hook preexec  _set_cmd_title
-  add-zsh-hook precmd   _set_title
-
-  PROMPT='%(?.$PROMPT_SYMBOL.$EXIT_VALUE_SYMBOL) %m %{$fg[magenta]%}:: %{$fg[blue]%}%3~%{$reset_color%} $(_vi_mode_indicator)%% '
+  VIMODE=$(_vi_mode_indicator)
+  PROMPT='%(?.$PROMPT_SYMBOL.$EXIT_VALUE_SYMBOL) %m $(_separator) [$VIMODE] %{$fg[green]%}%3~%{$reset_color%} %{$fg_bold[blue]%}%%%{$reset_color%} '
 
   PROMPT2=' $RPROMPT_SYMBOL '
   RPROMPT='%(?..%{$fg[red]%}%? ↵%{$reset_color%} )$(_git_info)'
 }
 
-geometry_prompt
+function zle-line-init zle-keymap-select {
+    geometry_prompt
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
