@@ -8,6 +8,9 @@ PROMPT_SYMBOL='▲'
 EXIT_VALUE_SYMBOL="%{$fg_bold[red]%}△%{$reset_color%}"
 RPROMPT_SYMBOL='◇'
 
+USER_PROMPT_SYMBOL="%{$fg_bold[blue]%}$%{$reset_color%}"
+ROOT_PROMPT_SYMBOL="%{$fg_bold[red]%}#%{$reset_color%}"
+
 GIT_DIRTY="%{$fg[red]%}⬡%{$reset_color%}"
 GIT_CLEAN="%{$fg[green]%}⬢%{$reset_color%}"
 GIT_REBASE="\uE0A0"
@@ -27,12 +30,6 @@ _vi_mode_indicator() {
         (*)          TEXT=""; COLOR="" ;;
     esac
     echo "%{$fg_bold[$COLOR]%}$TEXT%{$reset_color%}"
-}
-
-_git_branch() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-  echo "${ref#refs/heads/}"
 }
 
 _git_dirty() {
@@ -74,13 +71,29 @@ _git_symbol() {
 
 _git_info() {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-      echo "$(_git_symbol)%F{242}$(_git_branch)%{$reset_color%} $(_separator) $(_git_dirty)"
+      echo "$(_git_symbol)%F{242}$(git_current_branch)%{$reset_color%} $(_separator) $(_git_dirty)"
   fi
+}
+
+_user_host() {
+    if [ `whoami` = "root" ]; then
+        echo "%{$fg[red]%}%m%{$reset_color%}"
+    else
+        echo "%n@%m"
+    fi
+}
+
+_prompt_symbol() {
+    if [ `whoami` = "root" ]; then
+        echo "$ROOT_PROMPT_SYMBOL"
+    else
+        echo "$USER_PROMPT_SYMBOL"
+    fi
 }
 
 geometry_prompt() {
   VIMODE=$(_vi_mode_indicator)
-  PROMPT='%(?.$PROMPT_SYMBOL.$EXIT_VALUE_SYMBOL) %m $(_separator) [$VIMODE] %{$fg[green]%}%3~%{$reset_color%} %{$fg_bold[blue]%}%%%{$reset_color%} '
+  PROMPT='%(?.$PROMPT_SYMBOL.$EXIT_VALUE_SYMBOL) $(_user_host) $(_separator) [$VIMODE] %{$fg[green]%}%3~%{$reset_color%} $(_prompt_symbol) '
 
   PROMPT2=' $RPROMPT_SYMBOL '
   RPROMPT='%(?..%{$fg[red]%}%? ↵%{$reset_color%} )$(_git_info)'
