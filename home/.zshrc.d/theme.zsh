@@ -1,5 +1,5 @@
 # Color theme
-BASE16_THEME_DEFAULT="atelierheath"
+BASE16_THEME_DEFAULT="atelier-heath"
 
 function theme() {
     local theme_name variant found
@@ -7,8 +7,10 @@ function theme() {
 
     theme_name=${1}
     variant=${2:-dark}
-    theme_paths=("$HOME/.config/base16-shell/base16-$theme_name.$variant.sh" \
-                       "$HOME/.config/base16-shell/$theme_name.$variant.sh")
+    theme_paths=("$HOME/.config/base16-shell/scripts/base16-$theme_name-$variant.sh" \
+                       "$HOME/.config/base16-shell/scripts/base16-$theme_name.sh" \
+                       "$HOME/.config/base16-shell/scripts/$theme_name-$variant.sh" \
+                       "$HOME/.config/base16-shell/scripts/$theme_name.sh")
     found=false
 
     for theme_path in "${theme_paths[@]}"

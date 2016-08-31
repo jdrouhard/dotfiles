@@ -1,6 +1,8 @@
 # Options
 setopt correct
 unsetopt correctall
+setopt NO_NOMATCH
+setopt rm_star_silent
 
 # Path
 export PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
