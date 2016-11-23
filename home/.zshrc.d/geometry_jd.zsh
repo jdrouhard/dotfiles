@@ -25,9 +25,8 @@ _vi_mode_indicator() {
     case ${KEYMAP} in
         (main|viins) TEXT="INSERT"; COLOR="cyan" ;;
         (vicmd)      TEXT="NORMAL"; COLOR="yellow" ;;
-        (vivis)      TEXT="VISUAL"; COLOR="magenta" ;;
-        (vivli)      TEXT="V-LINE"; COLOR="magenta" ;;
-        (*)          TEXT=""; COLOR="" ;;
+        (visual|viopp) TEXT="$KEYMAP"; COLOR="magenta" ;;
+        (*)          TEXT="$KEYMAP"; COLOR="" ;;
     esac
     echo "%{$fg_bold[$COLOR]%}$TEXT%{$reset_color%}"
 }

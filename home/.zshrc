@@ -31,11 +31,29 @@ export LESS=-MIRXF
 
 # Set up bindings
 bindkey -M viins 'jk' vi-cmd-mode
-bindkey -M vivis 'jk' vi-visual-exit
-bindkey -M vivli 'jk' vi-visual-exit
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 bindkey -M menuselect '[Z' reverse-menu-complete
+
+bindkey -M vicmd 'v' visual-mode
+bindkey -M vicmd 'V' visual-line-mode
+
+autoload -U select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+    for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+        bindkey -M $m $c select-bracketed
+    done
+done
+
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+    for c in {a,i}{\',\",\`}; do
+        bindkey -M $m $c select-quoted
+    done
+done
+
 
 # Aliases
 function exists {
@@ -43,8 +61,6 @@ function exists {
 }
 exists _zsh_tmux_plugin_run && tmux_func="_zsh_tmux_plugin_run" || tmux_func="tmux"
 alias tmux="TERM=screen-256color-bce $tmux_func" # honestly I have no idea why the bce is necessary
-alias ec='emacsclient -t'
-alias ecgui='emacsclient -c'
 
 # set some history options
 setopt append_history
