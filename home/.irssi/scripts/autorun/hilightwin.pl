@@ -1,1 +1,0 @@
-/usr/share/irssi/scripts/hilightwin.pl
