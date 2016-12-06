@@ -49,6 +49,7 @@ set showcmd                          " display incomplete commands
 set modeline                         " enable modeline identifiers in files
 set cmdheight=2                      " set cmdheight=2 to avoid pesky
                                      " "Press ENTER to continue" after errors
+set lazyredraw
 
 " Resize splits when the window is resized.
 au VimResized * exe "normal! \<c-w>="
@@ -177,9 +178,20 @@ inoremap jk <ESC>
 nnoremap j gj
 nnoremap k gk
 
+" Configure fzf bindings
+map <leader>s :Ag<space>
+map <C-p> :Files<CR>
+map <leader>b :Buffer<CR>
+map <leader>t :GFiles<CR>
+map <leader>h :Commands<CR>
+map <leader>? :Helptags<CR>
+map <leader>gs :GFiles?<CR>
+map <leader>gl :Commits<CR>
+map <leader>gbl :BCommits<CR>
+inoremap <C-x><C-l> <plug>(fzf-complete-line)
+
 " Miscellaneous
 map <leader>w <C-w>
-map <leader>s :Ag<space>
 
 "-------------------------------------------------------------------------------
 " Configure plugins
@@ -208,8 +220,17 @@ let g:gitgutter_sign_column_always = 1
 " Configure gitv
 let g:Gitv_TruncateCommitSubjects = 1
 
-" Configure polyglot
+" Configure vim-cpp-enhanced-highlight
 let g:cpp_class_scope_highlight = 1
+
+" Configure fzf
+let g:fzf_layout = { 'down': '~15%' }
+au VimEnter * command! -bang -nargs=* Ag
+            \ call fzf#vim#ag(<q-args>,
+            \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+            \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+            \                 <bang>0)
+let g:fzf_files_options = '--preview "cat {} 2> /dev/null | head -'.&lines.'"'
 
 "-------------------------------------------------------------------------------
 " File type specific settings

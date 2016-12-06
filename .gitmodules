@@ -43,3 +43,9 @@
 [submodule "home/.config/nvim/bundle/vim-fugitive"]
 	path = home/.config/nvim/bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "fzf"]
+	path = fzf
+	url = https://github.com/junegunn/fzf.git
+[submodule "home/.config/nvim/bundle/fzf.vim"]
+	path = home/.config/nvim/bundle/fzf.vim
+	url = https://github.com/junegunn/fzf.vim.git
