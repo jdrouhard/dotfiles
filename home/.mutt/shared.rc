@@ -1,6 +1,6 @@
 # vim:ft=muttrc
 
-source $HOME/.mutt/mutt-colors-solarized/mutt-colors-solarized-dark-16.muttrc
+source $HOME/.mutt/mutt-base16-dark.muttrc
 
 #color sidebar_new     color33  color234
 #color sidebar_flagged color160 color234
@@ -11,7 +11,8 @@ set sort = threads
 # trust me you want this:
 # gmail-style "last thread item" determines sort order
 # (instead of the default "first thread item" determines sort order)
-set sort_aux = last-date-received
+set sort_browser = date
+set sort_aux = reverse-last-date-received
 
 # keep cache locally to speed up invocation
 set header_cache = "~/.mutt/cache/headers"
@@ -26,6 +27,7 @@ set move = no
 # use a more standard format date (to my lights)
 set date_format = "%a %Y-%m-%d %H:%M:%S"
 set index_format = "%4C %Z %D %-15.15L (%?l?%4l&%4c?) %s"
+#set index_format = "%4C %Z %D (%?l?%4l&%4c?) %s"
 
 # use caret to fetch new mail ($ also works to refresh your inbox)
 bind index "^" imap-fetch-mail
@@ -45,8 +47,9 @@ set edit_headers=yes
 set sidebar_width=35
 set sidebar_visible=no
 set sidebar_sort=yes
-#set sidebar_folderindent=yes
-set sidebar_shortpath=yes
+#set sidebar_sort_method=name
+#set sidebar_folder_indent=yes
+#set sidebar_short_path=yes
 
 bind index,pager \Ch sidebar-prev
 bind index,pager \Cl sidebar-next
@@ -61,7 +64,7 @@ set editor = "vim '+8'"
 bind index,pager / search
 bind index,pager ? search-reverse
 bind index,pager n search-next
-bind index,pager N search-opposite
+#bind index,pager N search-opposite
 
 bind index,pager \Cb half-up
 bind index,pager \Cf half-down
