@@ -49,3 +49,6 @@
 [submodule "home/.config/nvim/bundle/fzf.vim"]
 	path = home/.config/nvim/bundle/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
+[submodule "home/.config/nvim/bundle/YouCompleteMe"]
+	path = home/.config/nvim/bundle/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe.git

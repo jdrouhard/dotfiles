@@ -43,6 +43,8 @@ call toggletheme#maptransparency("<F10>")
 call toggletheme#mapbg("<F11>")
 call toggletheme#map256("<F12>")
 
+highlight link YcmErrorSection ErrorMsg
+
 set nofoldenable                     " disable code folding by default
 set number                           " always show line numbers
 set numberwidth=5                    " we are good for up to 99999 lines
@@ -181,7 +183,7 @@ inoremap jk <ESC>
 nnoremap j gj
 nnoremap k gk
 
-" Configure fzf bindings
+" Configure fzf mappings
 map <leader>s :Ag<space>
 map <C-p> :Files<CR>
 map <leader>b :Buffer<CR>
@@ -192,6 +194,10 @@ map <leader>gs :GFiles?<CR>
 map <leader>gl :Commits<CR>
 map <leader>gbl :BCommits<CR>
 inoremap <C-x><C-l> <plug>(fzf-complete-line)
+
+" YouCompleteMe mappings
+nnoremap <F6> :YcmForceCompileAndDiagnostics<CR>
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 " Miscellaneous
 map <leader>w <C-w>
@@ -217,6 +223,13 @@ let g:alternateNoDefaultAlternate = 1
 " Configure vim-rtags
 let g:rtagsUseLocationList = 0
 
+" Configure YouCompleteMe
+"let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_filepath_completion_use_working_dir = 1
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_key_list_select_completion = ['<C-j>', '<Tab>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-k>', '<S-Tab>', '<Up>']
+
 " Configure vim-gitgutter
 let g:gitgutter_sign_column_always = 1
 
@@ -228,12 +241,13 @@ let g:cpp_class_scope_highlight = 1
 
 " Configure fzf
 let g:fzf_layout = { 'down': '~15%' }
+let g:fzf_files_options = '--preview "cat {} 2> /dev/null | head -'.&lines.'"'
+let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
 au VimEnter * command! -bang -nargs=* Ag
             \ call fzf#vim#ag(<q-args>,
             \                 <bang>0 ? fzf#vim#with_preview('up:60%')
             \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
             \                 <bang>0)
-let g:fzf_files_options = '--preview "cat {} 2> /dev/null | head -'.&lines.'"'
 
 "-------------------------------------------------------------------------------
 " File type specific settings
