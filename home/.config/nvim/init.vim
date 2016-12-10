@@ -37,11 +37,25 @@ let g:rehash256=1
 " Base16 settings
 set background=dark
 let g:base16_termtrans=1
-colorscheme base16
+"colorscheme base16
+colorscheme tender
 
 call toggletheme#maptransparency("<F10>")
 call toggletheme#mapbg("<F11>")
 call toggletheme#map256("<F12>")
+
+" Airline theme settings
+set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
+let g:airline_theme='tender'
+let g:airline_powerline_fonts=1
+let g:solarized_base16=1
+"let g:airline_solarized_normal_green=1
+
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#buffer_nr_show=1
+let g:airline#extensions#tabline#buffer_nr_format='%s '
+"let g:airline#extensions#tabline#fnamemod=':t'
+
 
 highlight link YcmErrorSection ErrorMsg
 
@@ -205,17 +219,6 @@ map <leader>w <C-w>
 "-------------------------------------------------------------------------------
 " Configure plugins
 "-------------------------------------------------------------------------------
-set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
-let g:airline_theme='solarized'
-let g:airline_powerline_fonts=1
-let g:solarized_base16=1
-"let g:airline_solarized_normal_green=1
-
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#buffer_nr_show=1
-let g:airline#extensions#tabline#buffer_nr_format='%s '
-"let g:airline#extensions#tabline#fnamemod=':t'
-
 " Configure "A" plugin
 " Never open a non-existing file
 let g:alternateNoDefaultAlternate = 1
