@@ -60,7 +60,7 @@ function exists {
     whence -w $1 >/dev/null
 }
 exists _zsh_tmux_plugin_run && tmux_func="_zsh_tmux_plugin_run" || tmux_func="tmux"
-alias tmux="TERM=screen-256color-bce $tmux_func" # honestly I have no idea why the bce is necessary
+#alias tmux="TERM=screen-256color-bce $tmux_func" # honestly I have no idea why the bce is necessary
 
 # set some history options
 setopt append_history

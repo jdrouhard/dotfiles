@@ -21,6 +21,9 @@ set wrap                             " wrap overlong lines
 " UI settings
 "-------------------------------------------------------------------------------
 
+if (has("termguicolors"))
+    set termguicolors
+endif
 set t_so=[7m                         " set escape codes for standout mode
 set t_ZH=[3m                         " set escape codes for italics mode
 set t_ZR=[23m                        " set escape codes for italics mode
