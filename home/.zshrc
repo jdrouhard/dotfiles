@@ -26,7 +26,7 @@ zstyle :omz:plugins:ssh-agent agent-forwarding on
 # Environment variables
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
-export EDITOR=vim
+export EDITOR=nvim
 export LESS=-MIRXF
 
 # Set up bindings

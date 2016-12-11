@@ -2,6 +2,7 @@
 " Initialize pathogen
 "-------------------------------------------------------------------------------
 filetype off
+"let g:pathogen_disabled = ['YouCompleteMe']
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 execute pathogen#helptags()
@@ -24,29 +25,23 @@ set wrap                             " wrap overlong lines
 if (has("termguicolors"))
     set termguicolors
 endif
-set t_so=[7m                         " set escape codes for standout mode
-set t_ZH=[3m                         " set escape codes for italics mode
-set t_ZR=[23m                        " set escape codes for italics mode
 
-" Molokai settings
-"set t_Co=256                         " force 256 colors by default
-let g:molokai_original=0
-let g:rehash256=1
-"colorscheme molokai                  " set colorscheme for 256 color terminals
-
-" Base16 settings
+" colorscheme settings
 set background=dark
-let g:base16_termtrans=1
-"colorscheme base16
-colorscheme tender
 
-call toggletheme#maptransparency("<F10>")
-call toggletheme#mapbg("<F11>")
-call toggletheme#map256("<F12>")
+let g:onedark_terminal_italics = 1
+"colorscheme tender
+colorscheme onedark
+
+"let g:base16_termtrans=1
+"colorscheme base16
+"call toggletheme#maptransparency("<F10>")
+"call toggletheme#mapbg("<F11>")
+"call toggletheme#map256("<F12>")
 
 " Airline theme settings
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
-let g:airline_theme='tender'
+let g:airline_theme='onedark'
 let g:airline_powerline_fonts=1
 let g:solarized_base16=1
 "let g:airline_solarized_normal_green=1
@@ -64,7 +59,7 @@ set number                           " always show line numbers
 set numberwidth=5                    " we are good for up to 99999 lines
 "set ruler                            " show the cursor position all the time
 set showcmd                          " display incomplete commands
-"set cursorline                       " highlight current line
+set cursorline                       " highlight current line
 set modeline                         " enable modeline identifiers in files
 set cmdheight=2                      " set cmdheight=2 to avoid pesky
                                      " "Press ENTER to continue" after errors
@@ -125,7 +120,7 @@ let mapleader=" "                    " set our personal modifier key to space
 
 " Quickly edit and reload the vimrc file.
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+"nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " Map Y to copy to the end of the line (which is more logical, also according
 " to the Vim manual.
@@ -200,7 +195,7 @@ nnoremap k gk
 " Configure fzf mappings
 map <leader>s :Ag<space>
 map <C-p> :Files<CR>
-map <leader>b :Buffer<CR>
+map <leader>l :Buffer<CR>
 map <leader>t :GFiles<CR>
 map <leader>h :Commands<CR>
 map <leader>? :Helptags<CR>
@@ -315,11 +310,29 @@ augroup END
 " Misc settings
 "-------------------------------------------------------------------------------
 
-" Always start editing a file in case a swap file exists.
-augroup SimultaneousEdits
-    autocmd!
-    autocmd SwapExists * :let v:swapchoice = 'e'
-augroup End
+augroup AutoSwap
+        autocmd!
+        autocmd SwapExists *  call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
+augroup END
+
+function! AS_HandleSwapfile (filename, swapname)
+        " if swapfile is older than file itself, just get rid of it
+        if getftime(v:swapname) < getftime(a:filename)
+                call delete(v:swapname)
+                let v:swapchoice = 'e'
+        endif
+endfunction
+autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+  \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+
+augroup checktime
+    au!
+    if !has("gui_running")
+        "silent! necessary otherwise throws errors when using command
+        "line window.
+        autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,BufEnter,FocusLost,WinLeave * checktime
+    endif
+augroup END
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()

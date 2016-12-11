@@ -4,18 +4,20 @@
 [color]
 	ui = true
 [color "decorate"]
-    head = cyan reverse
-    branch = green reverse
-    tag = yellow reverse
+	head = cyan reverse
+	branch = green reverse
+	tag = yellow reverse
 [http]
 	postBuffer = 524288000
 [diff]
-	tool = vimdiff
+	tool = nvimdiff
 	guitool = meld
+[difftool "nvimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE
 [merge]
 	tool = fugitive
 [mergetool "fugitive"]
-    cmd = vim -f -c "Gvdiff" "$MERGED"
+	cmd = nvim -f -c "Gvdiff" "$MERGED"
 [difftool]
 	prompt = false
 [alias]

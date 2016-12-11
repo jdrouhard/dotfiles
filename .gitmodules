@@ -55,3 +55,6 @@
 [submodule "home/.config/nvim/bundle/tender"]
 	path = home/.config/nvim/bundle/tender
 	url = https://github.com/jacoborus/tender.vim.git
+[submodule "home/.config/nvim/bundle/onedark"]
+	path = home/.config/nvim/bundle/onedark
+	url = https://github.com/joshdick/onedark.vim.git
