@@ -282,13 +282,14 @@ augroup vimrc_autocmd
 
     " Set text width for C++ code to be able to easily format comments.
     au FileType cpp setlocal textwidth=80
-    au FileType cpp setlocal formatoptions=croqn
+    au FileType cpp setlocal formatoptions=crqnj
 
     " Add support for Doxygen comment leader.
     au FileType h,hpp,cpp,c setlocal comments^=:///
 
-    " Set text width for Git commit messages.
-    au BufEnter .git/COMMIT_EDITMSG setlocal textwidth=72
+    " Override vim-polyglot changes to git commit formatting
+    au FileType gitcommit setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s*
+    au FileType gitcommit setlocal formatoptions+=n
 
     " Set text width for Changelogs, and do not expand tabs.
     au BufEnter Changelog setlocal textwidth=80
@@ -299,7 +300,7 @@ augroup vimrc_autocmd
 
     " Set text width for Python to 80 to allow for proper docstring and comment formatting.
     au FileType python setlocal textwidth=80
-    au FileType python setlocal formatoptions=croqn
+    au FileType python setlocal formatoptions=crqnj
 
     au BufEnter *.gradle setlocal filetype=groovy
 

@@ -34,9 +34,6 @@
 [submodule "home/.config/nvim/bundle/vim-polyglot"]
 	path = home/.config/nvim/bundle/vim-polyglot
 	url = https://github.com/sheerun/vim-polyglot.git
-[submodule "home/.config/nvim/bundle/vim-cpp-enhanced-highlight"]
-	path = home/.config/nvim/bundle/vim-cpp-enhanced-highlight
-	url = https://github.com/octol/vim-cpp-enhanced-highlight.git
 [submodule "home/.config/nvim/bundle/nerdtree-git-plugin"]
 	path = home/.config/nvim/bundle/nerdtree-git-plugin
 	url = https://github.com/Xuyuanp/nerdtree-git-plugin.git
