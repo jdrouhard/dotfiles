@@ -234,8 +234,10 @@ let g:gitgutter_sign_column_always = 1
 " Configure gitv
 let g:Gitv_TruncateCommitSubjects = 1
 
-" Configure vim-cpp-enhanced-highlight
-let g:cpp_class_scope_highlight = 1
+" Configure vim-polyglot
+let g:polyglot_disabled = ['c/c++']
+"let g:cpp_class_scope_highlight = 1
+"let g:cpp_experimental_simple_template_highlight = 1
 
 " Configure fzf
 let g:fzf_layout = { 'down': '~15%' }
