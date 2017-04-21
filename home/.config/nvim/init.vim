@@ -120,7 +120,7 @@ let mapleader=" "                    " set our personal modifier key to space
 
 " Quickly edit and reload the vimrc file.
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
-"nmap <silent> <leader>sv :so $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " Map Y to copy to the end of the line (which is more logical, also according
 " to the Vim manual.
@@ -135,15 +135,8 @@ vmap <s-tab> <gv
 nnoremap <silent> <C-h> :bprevious<CR>
 nnoremap <silent> <C-l> :bnext<CR>
 
-nnoremap <leader>v V`]
-
 nnoremap / /\v
 vnoremap / /\v
-
-" Switch Ctri-i and Ctrl-o, jumping backwards using Ctrl-i and forwards using
-" Ctrl-o seems more logical given the keyboard layout.
-nnoremap <C-i> <C-o>
-nnoremap <C-o> <C-i>
 
 " Toggle for side bar
 fu! UiToggle(command)
@@ -241,8 +234,10 @@ let g:polyglot_disabled = ['c/c++']
 
 " Configure fzf
 let g:fzf_layout = { 'down': '~15%' }
-let g:fzf_files_options = '--preview "cat {} 2> /dev/null | head -'.&lines.'"'
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
+
+au VimEnter * command! -bang -nargs=? -complete=dir Files
+            \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 au VimEnter * command! -bang -nargs=* Ag
             \ call fzf#vim#ag(<q-args>,
             \                 <bang>0 ? fzf#vim#with_preview('up:60%')
