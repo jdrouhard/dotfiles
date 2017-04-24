@@ -56,10 +56,12 @@ set background=dark
 
 if (has("nvim"))
     let g:onedark_terminal_italics = 1
+    let g:airline_theme='onedark'
     colorscheme onedark
 else
     let g:base16_termtrans=1
     let g:base16_term_italics=1
+    let g:airline_theme='solarized'
     colorscheme base16
     call toggletheme#maptransparency("<F10>")
     call toggletheme#mapbg("<F11>")
@@ -68,10 +70,9 @@ endif
 
 " Airline theme settings
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
-let g:airline_theme='onedark'
 let g:airline_powerline_fonts=1
 let g:solarized_base16=1
-"let g:airline_solarized_normal_green=1
+let g:airline_solarized_normal_green=1
 
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
@@ -116,6 +117,7 @@ set smartcase                        " ignore case if search pattern is all
                                      " lowercase, case-sensitive otherwise
 set visualbell                       " only show a visual cue when an error
                                      " occurs
+set laststatus=2                     " always show the status line
 
 "-------------------------------------------------------------------------------
 " Behavioural settings
@@ -359,6 +361,11 @@ if (has("nvim"))
     autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
     \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
 
+    augroup AutoSwap
+            autocmd!
+            autocmd SwapExists *  call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
+    augroup END
+
     augroup checktime
         au!
         if !has("gui_running")
@@ -367,17 +374,13 @@ if (has("nvim"))
             autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,BufEnter,FocusLost,WinLeave * checktime
         endif
     augroup END
+
 else
     " Always start editing a file in case a swap file exists.
     augroup SimultaneousEdits
         autocmd!
         autocmd SwapExists * :let v:swapchoice = 'e'
     augroup End
-
-    augroup AutoSwap
-            autocmd!
-            autocmd SwapExists *  call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
-    augroup END
 endif
 
 " Don't close window, when deleting a buffer
