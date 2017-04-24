@@ -1,12 +1,32 @@
 "-------------------------------------------------------------------------------
-" Initialize pathogen
+" vim-plug
 "-------------------------------------------------------------------------------
-filetype off
-"let g:pathogen_disabled = ['YouCompleteMe']
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
-execute pathogen#helptags()
-filetype plugin indent on
+let s:plugin_dir = '~/.local/share/nvim/plugged'
+let s:plug_file = '~/.local/share/nvim/site/autoload/plug.vim'
+
+if empty(glob(s:plug_file))
+    silent execute '!curl -fLo ' . s:plug_file . ' --create-dirs ' .
+        \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin(s:plugin_dir)
+
+Plug 'airblade/vim-gitgutter'
+Plug 'joshdick/onedark.vim'
+Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
+Plug 'lyuts/vim-rtags'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+
+" Manually managed
+Plug '~/.config/nvim/bundle/YouCompleteMe', { 'for': ['cpp', 'python'] }
+
+call plug#end()
 
 "-------------------------------------------------------------------------------
 " Text formatting
@@ -30,7 +50,6 @@ endif
 set background=dark
 
 let g:onedark_terminal_italics = 1
-"colorscheme tender
 colorscheme onedark
 
 "let g:base16_termtrans=1
@@ -109,6 +128,8 @@ set nostartofline                       " do not change the X position of the
 set wildignore+=*.o,*.obj,*.dwo
 set completeopt=longest,menuone         " Configure (keyword) completion.
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
+set updatetime=250                      " write swap file after 250ms of inactivity
+                                        " instead of 4000
 set inccommand=nosplit
 "set mouse=a
 
