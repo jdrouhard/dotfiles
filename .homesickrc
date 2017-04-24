@@ -2,4 +2,3 @@
 #system('ln -nfs ~/.homesick/repos/dotfiles/dircolors-solarized/dircolors.ansi-dark ~/.dircolors')
 system('bash ~/.homesick/repos/dotfiles/fonts/install.sh')
 system('~/.homesick/repos/dotfiles/tmux-terminfo.sh')
-system('mkdir -p ~/.local/share/nvim/backup')

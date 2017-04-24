@@ -1,8 +1,8 @@
 "-------------------------------------------------------------------------------
 " vim-plug
 "-------------------------------------------------------------------------------
-let s:plugin_dir = '~/.local/share/nvim/plugged'
-let s:plug_file = '~/.local/share/nvim/site/autoload/plug.vim'
+let s:plugin_dir = '~/.vim/plugged'
+let s:plug_file = '~/.vim/autoload/plug.vim'
 
 if empty(glob(s:plug_file))
     silent execute '!curl -fLo ' . s:plug_file . ' --create-dirs ' .
@@ -24,17 +24,22 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 " Manually managed
-Plug '~/.config/nvim/bundle/YouCompleteMe', { 'for': ['cpp', 'python'] }
+Plug '~/.vim/bundle/YouCompleteMe', { 'for': ['cpp', 'python'] }
 
 call plug#end()
 
 "-------------------------------------------------------------------------------
 " Text formatting
 "-------------------------------------------------------------------------------
+set encoding=utf-8
+
+set autoindent                       " always set autoindenting on
 set expandtab                        " insert spaces when the tab key is pressed
 set shiftround                       " use multiple of shiftwidth when indenting
                                      " with '<' and '>'
 set shiftwidth=4                     " number of spaces to use for autoindenting
+set smarttab                         " insert tabs on the start of a line
+                                     " according to shiftwidth, not tabstop
 set tabstop=4                        " a tab is four spaces
 set wrap                             " wrap overlong lines
 
@@ -42,21 +47,24 @@ set wrap                             " wrap overlong lines
 " UI settings
 "-------------------------------------------------------------------------------
 
-if (has("termguicolors"))
+if (has("termguicolors") && has("nvim"))
     set termguicolors
 endif
 
 " colorscheme settings
 set background=dark
 
-let g:onedark_terminal_italics = 1
-colorscheme onedark
-
-"let g:base16_termtrans=1
-"colorscheme base16
-"call toggletheme#maptransparency("<F10>")
-"call toggletheme#mapbg("<F11>")
-"call toggletheme#map256("<F12>")
+if (has("nvim"))
+    let g:onedark_terminal_italics = 1
+    colorscheme onedark
+else
+    let g:base16_termtrans=1
+    let g:base16_term_italics=1
+    colorscheme base16
+    call toggletheme#maptransparency("<F10>")
+    call toggletheme#mapbg("<F11>")
+    call toggletheme#map256("<F12>")
+endif
 
 " Airline theme settings
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
@@ -70,9 +78,10 @@ let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
 
-
 highlight link YcmErrorSection ErrorMsg
 
+set backspace=indent,eol,start       " allow backspacing over everything in
+                                     " insert mode
 set nofoldenable                     " disable code folding by default
 set number                           " always show line numbers
 set numberwidth=5                    " we are good for up to 99999 lines
@@ -91,6 +100,7 @@ au VimResized * exe "normal! \<c-w>="
 " Visual cues
 "-------------------------------------------------------------------------------
 
+set incsearch                        " show search matches as you type
 set listchars=tab:▸\ ,trail:·        " set custom characters for non-printable
                                      " characters
 set list                             " always show non-printable characters
@@ -113,16 +123,23 @@ set visualbell                       " only show a visual cue when an error
 
 set autoread                            " automatically reload a file when it has
                                         " been changed
+if (has("nvim"))
+    set shada^=%                        " Remember info about open buffers on close
+else
+    set viminfo^=%                      " Remember info about open buffers on close
+endif
 
-set shada^=%                            " Remember info about open buffers on close
 set backup                              " enable backups
-set backupdir=$HOME/.local/share/nvim/backup " only save backups to this directory
+set backupdir=$HOME/.vim/backup         " only save backups to this directory
 set undofile                            " enable persistent undo
-"set clipboard=unnamedplus               " use the system clipboard by default
+set undodir=$HOME/.vim/undo             " persistent undo directory
+"set clipboard=unnamedplus              " use the system clipboard by default
+set dir=$HOME/.vim/swap                 " set the swap directory
 set hidden                              " be able to put the current buffer to the
                                         " background without writing to disk and
                                         " remember marks and undo-history when a
                                         " background buffer becomes current again
+set history=50                          " keep 50 lines of command line history
 set nostartofline                       " do not change the X position of the
                                         " cursor when paging up and down
 set wildignore+=*.o,*.obj,*.dwo
@@ -130,7 +147,9 @@ set completeopt=longest,menuone         " Configure (keyword) completion.
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
 set updatetime=250                      " write swap file after 250ms of inactivity
                                         " instead of 4000
-set inccommand=nosplit
+if (has("nvim"))
+    set inccommand=nosplit
+endif
 "set mouse=a
 
 "-------------------------------------------------------------------------------
@@ -329,29 +348,37 @@ augroup END
 " Misc settings
 "-------------------------------------------------------------------------------
 
-augroup AutoSwap
-        autocmd!
-        autocmd SwapExists *  call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
-augroup END
+if (has("nvim"))
+    function! AS_HandleSwapfile (filename, swapname)
+            " if swapfile is older than file itself, just get rid of it
+            if getftime(v:swapname) < getftime(a:filename)
+                    call delete(v:swapname)
+                    let v:swapchoice = 'e'
+            endif
+    endfunction
+    autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+    \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
 
-function! AS_HandleSwapfile (filename, swapname)
-        " if swapfile is older than file itself, just get rid of it
-        if getftime(v:swapname) < getftime(a:filename)
-                call delete(v:swapname)
-                let v:swapchoice = 'e'
+    augroup checktime
+        au!
+        if !has("gui_running")
+            "silent! necessary otherwise throws errors when using command
+            "line window.
+            autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,BufEnter,FocusLost,WinLeave * checktime
         endif
-endfunction
-autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
-  \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+    augroup END
+else
+    " Always start editing a file in case a swap file exists.
+    augroup SimultaneousEdits
+        autocmd!
+        autocmd SwapExists * :let v:swapchoice = 'e'
+    augroup End
 
-augroup checktime
-    au!
-    if !has("gui_running")
-        "silent! necessary otherwise throws errors when using command
-        "line window.
-        autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,BufEnter,FocusLost,WinLeave * checktime
-    endif
-augroup END
+    augroup AutoSwap
+            autocmd!
+            autocmd SwapExists *  call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
+    augroup END
+endif
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()

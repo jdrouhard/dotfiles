@@ -10,6 +10,6 @@
 [submodule "home/.zsh/zgen"]
 	path = home/.zsh/zgen
 	url = https://github.com/tarjoilija/zgen.git
-[submodule "home/.config/nvim/bundle/YouCompleteMe"]
-	path = home/.config/nvim/bundle/YouCompleteMe
+[submodule "home/.vim/bundle/YouCompleteMe"]
+	path = home/.vim/bundle/YouCompleteMe
 	url = https://github.com/Valloric/YouCompleteMe.git
