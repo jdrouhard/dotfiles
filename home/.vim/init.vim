@@ -5,7 +5,7 @@ let s:plugin_dir = '~/.vim/plugged'
 let s:plug_file = '~/.vim/autoload/plug.vim'
 
 if empty(glob(s:plug_file))
-    silent execute '!curl -fLo ' . s:plug_file . ' --create-dirs ' .
+    silent execute '!curl -fLo ' . s:plug_file . ' --create-dirs -k ' .
         \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -24,7 +24,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 " Manually managed
-Plug '~/.vim/bundle/YouCompleteMe', { 'for': ['cpp', 'python'] }
+Plug '~/.vim/bundle/YouCompleteMe', { 'for': ['cpp', 'c', 'python', 'js'] }
 
 call plug#end()
 
@@ -127,16 +127,17 @@ set autoread                            " automatically reload a file when it ha
                                         " been changed
 if (has("nvim"))
     set shada^=%                        " Remember info about open buffers on close
+    set inccommand=nosplit              " Don't show partial results in preview window
 else
     set viminfo^=%                      " Remember info about open buffers on close
+    set undodir=$HOME/.vim/undo         " persistent undo directory
+    set dir=$HOME/.vim/swap             " set the swap directory
 endif
 
 set backup                              " enable backups
 set backupdir=$HOME/.vim/backup         " only save backups to this directory
 set undofile                            " enable persistent undo
-set undodir=$HOME/.vim/undo             " persistent undo directory
 "set clipboard=unnamedplus              " use the system clipboard by default
-set dir=$HOME/.vim/swap                 " set the swap directory
 set hidden                              " be able to put the current buffer to the
                                         " background without writing to disk and
                                         " remember marks and undo-history when a
@@ -149,10 +150,6 @@ set completeopt=longest,menuone         " Configure (keyword) completion.
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
 set updatetime=250                      " write swap file after 250ms of inactivity
                                         " instead of 4000
-if (has("nvim"))
-    set inccommand=nosplit
-endif
-"set mouse=a
 
 "-------------------------------------------------------------------------------
 " Key remappings
@@ -191,13 +188,8 @@ endf
 " Toggle the file system tree with F2
 nnoremap <silent> <F2> :call UiToggle(":NERDTreeToggle")<CR>
 
-" Toggle the tag list
-"nnoremap <silent> <F3> :call UiToggle(":TagbarToggle")<CR>
-
 " Close the current buffer
 map <leader>bd :Bclose<CR>
-" Remap Ctrl-q to close the current buffer
-nmap <silent> <C-q> :Bclose<CR>
 
 " Remap K to do nothing instead of searching the man pages.
 nnoremap K <nop>
@@ -409,6 +401,11 @@ autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
+
+" Read local machine settings
+if filereadable("~/.local/vim/vimrc")
+    so "~/.localvimrc"
+endif
 
 " Read in a custom Vim configuration local to the working directory.
 if filereadable(".project.vim")
