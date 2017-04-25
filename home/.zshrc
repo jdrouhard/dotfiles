@@ -8,7 +8,6 @@ setopt rm_star_silent
 export PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
 
 for path_candidate in /opt/local/sbin \
-    /opt/bats/bin \
     /opt/local/bin \
     ~/.local/bin \
     ~/bin
@@ -26,8 +25,12 @@ zstyle :omz:plugins:ssh-agent agent-forwarding on
 # Environment variables
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
-export EDITOR=nvim
 export LESS=-MIRXF
+if hash nvim 2>/dev/null; then
+    export EDITOR=nvim
+else
+    export EDITOR=vim
+fi
 
 # Set up bindings
 bindkey -M viins 'jk' vi-cmd-mode

@@ -21,12 +21,19 @@ vnoremap <unique> <script> <Plug>Toggle256 <ESC><SID>Tog256<ESC>gv
 nnoremap <unique> <script> <Plug>ToggleTransparency <SID>TogTransparency
 inoremap <unique> <script> <Plug>ToggleTransparency <ESC><SID>TogTransparency<ESC>a
 vnoremap <unique> <script> <Plug>ToggleTransparency <ESC><SID>TogTransparency<ESC>gv
-noremap <SID>TogBG  :call <SID>TogBG()<CR>
-noremap <SID>Tog256  :call <SID>Tog256()<CR>
-noremap <SID>TogTransparency  :call <SID>TogTransparency()<CR>
+nnoremap <unique> <script> <Plug>ToggleTrueColors <SID>TogTrueColors
+inoremap <unique> <script> <Plug>ToggleTrueColors <ESC><SID>TogTrueColors<ESC>a
+vnoremap <unique> <script> <Plug>ToggleTrueColors <ESC><SID>TogTrueColors<ESC>gv
+noremap <SID>TogBG :call <SID>TogBG()<CR>
+noremap <SID>Tog256 :call <SID>Tog256()<CR>
+noremap <SID>TogTransparency :call <SID>TogTransparency()<CR>
+noremap <SID>TogTrueColors :call <SID>TogTrueColors()<CR>
 
 let s:background = &background
 let s:num_colors = &t_Co
+if (has("termguicolors"))
+    let s:termguicolors = &termguicolors
+endif
 
 function! s:ApplyColors()
     if exists("g:colors_name")
@@ -60,6 +67,17 @@ function! s:TogTransparency()
     call s:ApplyColors()
 endfunction
 
+function! s:TogTrueColors()
+    if (has("termguicolors"))
+        let s:termguicolors = ( s:termguicolors == 0 ? 1 : 0)
+        if (s:termguicolors == 1)
+            set termguicolors
+        else
+            set notermguicolors
+        endif
+    endif
+endfunction
+
 if !exists(":ToggleBG")
     command ToggleBG :call s:TogBG()
 endif
@@ -70,6 +88,10 @@ endif
 
 if !exists(":ToggleTransparency")
     command ToggleTransparency :call s:TogTransparency()
+endif
+
+if !exists(":ToggleTrueColors")
+    command ToggleTrueColors :call s:TogTrueColors()
 endif
 
 function s:mapActivation(mapActivation, func)
@@ -92,6 +114,10 @@ endfunction
 
 function! toggletheme#maptransparency(mapActivation)
     call s:mapActivation(a:mapActivation, "ToggleTransparency")
+endfunction
+
+function! toggletheme#maptruecolors(mapActivation)
+    call s:mapActivation(a:mapActivation, "ToggleTrueColors")
 endfunction
 
 if !exists("no_plugin_maps")

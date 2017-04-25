@@ -53,26 +53,37 @@ set wrap                             " wrap overlong lines
 " UI settings
 "-------------------------------------------------------------------------------
 
-if (has("termguicolors") && has("nvim"))
-    set termguicolors
-endif
-
 " colorscheme settings
 set background=dark
-
-if (has("nvim"))
+if (has("termguicolors") || has("gui_running"))
+    set termguicolors
     let g:onedark_terminal_italics = 1
     let g:airline_theme='onedark'
     colorscheme onedark
+
+    call toggletheme#maptruecolors("<F12>")
 else
     let g:base16_termtrans=1
     let g:base16_term_italics=1
     let g:airline_theme='solarized'
     colorscheme base16
+
     call toggletheme#maptransparency("<F10>")
     call toggletheme#mapbg("<F11>")
     call toggletheme#map256("<F12>")
 endif
+
+if (!has("nvim"))
+    set t_so=[7m                         " set escape codes for standout mode
+    set t_se=[27m                        " set escape codes for standout mode
+    set t_ZH=[3m                         " set escape codes for italics mode
+    set t_ZR=[23m                        " set escape codes for italics mode
+    if (has("termguicolors"))
+        let &t_8f = "\<esc>[38;2;%lu;%lu;%lum" " true color fix
+        let &t_8b = "\<esc>[48;2;%lu;%lu;%lum" " true color fix
+    endif
+endif
+
 
 " Airline theme settings
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
