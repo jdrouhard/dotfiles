@@ -24,7 +24,13 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 " Manually managed
-Plug '~/.vim/bundle/YouCompleteMe', { 'for': ['cpp', 'c', 'python', 'js'] }
+"Plug '~/.vim/bundle/YouCompleteMe', { 'for': ['cpp', 'c', 'python', 'js'] }
+Plug '~/.vim/bundle/YouCompleteMe', { 'for': [] }
+augroup load_ycm
+    autocmd!
+    autocmd CursorHold,CursorHoldI * call plug#load('YouCompleteMe')
+                                  \ | autocmd! load_ycm
+augroup END
 
 call plug#end()
 
@@ -363,7 +369,7 @@ if (has("nvim"))
         if !has("gui_running")
             "silent! necessary otherwise throws errors when using command
             "line window.
-            autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,BufEnter,FocusLost,WinLeave * checktime
+            autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,FocusLost,WinLeave * checktime
         endif
     augroup END
 
@@ -403,7 +409,7 @@ autocmd BufReadPost *
      \ endif
 
 " Read local machine settings
-if filereadable("~/.local/vim/vimrc")
+if filereadable("~/.localvimrc")
     so "~/.localvimrc"
 endif
 
