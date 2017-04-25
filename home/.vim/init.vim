@@ -380,7 +380,7 @@ if (has("nvim"))
         if !has("gui_running")
             "silent! necessary otherwise throws errors when using command
             "line window.
-            autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,FocusLost,WinLeave * checktime
+            silent! autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,FocusLost,WinLeave * checktime
         endif
     augroup END
 
