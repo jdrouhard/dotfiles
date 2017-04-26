@@ -55,7 +55,7 @@ set wrap                             " wrap overlong lines
 
 " colorscheme settings
 set background=dark
-if (has("termguicolors") || has("gui_running"))
+if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")) || has("gui_running"))
     set termguicolors
     let g:onedark_terminal_italics=1
     let g:airline_theme='onedark'
