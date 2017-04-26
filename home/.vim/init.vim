@@ -57,7 +57,7 @@ set wrap                             " wrap overlong lines
 set background=dark
 if (has("termguicolors") || has("gui_running"))
     set termguicolors
-    let g:onedark_terminal_italics = 1
+    let g:onedark_terminal_italics=1
     let g:airline_theme='onedark'
     colorscheme onedark
 
