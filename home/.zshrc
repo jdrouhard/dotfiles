@@ -8,6 +8,7 @@ setopt rm_star_silent
 export PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
 
 for path_candidate in /opt/local/sbin \
+    /opt/bats/bin \
     /opt/local/bin \
     ~/.local/bin \
     ~/bin

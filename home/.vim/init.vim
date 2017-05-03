@@ -24,12 +24,13 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 " Manually managed
-"Plug '~/.vim/bundle/YouCompleteMe', { 'for': ['cpp', 'c', 'python', 'js'] }
 Plug '~/.vim/bundle/YouCompleteMe', { 'for': [] }
 augroup load_ycm
     autocmd!
-    autocmd CursorHold,CursorHoldI * call plug#load('YouCompleteMe')
-                                  \ | autocmd! load_ycm
+    autocmd CursorHold,CursorHoldI * exe "normal! m\""
+                                 \ | call plug#load('YouCompleteMe')
+                                 \ | set updatetime=250
+                                 \ | autocmd! load_ycm
 augroup END
 
 call plug#end()
@@ -103,16 +104,11 @@ set backspace=indent,eol,start       " allow backspacing over everything in
 set nofoldenable                     " disable code folding by default
 set number                           " always show line numbers
 set numberwidth=5                    " we are good for up to 99999 lines
-"set ruler                            " show the cursor position all the time
 set showcmd                          " display incomplete commands
-set cursorline                       " highlight current line
 set modeline                         " enable modeline identifiers in files
 set cmdheight=2                      " set cmdheight=2 to avoid pesky
                                      " "Press ENTER to continue" after errors
 set lazyredraw
-
-" Resize splits when the window is resized.
-au VimResized * exe "normal! \<c-w>="
 
 "-------------------------------------------------------------------------------
 " Visual cues
@@ -165,8 +161,6 @@ set nostartofline                       " do not change the X position of the
 set wildignore+=*.o,*.obj,*.dwo
 set completeopt=longest,menuone         " Configure (keyword) completion.
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
-set updatetime=250                      " write swap file after 250ms of inactivity
-                                        " instead of 4000
 
 "-------------------------------------------------------------------------------
 " Key remappings
@@ -176,7 +170,7 @@ let mapleader=" "                    " set our personal modifier key to space
 
 " Quickly edit and reload the vimrc file.
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+"nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " Map Y to copy to the end of the line (which is more logical, also according
 " to the Vim manual.
@@ -279,7 +273,7 @@ let g:gitgutter_sign_column_always = 1
 let g:Gitv_TruncateCommitSubjects = 1
 
 " Configure vim-polyglot
-let g:polyglot_disabled = ['c/c++']
+let g:polyglot_disabled = ['c/c++', 'latex']
 "let g:cpp_class_scope_highlight = 1
 "let g:cpp_experimental_simple_template_highlight = 1
 
@@ -287,16 +281,8 @@ let g:polyglot_disabled = ['c/c++']
 let g:fzf_layout = { 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
 
-au VimEnter * command! -bang -nargs=? -complete=dir Files
-            \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-au VimEnter * command! -bang -nargs=* Ag
-            \ call fzf#vim#ag(<q-args>,
-            \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-            \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-            \                 <bang>0)
-
 "-------------------------------------------------------------------------------
-" File type specific settings
+" Configure autocommmands
 "-------------------------------------------------------------------------------
 
 " Automatically remove trailing whitespace before write.
@@ -308,29 +294,16 @@ endfunction
 
 augroup vimrc_autocmd
     autocmd!
-    " Syntax highlighting for Go.
-    au BufEnter *.go setlocal syntax=go
+    " Modify default tabstop and textwidth/formatting
+    au FileType cmake,xml setlocal tabstop=2
+    au FileType cmake,xml setlocal shiftwidth=2
 
-    " Set tab stop to 2 for CMake files.
-    au BufEnter CMakeLists.txt setlocal tabstop=2
-    au BufEnter CMakeLists.txt setlocal shiftwidth=2
-    au BufEnter *.cmake setlocal tabstop=2
-    au BufEnter *.cmake setlocal shiftwidth=2
-
-    au BufEnter *.xml setlocal tabstop=2
-    au BufEnter *.xml setlocal shiftwidth=2
-
-    " Set tab stop to 4 for Vimscript files.
-    au BufEnter *.vim setlocal tabstop=4
-    au BufEnter *.vim setlocal shiftwidth=4
+    au FileType cpp,python setlocal textwidth=80
+    au FileType cpp,python setlocal formatoptions=crqnj
 
     " Strip trailing white spaces in source code.
     "au BufWritePre *.cpp,*.hpp,*.h,*.c :call StripTrailingWhitespace()
     au BufWritePre .vimrc,*.js,*.php :call StripTrailingWhitespace()
-
-    " Set text width for C++ code to be able to easily format comments.
-    au FileType cpp setlocal textwidth=80
-    au FileType cpp setlocal formatoptions=crqnj
 
     " Add support for Doxygen comment leader.
     au FileType h,hpp,cpp,c setlocal comments^=:///
@@ -339,58 +312,70 @@ augroup vimrc_autocmd
     au FileType gitcommit setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s*
     au FileType gitcommit setlocal formatoptions+=n
 
-    " Set text width for Changelogs, and do not expand tabs.
-    au BufEnter Changelog setlocal textwidth=80
-    au BufEnter Changelog setlocal expandtab
+    " sqli files are actually sql files
+    au BufRead,BufNewFile *.sqli setlocal filetype=sql
 
-    " Set text width for reStructured text.
-    au BufEnter *.rst setlocal textwidth=80
+    " latex regex is too slow to match parens
+    au FileType tex :NoMatchParen
 
-    " Set text width for Python to 80 to allow for proper docstring and comment formatting.
-    au FileType python setlocal textwidth=80
-    au FileType python setlocal formatoptions=crqnj
+    " Resize splits when the window is resized.
+    au VimResized * exe "normal! \<c-w>="
 
-    au BufEnter *.gradle setlocal filetype=groovy
+    " Return to last edit position when opening files (You want this!)
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                 \ |   exe "normal! g`\"" |
+                 \ | endif
 
-    au BufEnter *.sqli setlocal filetype=sql
+    " Close vim if the last window is NERDTree
+    au BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary")
+              \ | q
+              \ | endif
+
+    " Add preview functionality to fzf
+    au VimEnter * command! -bang -nargs=? -complete=dir Files
+                \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+    au VimEnter * command! -bang -nargs=* Ag
+                \ call fzf#vim#ag(<q-args>,
+                \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+                \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+                \                 <bang>0)
+
 augroup END
 
 "-------------------------------------------------------------------------------
 " Misc settings
 "-------------------------------------------------------------------------------
-
 if (has("nvim"))
-    function! AS_HandleSwapfile (filename, swapname)
-            " if swapfile is older than file itself, just get rid of it
-            if getftime(v:swapname) < getftime(a:filename)
-                    call delete(v:swapname)
-                    let v:swapchoice = 'e'
-            endif
+    function! AS_HandleSwapfile(filename, swapname)
+        " if swapfile is older than file itself, just get rid of it
+        if getftime(v:swapname) < getftime(a:filename)
+            call delete(v:swapname)
+            let v:swapchoice = 'e'
+        endif
     endfunction
-    autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
-    \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
 
     augroup AutoSwap
-            autocmd!
-            autocmd SwapExists *  call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
+        autocmd!
+        autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+                \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+        autocmd SwapExists * call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
     augroup END
-
-    augroup checktime
-        au!
-        if !has("gui_running")
-            "silent! necessary otherwise throws errors when using command
-            "line window.
-            silent! autocmd BufEnter,CursorHold,CursorHoldI,CursorMoved,CursorMovedI,FocusGained,FocusLost,WinLeave * checktime
-        endif
-    augroup END
-
 else
     " Always start editing a file in case a swap file exists.
-    augroup SimultaneousEdits
+    augroup AutoSwap
         autocmd!
         autocmd SwapExists * :let v:swapchoice = 'e'
-    augroup End
+    augroup END
 endif
+
+augroup checktime
+    autocmd!
+    if !has("gui_running")
+        "silent! necessary otherwise throws errors when using command line window.
+        silent! autocmd BufEnter,CursorHold,CursorHoldI,FocusGained,FocusLost,WinLeave * checktime
+    endif
+augroup END
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
@@ -413,12 +398,6 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
-" Return to last edit position when opening files (You want this!)
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
-
 " Read local machine settings
 if filereadable("~/.localvimrc")
     so "~/.localvimrc"
@@ -429,5 +408,3 @@ if filereadable(".project.vim")
     so .project.vim
 endif
 
-" Close vim if the last window is NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
