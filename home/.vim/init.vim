@@ -201,6 +201,7 @@ nnoremap <silent> <F2> :call UiToggle(":NERDTreeToggle")<CR>
 
 " Close the current buffer
 map <leader>bd :Bclose<CR>
+map <C-q> :Bclose<CR>
 
 " Remap K to do nothing instead of searching the man pages.
 nnoremap K <nop>
@@ -273,7 +274,7 @@ let g:gitgutter_sign_column_always = 1
 let g:Gitv_TruncateCommitSubjects = 1
 
 " Configure vim-polyglot
-let g:polyglot_disabled = ['c/c++', 'latex']
+let g:polyglot_disabled = ['c/c++']
 "let g:cpp_class_scope_highlight = 1
 "let g:cpp_experimental_simple_template_highlight = 1
 
@@ -314,9 +315,6 @@ augroup vimrc_autocmd
 
     " sqli files are actually sql files
     au BufRead,BufNewFile *.sqli setlocal filetype=sql
-
-    " latex regex is too slow to match parens
-    au FileType tex :NoMatchParen
 
     " Resize splits when the window is resized.
     au VimResized * exe "normal! \<c-w>="
