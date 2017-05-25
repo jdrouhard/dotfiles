@@ -18,8 +18,12 @@ if hash pip 2>/dev/null && hash powerline-daemon 2>/dev/null; then
     . $POWERLINE_DIR/powerline/bindings/bash/powerline.sh
 fi
 
-alias tmux="TERM=screen-256color-bce tmux"
+#alias tmux="TERM=screen-256color-bce tmux"
 #alias vim="vim --servername vim"
+alias sudo="sudo -E"
+
+stty -ixoff
+stty -ixon
 
 function tmup() {
     echo -n "Updating to latest tmux environment...";

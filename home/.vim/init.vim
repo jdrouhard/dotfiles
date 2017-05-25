@@ -15,11 +15,12 @@ call plug#begin(s:plugin_dir)
 Plug 'airblade/vim-gitgutter'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-dirvish'
 Plug 'lyuts/vim-rtags'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
@@ -188,16 +189,8 @@ nnoremap <silent> <C-l> :bnext<CR>
 nnoremap / /\v
 vnoremap / /\v
 
-" Toggle for side bar
-fu! UiToggle(command)
-  let b = bufnr("%")
-  execute a:command
-  execute ( bufwinnr(b) . "wincmd w" )
-  "execute ":set number!"
-endf
-
-" Toggle the file system tree with F2
-nnoremap <silent> <F2> :call UiToggle(":NERDTreeToggle")<CR>
+" Open the current working directory in dirvish
+nnoremap <silent> <F2> :Dirvish<CR>
 
 " Close the current buffer
 map <leader>bd :Bclose<CR>
@@ -323,11 +316,6 @@ augroup vimrc_autocmd
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
                  \ |   exe "normal! g`\"" |
                  \ | endif
-
-    " Close vim if the last window is NERDTree
-    au BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary")
-              \ | q
-              \ | endif
 
     " Add preview functionality to fzf
     au VimEnter * command! -bang -nargs=? -complete=dir Files

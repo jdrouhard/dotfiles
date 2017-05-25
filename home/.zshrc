@@ -4,6 +4,9 @@ unsetopt correctall
 setopt NO_NOMATCH
 setopt rm_star_silent
 
+stty -ixon
+stty -ixoff
+
 # Path
 export PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
 
@@ -65,6 +68,8 @@ function exists {
 }
 exists _zsh_tmux_plugin_run && tmux_func="_zsh_tmux_plugin_run" || tmux_func="tmux"
 #alias tmux="TERM=screen-256color-bce $tmux_func" # honestly I have no idea why the bce is necessary
+
+alias sudo="sudo -E"
 
 # set some history options
 setopt append_history
