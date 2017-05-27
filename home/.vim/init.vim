@@ -55,7 +55,6 @@ set wrap                             " wrap overlong lines
 " UI settings
 "-------------------------------------------------------------------------------
 
-" colorscheme settings
 set background=dark
 if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")) || has("gui_running"))
     set termguicolors
@@ -86,8 +85,6 @@ if (!has("nvim"))
     endif
 endif
 
-
-" Airline theme settings
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
 let g:airline_powerline_fonts=1
 let g:solarized_base16=1
@@ -274,6 +271,7 @@ let g:polyglot_disabled = ['c/c++']
 " Configure fzf
 let g:fzf_layout = { 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 "-------------------------------------------------------------------------------
 " Configure autocommmands
@@ -314,7 +312,7 @@ augroup vimrc_autocmd
 
     " Return to last edit position when opening files (You want this!)
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                 \ |   exe "normal! g`\"" |
+                 \ |   exe "normal! g`\""
                  \ | endif
 
     " Add preview functionality to fzf
@@ -385,8 +383,8 @@ function! <SID>BufcloseCloseIt()
 endfunction
 
 " Read local machine settings
-if filereadable("~/.localvimrc")
-    so "~/.localvimrc"
+if filereadable(expand("~/.localvimrc"))
+    so ~/.localvimrc
 endif
 
 " Read in a custom Vim configuration local to the working directory.
