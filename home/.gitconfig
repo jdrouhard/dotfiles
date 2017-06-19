@@ -22,6 +22,7 @@
 	prompt = false
 [alias]
 	l = log --graph --all --pretty=format:'%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset' --abbrev-commit --date=relative
-	addnw = !sh -c 'git diff -w --no-color "$@" | git apply --cached --ignore-whitespace' - && git status
+	slog = log --pretty=format:\"-------------------------------------------------------------------------%n%C(yellow)%h%Creset | %C(magenta)%an%Creset | %C(cyan)%ad%Creset |%C(green)%d%Creset%n%n%s%n%b\" --name-status
 [core]
 	autocrlf = false
+	quotepath = false

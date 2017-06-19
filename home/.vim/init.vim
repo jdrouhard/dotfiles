@@ -231,7 +231,9 @@ map <leader>? :Helptags<CR>
 map <leader>gs :GFiles?<CR>
 map <leader>gl :Commits<CR>
 map <leader>gbl :BCommits<CR>
-inoremap <C-x><C-l> <plug>(fzf-complete-line)
+imap <C-x><C-l> <plug>(fzf-complete-line)
+
+map <leader>gg :Gblame<CR>
 
 " YouCompleteMe mappings
 nnoremap <F6> :YcmForceCompileAndDiagnostics<CR>
@@ -333,8 +335,8 @@ augroup END
 if (has("nvim"))
     function! AS_HandleSwapfile(filename, swapname)
         " if swapfile is older than file itself, just get rid of it
-        if getftime(v:swapname) < getftime(a:filename)
-            call delete(v:swapname)
+        if getftime(a:swapname) < getftime(a:filename)
+            call delete(a:swapname)
             let v:swapchoice = 'e'
         endif
     endfunction
