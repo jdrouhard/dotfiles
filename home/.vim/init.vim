@@ -256,6 +256,7 @@ let g:rtagsUseLocationList = 0
 "let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_filepath_completion_use_working_dir = 1
 let g:ycm_confirm_extra_conf = 0
+let g:ycm_global_ycm_extra_conf = expand("~/.ycm_extra_conf.py")
 let g:ycm_key_list_select_completion = ['<C-j>', '<Tab>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-Tab>', '<Up>']
 
