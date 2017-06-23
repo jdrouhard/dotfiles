@@ -14,17 +14,17 @@ compilation_database_dir_map = dict()
 file_directory_heuristic_map = dict()
 
 def LoadSystemIncludes():
-    regex = re.compile(r"(?:\#include \<...\> search starts here\:)(?P<list>.*?)(?:End of search list)", re.DOTALL);
-    process = subprocess.Popen(['gcc', '-v', '-E', '-x', 'c++', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-    process_out, process_err = process.communicate('');
-    output = str(process_out + process_err);
-    includes = [];
-    for p in re.search(regex, output).group('list').split('\n'):
-        p = p.strip();
+    regex = re.compile(r"(?:\#include \<...\> search starts here\:)(?P<list>.*?)(?:End of search list)", re.DOTALL)
+    process = subprocess.Popen(['clang', '-v', '-E', '-x', 'c++', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process_out, process_err = process.communicate('')
+    output = process_out + process_err
+    includes = []
+    for p in re.search(regex, output.decode()).group('list').splitlines():
+        p = p.strip()
         if len(p) > 0 and p.find('(framework directory)') < 0:
-            includes.append('-isystem');
-            includes.append(p);
-    return includes;
+            includes.append('-isystem')
+            includes.append(p)
+    return includes
 SYSTEM_INCLUDES = LoadSystemIncludes()
 
 def FindCompilationDatabase(wd):
@@ -32,31 +32,22 @@ def FindCompilationDatabase(wd):
         if folder in compilation_database_dir_map:
             return compilation_database_dir_map[folder]
 
-        def _SearchForFile(base_dir, build_dir = ''):
-            candidate = os.path.join(base_dir, build_dir)
-            compile_commands = os.path.join(candidate, 'compile_commands.json')
-            if os.path.exists(compile_commands):
-                database = ycm_core.CompilationDatabase(candidate)
-                compilation_database_dir_map[base_dir] = database
-                return database
-            return None
-
-        database = _SearchForFile(folder)
-
-        if database:
-            return database
-
         build_dirs = ['build.clang', 'build']
         build_subdirs = ['debug', 'release']
 
-        for build_dir in build_dirs:
-            database = _SearchForFile(folder, build_dir)
-            if database:
-                return database
+        candidates = [
+            folder,
+            [os.path.join(folder, x) for x in build_dirs],
+            [os.path.join(folder, x[1], x[0]) for x in itertools.product(build_subdirs, build_dirs)],
+        ]
 
-        for build_dir in itertools.product(build_subdirs, build_dirs):
-            database = _SearchForFile(folder, os.path.join(build_dir[1], build_dir[0]))
-            if database:
+        candidates = itertools.chain.from_iterable(candidates)
+
+        for candidate in candidates:
+            compile_commands = os.path.join(candidate, 'compile_commands.json')
+            if os.path.exists(compile_commands):
+                database = ycm_core.CompilationDatabase(candidate)
+                compilation_database_dir_map[folder] = database
                 return database
 
     compilation_database_dir_map[wd] = None
