@@ -129,6 +129,7 @@ set smartcase                        " ignore case if search pattern is all
 set visualbell                       " only show a visual cue when an error
                                      " occurs
 set laststatus=2                     " always show the status line
+set signcolumn=yes                   " always show the sign column
 
 "-------------------------------------------------------------------------------
 " Behavioural settings
@@ -259,9 +260,6 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_global_ycm_extra_conf = expand("~/.ycm_extra_conf.py")
 let g:ycm_key_list_select_completion = ['<C-j>', '<Tab>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-Tab>', '<Up>']
-
-" Configure vim-gitgutter
-let g:gitgutter_sign_column_always = 1
 
 " Configure gitv
 let g:Gitv_TruncateCommitSubjects = 1
