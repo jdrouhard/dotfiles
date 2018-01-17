@@ -704,7 +704,7 @@ endfunction
 "            + implemented fix from Matt Perry
 function! <SID>FindOrCreateBuffer(fileName, doSplit, findSimilar)
   " Check to see if the buffer is already open before re-opening it.
-  let FILENAME = escape(a:fileName, ' ')
+  let FILENAME = fnamemodify(escape(a:fileName, ' '), ':.')
   let bufNr = -1
   let lastBuffer = bufnr("$")
   let i = 1

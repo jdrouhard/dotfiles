@@ -19,6 +19,7 @@ Plug 'justinmk/vim-dirvish'
 Plug 'lyuts/vim-rtags'
 Plug 'scrooloose/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
+Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -86,7 +87,7 @@ if (!has("nvim"))
 endif
 
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
-let g:airline_powerline_fonts=1
+"let g:airline_powerline_fonts=1
 let g:solarized_base16=1
 let g:airline_solarized_normal_green=1
 
@@ -94,6 +95,9 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
+let g:airline#extensions#ycm#enabled=1
+call airline#parts#define('cfunc', {'function': 'Tlist_Get_Tagname_By_Line'})
+let g:airline_section_x = airline#section#create_right(['cfunc', 'filetype'])
 
 highlight link YcmErrorSection ErrorMsg
 
@@ -158,6 +162,7 @@ set history=50                          " keep 50 lines of command line history
 set nostartofline                       " do not change the X position of the
                                         " cursor when paging up and down
 set wildignore+=*.o,*.obj,*.dwo
+set path=$PWD/**
 set completeopt=longest,menuone         " Configure (keyword) completion.
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
 
@@ -274,6 +279,15 @@ let g:fzf_layout = { 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
+" Configure taglist
+let Tlist_Inc_Winwidth=0
+let Tlist_Process_File_Always=1
+let Tlist_Use_Horiz_Window=0
+let Tlist_Use_Right_Window = 1
+let Tlist_WinWidth=60
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Close_On_Select=0
+
 "-------------------------------------------------------------------------------
 " Configure autocommmands
 "-------------------------------------------------------------------------------
@@ -291,7 +305,7 @@ augroup vimrc_autocmd
     au FileType cmake,xml setlocal tabstop=2
     au FileType cmake,xml setlocal shiftwidth=2
 
-    au FileType cpp,python setlocal textwidth=80
+    au FileType cpp,python setlocal textwidth=100
     au FileType cpp,python setlocal formatoptions=crqnj
 
     " Strip trailing white spaces in source code.
@@ -353,14 +367,6 @@ else
         autocmd SwapExists * :let v:swapchoice = 'e'
     augroup END
 endif
-
-augroup checktime
-    autocmd!
-    if !has("gui_running")
-        "silent! necessary otherwise throws errors when using command line window.
-        silent! autocmd BufEnter,CursorHold,CursorHoldI,FocusGained,FocusLost,WinLeave * checktime
-    endif
-augroup END
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
