@@ -96,8 +96,11 @@ let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
 let g:airline#extensions#ycm#enabled=1
-call airline#parts#define('cfunc', {'function': 'Tlist_Get_Tagname_By_Line'})
-let g:airline_section_x = airline#section#create_right(['cfunc', 'filetype'])
+function! GetTagname()
+    silent! return Tlist_Get_Tagname_By_Line()
+endfunction
+call airline#parts#define_function("cfunc", "GetTagname")
+let g:airline_section_x = airline#section#create_right(["cfunc", "filetype"])
 
 highlight link YcmErrorSection ErrorMsg
 

@@ -44,7 +44,7 @@
 "    $VIM/vimfiles/doc directory, start Vim and run the ":helptags ."
 "    command to process the taglist help file.
 " 3. If the exuberant ctags utility is not present in your PATH, then set the
-"    Tlist_Ctags_Cmd variable to point to the location of the exuberant ctags
+"    g:Tlist_Ctags_Cmd variable to point to the location of the exuberant ctags
 "    utility (not to the directory) in the .vimrc file.
 " 4. If you are running a terminal/console version of Vim and the
 "    terminal doesn't support changing the window width then set the
@@ -65,6 +65,49 @@ if !exists('s:cpo_save')
 endif
 set cpo&vim
 
+function! s:CheckForExCtags() abort
+    let ctagsbins  = []
+    let ctagsbins += ['ctags-exuberant'] " Debian
+    let ctagsbins += ['exuberant-ctags']
+    let ctagsbins += ['exctags'] " FreeBSD, NetBSD
+    let ctagsbins += ['/usr/local/bin/ctags'] " Homebrew
+    let ctagsbins += ['/opt/local/bin/ctags'] " Macports
+    let ctagsbins += ['ectags'] " OpenBSD
+    let ctagsbins += ['ctags']
+    let ctagsbins += ['ctags.exe']
+    let ctagsbins += ['tags']
+    for ctags in ctagsbins
+        if executable(ctags)
+            let g:Tlist_Ctags_Cmd = ctags
+            break
+        endif
+    endfor
+    if !exists('g:Tlist_Ctags_Cmd')
+        return 0
+    endif
+
+    let ctags_cmd = g:Tlist_Ctags_Cmd . ' --version'
+
+    if &shellxquote == '"'
+        " Double-quotes within double-quotes will not work in the
+        " command-line.If the 'shellxquote' option is set to double-quotes,
+        " then escape the double-quotes in the ctags command-line.
+        let ctags_cmd = escape(ctags_cmd, '"')
+    endif
+
+    if ctags_cmd == ''
+        return 0
+    endif
+
+    let ctags_output = system(ctags_cmd)
+
+    if v:shell_error || ctags_output !~# '\(Exuberant\|Universal\) Ctags'
+        return 0
+    else
+        return 1
+    endif
+endfunction
+
 if !exists('loaded_taglist')
     " First time loading the taglist plugin
     "
@@ -84,30 +127,16 @@ if !exists('loaded_taglist')
     endif
 
     " Location of the exuberant ctags tool
-    if !exists('Tlist_Ctags_Cmd')
-        if executable('exuberant-ctags')
-            " On Debian Linux, exuberant ctags is installed
-            " as exuberant-ctags
-            let Tlist_Ctags_Cmd = 'exuberant-ctags'
-        elseif executable('exctags')
-            " On Free-BSD, exuberant ctags is installed as exctags
-            let Tlist_Ctags_Cmd = 'exctags'
-        elseif executable('ctags')
-            let Tlist_Ctags_Cmd = 'ctags'
-        elseif executable('ctags.exe')
-            let Tlist_Ctags_Cmd = 'ctags.exe'
-        elseif executable('tags')
-            let Tlist_Ctags_Cmd = 'tags'
-        else
-            echomsg 'Taglist: Exuberant ctags (http://ctags.sf.net) ' .
-                        \ 'not found in PATH. Plugin is not loaded.'
+    if !exists('g:Tlist_Ctags_Cmd')
+        if !s:CheckForExCtags()
+            "echomsg 'Taglist: Exuberant ctags (http://ctags.sf.net) ' .
+                        "\ 'not found in PATH. Plugin is not loaded.'
             " Skip loading the plugin
             let loaded_taglist = 'no'
             let &cpo = s:cpo_save
             finish
         endif
     endif
-
 
     " Automatically open the taglist window on Vim startup
     if !exists('Tlist_Auto_Open')
