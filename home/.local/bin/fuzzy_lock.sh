@@ -19,7 +19,7 @@ if pgrep i3lock > /dev/null; then
     trap - INT TERM EXIT
     exit
 else
-    fifo=`find $HOME/.weechat/ -name 'weechat_fifo_*'`
+    fifo=`find $HOME/.weechat/ -name 'weechat_fifo*'`
     tmpbg="$(mktemp /tmp/lock-XXXXXXXX.png)"
     away=/tmp/away
 
