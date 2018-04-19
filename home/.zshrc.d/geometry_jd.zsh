@@ -32,7 +32,7 @@ _vi_mode_indicator() {
 }
 
 _git_dirty() {
-  if test -z "$(git status --porcelain --ignore-submodules)"; then
+  if test -z "$(git status --porcelain --ignore-submodules 2>/dev/null)"; then
     echo $GIT_CLEAN
   else
     echo $GIT_DIRTY

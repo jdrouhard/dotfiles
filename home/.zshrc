@@ -7,19 +7,7 @@ setopt rm_star_silent
 stty -ixon
 stty -ixoff
 
-# Path
-export PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
-
-for path_candidate in /opt/local/sbin \
-    /opt/bats/bin \
-    /opt/local/bin \
-    ~/.local/bin \
-    ~/bin
-do
-    if [ -d ${path_candidate}  ]; then
-        export PATH=${path_candidate}:${PATH}
-    fi
-done
+export PATH=~/.local/bin${PATH:+:${PATH}}
 
 # Plugins
 source ~/.zsh/zgenrc
@@ -62,14 +50,9 @@ for m in visual viopp; do
 done
 
 
-# Aliases
-function exists {
-    whence -w $1 >/dev/null
-}
-exists _zsh_tmux_plugin_run && tmux_func="_zsh_tmux_plugin_run" || tmux_func="tmux"
-#alias tmux="TERM=screen-256color-bce $tmux_func" # honestly I have no idea why the bce is necessary
-
-alias sudo="sudo -E"
+# aliases
+alias sudo="/usr/bin/sudo -E"
+alias which="builtin which"
 
 # set some history options
 setopt append_history
@@ -84,6 +67,7 @@ setopt hist_verify
 
 # set some more options
 setopt pushd_ignore_dups
+setopt pushd_silent
 
 # Keep a ton of history.
 HISTSIZE=100000
@@ -120,23 +104,7 @@ if [ -n "$(ls ~/.zshrc.d)" ]; then
   done
 fi
 
-# In case a plugin adds a redundant path entry, remove duplicate entries
-# from PATH
-#
-# This snippet is from Mislav Marohnić <mislav.marohnic@gmail.com>'s
-# dotfiles repo at https://github.com/mislav/dotfiles
+# Dedupe the PATH environment variable
+typeset -U PATH path
 
-dedupe_path() {
-  typeset -a paths result
-  paths=($path)
-
-  while [[ ${#paths} -gt 0 ]]; do
-    p="${paths[1]}"
-    shift paths
-    [[ -z ${paths[(r)$p]} ]] && result+="$p"
-  done
-
-  export PATH=${(j+:+)result}
-}
-
-dedupe_path
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
