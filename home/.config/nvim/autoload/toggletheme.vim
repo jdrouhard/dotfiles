@@ -75,7 +75,6 @@ function! s:TogTrueColors()
         else
             set notermguicolors
         endif
-        mode
     endif
 endfunction
 

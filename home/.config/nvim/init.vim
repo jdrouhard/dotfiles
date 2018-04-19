@@ -128,7 +128,6 @@ set scrolloff=3                      " maintain more context around the cursor
 set linebreak                        " wrap lines at logical word boundaries
 set showbreak=↪                      " character to display in front of wrapper
                                      " lines
-set breakindent                      " indent wrapped lines
 set showmatch                        " enable brace highlighting
 set ignorecase                       " ignore case
 set smartcase                        " ignore case if search pattern is all
@@ -136,7 +135,16 @@ set smartcase                        " ignore case if search pattern is all
 set visualbell                       " only show a visual cue when an error
                                      " occurs
 set laststatus=2                     " always show the status line
-set signcolumn=yes                   " always show the sign column
+
+if exists('&breakindent')
+    set breakindent                  " indent wrapped lines
+endif
+
+if exists('&signcolumn')
+    set signcolumn=yes               " always show the sign column
+else
+    let g:gitgutter_sign_column_always = 1
+endif
 
 "-------------------------------------------------------------------------------
 " Behavioural settings
@@ -295,12 +303,7 @@ let Tlist_Close_On_Select=0
 " Configure autocommmands
 "-------------------------------------------------------------------------------
 
-" Automatically remove trailing whitespace before write.
-function! StripTrailingWhitespace()
-    normal mZ
-    %s/\s\+$//e
-    normal `Z
-endfunction
+command -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``
 
 augroup vimrc_autocmd
     autocmd!
@@ -308,12 +311,12 @@ augroup vimrc_autocmd
     au FileType cmake,xml setlocal tabstop=2
     au FileType cmake,xml setlocal shiftwidth=2
 
-    au FileType cpp,python setlocal textwidth=100
+    au FileType cpp,python setlocal textwidth=90
     au FileType cpp,python setlocal formatoptions=crqnj
 
     " Strip trailing white spaces in source code.
-    "au BufWritePre *.cpp,*.hpp,*.h,*.c :call StripTrailingWhitespace()
-    au BufWritePre .vimrc,*.js,*.php :call StripTrailingWhitespace()
+    "au BufWritePre *.cpp,*.hpp,*.h,*.c :StripTrailingWhitespace
+    au BufWritePre .vimrc,*.js,*.php :StripTrailingWhitespace
 
     " Add support for Doxygen comment leader.
     au FileType h,hpp,cpp,c setlocal comments^=:///
