@@ -16,7 +16,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
-Plug 'lyuts/vim-rtags'
+Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -27,11 +27,12 @@ Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 " Manually managed
 Plug '~/.vim/bundle/YouCompleteMe', { 'for': [] }
+set updatetime=500
 augroup load_ycm
     autocmd!
     autocmd CursorHold,CursorHoldI * exe "normal! m\""
                                  \ | call plug#load('YouCompleteMe')
-                                 \ | set updatetime=250
+                                 \ | set updatetime=100
                                  \ | autocmd! load_ycm
 augroup END
 
@@ -239,18 +240,30 @@ nnoremap j gj
 nnoremap k gk
 
 " Configure fzf mappings
-map <leader>s :Ag<space>
-map <C-p> :Files<CR>
-map <leader>l :Buffer<CR>
-map <leader>t :GFiles<CR>
-map <leader>h :Commands<CR>
-map <leader>? :Helptags<CR>
-map <leader>gs :GFiles?<CR>
-map <leader>gl :Commits<CR>
-map <leader>gbl :BCommits<CR>
+nnoremap          <leader>s   :Ag<space>
+nnoremap <silent> <leader>ag  :Ag <C-R><C-W><CR>
+nnoremap <silent> <leader>AG  :Ag <C-R><C-A><CR>
+xnoremap <silent> <leader>ag  y:Ag <C-R>"<CR>
+
+nnoremap <silent> <C-p>       :Files<CR>
+nnoremap <silent> <leader>l   :Buffer<CR>
+nnoremap <silent> <leader>t   :GFiles<CR>
+nnoremap <silent> <leader>h   :Commands<CR>
+nnoremap <silent> <leader>?   :Helptags<CR>
+nnoremap <silent> <leader>gs  :GFiles?<CR>
+nnoremap <silent> <leader>gl  :Commits<CR>
+nnoremap <silent> <leader>gbl :BCommits<CR>
+
+imap <C-x><C-f> <plug>(fzf-complete-path)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
-map <leader>gg :Gblame<CR>
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" vim-fugitive mappings
+nnoremap <silent> <leader>gg :Gblame<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
 
 " YouCompleteMe mappings
 nnoremap <F6> :YcmForceCompileAndDiagnostics<CR>
@@ -266,9 +279,6 @@ map <leader>w <C-w>
 " Never open a non-existing file
 let g:alternateNoDefaultAlternate = 1
 
-" Configure vim-rtags
-let g:rtagsUseLocationList = 0
-
 " Configure YouCompleteMe
 "let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_filepath_completion_use_working_dir = 1
@@ -277,18 +287,19 @@ let g:ycm_global_ycm_extra_conf = expand("~/.ycm_extra_conf.py")
 let g:ycm_key_list_select_completion = ['<C-j>', '<Tab>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-Tab>', '<Up>']
 
-" Configure gitv
-let g:Gitv_TruncateCommitSubjects = 1
-
 " Configure vim-polyglot
 let g:polyglot_disabled = ['c/c++']
 "let g:cpp_class_scope_highlight = 1
 "let g:cpp_experimental_simple_template_highlight = 1
 
 " Configure fzf
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+if has('nvim') || has('gui_running')
+    let $FZF_DEFAULT_OPTS .= ' --inline-info --bind up:preview-up,down:preview-down,pgup:preview-page-up,pgdn:preview-page-down'
+endif
+
 let g:fzf_layout = { 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 " Configure taglist
 let Tlist_Inc_Winwidth=0
