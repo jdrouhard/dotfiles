@@ -18,6 +18,7 @@ zstyle :omz:plugins:ssh-agent agent-forwarding on
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 export LESS=-MIRXF
+export NINJA_STATUS="[0m[[31m%u[0m/[33m%r[0m/[32m%f[36m %o/s [35m%e[0m] "
 if hash nvim 2>/dev/null; then
     export EDITOR=nvim
 else
@@ -107,4 +108,4 @@ fi
 # Dedupe the PATH environment variable
 typeset -U PATH path
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh

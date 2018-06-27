@@ -17,7 +17,7 @@
 [merge]
 	tool = fugitive
 [mergetool "fugitive"]
-	cmd = nvim -f -c "Gvdiff" "$MERGED"
+	cmd = nvim -f "$MERGED" -S "$HOME/.config/nvim/diff.vim"
 [difftool]
 	prompt = false
 [alias]

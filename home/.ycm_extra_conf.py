@@ -6,7 +6,7 @@ import itertools
 from ycmd import utils
 import ycm_core
 
-DEFAULT_FLAGS = ['-Wall', '-Wextra', '-Werror', '-std=c++14', '-x', 'c++', '-I', '.']
+DEFAULT_FLAGS = ['-Wall', '-Wextra', '-Werror', '-std=c++17', '-x', 'c++', '-I', '.']
 HEADER_EXTENSIONS = ['.h', '.hxx', '.hpp', '.hh']
 SOURCE_EXTENSIONS = ['.cpp', '.cxx', '.cc', '.c', '.m', '.mm']
 
