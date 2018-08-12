@@ -36,7 +36,7 @@ def FindCompilationDatabase(wd):
         build_subdirs = ['debug', 'release']
 
         candidates = [
-            folder,
+            [folder],
             [os.path.join(folder, x) for x in build_dirs],
             [os.path.join(folder, x[1], x[0]) for x in itertools.product(build_subdirs, build_dirs)],
         ]

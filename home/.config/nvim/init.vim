@@ -61,8 +61,9 @@ set background=dark
 if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")) || has("gui_running"))
     set termguicolors
     let g:onedark_terminal_italics=1
-    let g:airline_theme='onedark'
-    colorscheme onedark
+    let g:gruvbox_italic=1
+    let g:airline_theme='gruvbox'
+    colorscheme gruvbox
 
     call toggletheme#maptruecolors("<F12>")
 else
