@@ -15,6 +15,8 @@ call plug#begin(s:plugin_dir)
 Plug 'airblade/vim-gitgutter'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
+Plug 'junegunn/gv.vim'
+Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
 Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdcommenter'
@@ -62,6 +64,7 @@ if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")
     set termguicolors
     let g:onedark_terminal_italics=1
     let g:gruvbox_italic=1
+    let g:gruvbox_contrast_dark='soft'
     let g:airline_theme='gruvbox'
     colorscheme gruvbox
 
@@ -269,6 +272,10 @@ nnoremap <silent> <leader>gd :Gdiff<CR>
 " YouCompleteMe mappings
 nnoremap <F6> :YcmForceCompileAndDiagnostics<CR>
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
+
+" vim-easy-align mappings
+xmap ga <plug>(EasyAlign)
+nmap ga <plug>(EasyAlign)
 
 " Miscellaneous
 map <leader>w <C-w>
