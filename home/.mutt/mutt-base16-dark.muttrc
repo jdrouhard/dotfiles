@@ -1,39 +1,16 @@
 # vim: filetype=muttrc
 
-#
-#
-# make sure that you are using mutt linked against slang, not ncurses, or
-# suffer the consequences of weird color issues. use "mutt -v" to check this.
-
-# custom body highlights -----------------------------------------------
-# highlight my name and other personally relevant strings
-#color body          yellow          default         "(ethan|schoonover)"
-# custom index highlights ----------------------------------------------
-# messages which mention my name in the body
-#color index         yellow          default         "~b \"phil(_g|\!| gregory| gold)|pgregory\" !~N !~T !~F !~p !~P"
-#color index         J_cream         brightwhite     "~b \"phil(_g|\!| gregory| gold)|pgregory\" ~N !~T !~F !~p !~P"
-#color index         yellow          cyan            "~b \"phil(_g|\!| gregory| gold)|pgregory\" ~T !~F !~p !~P"
-#color index         yellow          J_magent        "~b \"phil(_g|\!| gregory| gold)|pgregory\" ~F !~p !~P"
-## messages which are in reference to my mails
-#color index         J_magent        default         "~x \"(mithrandir|aragorn)\\.aperiodic\\.net|thorin\\.hillmgt\\.com\" !~N !~T !~F !~p !~P"
-#color index         J_magent        brightwhite     "~x \"(mithrandir|aragorn)\\.aperiodic\\.net|thorin\\.hillmgt\\.com\" ~N !~T !~F !~p !~P"
-#color index         J_magent        cyan            "~x \"(mithrandir|aragorn)\\.aperiodic\\.net|thorin\\.hillmgt\\.com\" ~T !~F !~p !~P"
-#color index         J_magent        red             "~x \"(mithrandir|aragorn)\\.aperiodic\\.net|thorin\\.hillmgt\\.com\" ~F !~p !~P"
-
-# for background in 16 color terminal, valid background colors include:
-# base03, bg, black, any of the non brights
-
 # basic colors ---------------------------------------------------------
-color normal        brightblack     default         
-color error         red             default         
-color tilde         color18         default         
-color message       cyan            default         
-color markers       red             color21         
-color attachment    color21         default         
-color search        magenta         default         
-#color status        J_black         J_status        
-color status        brightblack     color18         
-color indicator     black           yellow          
+color normal        brightblack     default
+color error         red             default
+color tilde         color18         default
+color message       cyan            default
+color markers       red             color21
+color attachment    color21         default
+color search        magenta         default
+#color status        J_black         J_status
+color status        brightblack     color18
+color indicator     black           yellow
 color tree          yellow          default                                     # arrow in threads
 
 # basic monocolor screen
@@ -41,6 +18,12 @@ mono  bold          bold
 mono  underline     underline
 mono  indicator     reverse
 mono  error         bold
+
+# sidebar
+color sidebar_new       blue  default
+color sidebar_flagged   red   default
+color sidebar_divider   black color18
+color sidebar_highlight default color17
 
 # index ----------------------------------------------------------------
 
@@ -88,30 +71,22 @@ color index         yellow          red             "~v~(~D)"                   
 # message headers ------------------------------------------------------
 
 #color header        color19         default         "^"
-color hdrdefault    color19         default         
+color hdrdefault    color19         default
 color header        brightblack     default         "^(From)"
 color header        blue            default         "^(Subject)"
 
 # body -----------------------------------------------------------------
 
-color quoted        blue            default         
-color quoted1       cyan            default         
-color quoted2       yellow          default         
-color quoted3       red             default         
-color quoted4       color16         default         
+color quoted        blue            default
+color quoted1       cyan            default
+color quoted2       yellow          default
+color quoted3       red             default
+color quoted4       color16         default
 
-color signature     color19         default         
-color bold          color18         default         
-color underline     color18         default         
-color normal        default         default         
-#
-color body          white           default         "[;:][-o][)/(|]"    # emoticons
-color body          white           default         "[;:][)(|]"         # emoticons
-color body          white           default         "[*]?((N)?ACK|CU|LOL|SCNR|BRB|BTW|CWYL|\
-                                                     |FWIW|vbg|GD&R|HTH|HTHBE|IMHO|IMNSHO|\
-                                                     |IRL|RTFM|ROTFL|ROFL|YMMV)[*]?"
-color body          white           default         "[ ][*][^*]*[*][ ]?" # more emoticon?
-color body          white           default         "[ ]?[*][^*]*[*][ ]" # more emoticon?
+color signature     color19         default
+color bold          color18         default
+color underline     color18         default
+color normal        default         default
 
 ## pgp
 
@@ -123,12 +98,17 @@ color body          brightblack     red             "^gpg: BAD signature from.*"
 mono  body          bold                            "^gpg: Good signature"
 mono  body          bold                            "^gpg: BAD signature from.*"
 
-# yes, an insance URL regex
-color body          red             default         "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
-# and a heavy handed email regex
-#color body          J_magent        default         "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
+color body          color17         default         "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
 
 # Various smilies and the like
+color body          white           default         "[;:][-o][)/(|]"    # emoticons
+color body          white           default         "[;:][)(|]"         # emoticons
+color body          white           default         "[*]?((N)?ACK|CU|LOL|SCNR|BRB|BTW|CWYL|\
+                                                     |FWIW|vbg|GD&R|HTH|HTHBE|IMHO|IMNSHO|\
+                                                     |IRL|RTFM|ROTFL|ROFL|YMMV)[*]?"
+color body          white           default         "[ ][*][^*]*[*][ ]?" # more emoticon?
+color body          white           default         "[ ]?[*][^*]*[*][ ]" # more emoticon?
+
 #color body          brightwhite     default         "<[Gg]>"                            # <g>
 #color body          brightwhite     default         "<[Bb][Gg]>"                        # <bg>
 color body          yellow          default         " [;:]-*[})>{(<|pP]"                  # :-) etc...

@@ -2,54 +2,42 @@
 
 source $HOME/.mutt/mutt-base16-dark.muttrc
 
-#color sidebar_new     color33  color234
-#color sidebar_flagged color160 color234
-color sidebar_new     blue  default
-color sidebar_flagged red   default
+# imap settings
+set mail_check_stats             # check for mailbox counts periodically and at startup
+set move = no                    # leave everything server-side
+bind index "^" imap-fetch-mail   # use caret to fetch new mail ($ also works to refresh your inbox)
 
+# display settings
 set sort = threads
-# trust me you want this:
-# gmail-style "last thread item" determines sort order
-# (instead of the default "first thread item" determines sort order)
 set sort_browser = date
 set sort_aux = reverse-last-date-received
-
-# keep cache locally to speed up invocation
 set header_cache = "~/.mutt/cache/headers"
 set message_cachedir = "~/.mutt/cache/bodies"
 
-# leave everything server side
-set move = no
-
-# by default, don't ask to recall postponed message at compose-time
-#set recall = no
-
-# use a more standard format date (to my lights)
 set date_format = "%a %Y-%m-%d %H:%M:%S"
 set index_format = "%4C %Z %D %-15.15L (%?l?%4l&%4c?) %s"
-#set index_format = "%4C %Z %D (%?l?%4l&%4c?) %s"
 
-# use caret to fetch new mail ($ also works to refresh your inbox)
-bind index "^" imap-fetch-mail
-
-# set number of lines to use while reading one email (so you can still see part of your index)
 set pager_index_lines = 20
 
 # show HTML emails as text
 auto_view text/html
-alternative_order text/html text/plain text/enriched # or put text/html last if you prefer
+alternative_order text/html text/plain text/enriched
 
 # text formatting
 set text_flowed=yes
 set edit_headers=yes
 
+ignore *
+unignore from: date subject to cc
+unignore x-mailer x-url user-agent
+hdr_order date from to cc subject
+
 # sidebar
 set sidebar_width=35
-set sidebar_visible=no
-set sidebar_sort=yes
-#set sidebar_sort_method=name
-#set sidebar_folder_indent=yes
-#set sidebar_short_path=yes
+set sidebar_visible=yes
+set sidebar_folder_indent=yes
+set sidebar_short_path=yes
+set sidebar_format='%B%?F? [%F]?%* %?N?%N/?%S'
 
 bind index,pager \Ch sidebar-prev
 bind index,pager \Cl sidebar-next
@@ -59,7 +47,7 @@ macro index <F2> '<enter-command>toggle sidebar_visible<enter><refresh>'
 macro pager <F2> '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 
 # vim stuff
-set editor = "vim '+8'"
+set editor = "nvim '+/^$' -c 'noh'"
 
 bind index,pager / search
 bind index,pager ? search-reverse
