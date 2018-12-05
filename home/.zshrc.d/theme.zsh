@@ -1,5 +1,5 @@
 # Color theme
-BASE16_THEME_DEFAULT="atelier-heath"
+BASE16_THEME_DEFAULT="gruvbox-dark-soft"
 
 function theme() {
     local theme_name variant found
