@@ -7,6 +7,7 @@ setopt rm_star_silent
 stty -ixon
 stty -ixoff
 
+export FZF_BASE=$HOME/.config/nvim/plugged/fzf
 export PATH=~/.local/bin${PATH:+:${PATH}}
 
 # Plugins
@@ -107,5 +108,3 @@ fi
 
 # Dedupe the PATH environment variable
 typeset -U PATH path
-
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
