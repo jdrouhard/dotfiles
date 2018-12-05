@@ -100,30 +100,30 @@ def FlagsForFile(file_name, **kwargs):
     file_dir = os.path.dirname(file_name)
     file_root, file_extension = os.path.splitext(file_name)
 
+    do_cache = True
+    final_flags = None
     database = FindCompilationDatabase(file_dir)
 
     if database:
         # Bear in mind that compilation_info.compiler_flags_ does NOT return a
         # python list, but a "list-like" StringVec object
         compilation_info = GetCompilationInfoForFile(database, file_name, file_extension)
-        if not compilation_info:
-            if file_dir in file_directory_heuristic_map:
-                compilation_info = file_directory_heuristic_map[file_dir]
-            else:
-                return { 'flags': [], }
+        if not compilation_info and file_dir in file_directory_heuristic_map:
+            compilation_info = file_directory_heuristic_map[file_dir]
 
-        if file_dir not in file_directory_heuristic_map:
-            file_directory_heuristic_map[file_dir] = compilation_info
+        if compilation_info:
+            if file_dir not in file_directory_heuristic_map:
+                file_directory_heuristic_map[file_dir] = compilation_info
 
-        final_flags = MakeRelativePathsInFlagsAbsolute(
-            compilation_info.compiler_flags_,
-            compilation_info.compiler_working_dir_)
-        final_flags += SYSTEM_INCLUDES
-        final_flags += ['-x', 'c++']
+            final_flags = MakeRelativePathsInFlagsAbsolute(
+                compilation_info.compiler_flags_,
+                compilation_info.compiler_working_dir_)
+            final_flags += SYSTEM_INCLUDES
+            final_flags += ['-x', 'c++']
 
-    else:
-        relative_to = file_dir
-        final_flags = MakeRelativePathsInFlagsAbsolute(DEFAULT_FLAGS, relative_to) + SYSTEM_INCLUDES
+    if not final_flags:
+        do_cache = False
+        final_flags = MakeRelativePathsInFlagsAbsolute(DEFAULT_FLAGS, file_dir) + SYSTEM_INCLUDES
 
     return {
         'flags': final_flags,
