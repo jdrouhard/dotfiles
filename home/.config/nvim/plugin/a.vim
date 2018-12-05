@@ -746,19 +746,19 @@ function! <SID>FindOrCreateBuffer(fileName, doSplit, findSimilar)
   let bang = a:doSplit[1]
   if (bufNr == -1)
      " Buffer did not exist....create it
-     let v:errmsg=""
-     if (splitType == "h")
-        silent! execute ":split".bang." " . FILENAME
-     elseif (splitType == "v")
-        silent! execute ":vsplit".bang." " . FILENAME
-     elseif (splitType == "t")
-        silent! execute ":tab split".bang." " . FILENAME
-     else
-        silent! execute ":e".bang." " . FILENAME
-     endif
-     if (v:errmsg != "")
-        echo v:errmsg
-     endif
+     try
+        if (splitType == "h")
+           silent! execute ":split".bang." " . FILENAME
+        elseif (splitType == "v")
+           silent! execute ":vsplit".bang." " . FILENAME
+        elseif (splitType == "t")
+           silent! execute ":tab split".bang." " . FILENAME
+        else
+           silent! execute ":e".bang." " . FILENAME
+        endif
+     catch
+        echom v:errmsg
+     endtry
   else
 
      " Find the correct tab corresponding to the existing buffer
@@ -791,37 +791,37 @@ function! <SID>FindOrCreateBuffer(fileName, doSplit, findSimilar)
      let bufWindow = bufwinnr(bufNr)
      if (bufWindow == -1)
         " Buffer was not in a window so open one
-        let v:errmsg=""
-        if (splitType == "h")
-           silent! execute ":sbuffer".bang." " . FILENAME
-        elseif (splitType == "v")
-           silent! execute ":vert sbuffer " . FILENAME
-        elseif (splitType == "t")
-           silent! execute ":tab sbuffer " . FILENAME
-        else
-           silent! execute ":buffer".bang." " . FILENAME
-        endif
-        if (v:errmsg != "")
-           echo v:errmsg
-        endif
+        try
+           if (splitType == "h")
+              silent! execute ":sbuffer".bang." " . FILENAME
+           elseif (splitType == "v")
+              silent! execute ":vert sbuffer " . FILENAME
+           elseif (splitType == "t")
+              silent! execute ":tab sbuffer " . FILENAME
+           else
+              silent! execute ":buffer".bang." " . FILENAME
+           endif
+        catch
+           echom v:errmsg
+        endtry
      else
         " Buffer is already in a window so switch to the window
         execute bufWindow."wincmd w"
         if (bufWindow != winnr())
            " something wierd happened...open the buffer
-           let v:errmsg=""
-           if (splitType == "h")
-              silent! execute ":split".bang." " . FILENAME
-           elseif (splitType == "v")
-              silent! execute ":vsplit".bang." " . FILENAME
-           elseif (splitType == "t")
-              silent! execute ":tab split".bang." " . FILENAME
-           else
-              silent! execute ":e".bang." " . FILENAME
-           endif
-           if (v:errmsg != "")
-              echo v:errmsg
-           endif
+           try
+              if (splitType == "h")
+                 silent! execute ":split".bang." " . FILENAME
+              elseif (splitType == "v")
+                 silent! execute ":vsplit".bang." " . FILENAME
+              elseif (splitType == "t")
+                 silent! execute ":tab split".bang." " . FILENAME
+              else
+                 silent! execute ":e".bang." " . FILENAME
+              endif
+           catch
+              echom v:errmsg
+           endtry
         endif
      endif
   endif
