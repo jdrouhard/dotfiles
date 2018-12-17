@@ -110,6 +110,12 @@ def FlagsForFile(file_name, **kwargs):
         compilation_info = GetCompilationInfoForFile(database, file_name, file_extension)
         if not compilation_info and file_dir in file_directory_heuristic_map:
             compilation_info = file_directory_heuristic_map[file_dir]
+        else:
+            for alternate in [f for f in os.listdir(file_dir) if os.path.splitext(f)[1] in SOURCE_EXTENSIONS]:
+                compilation_info = database.GetCompilationInfoForFile(os.path.join(file_dir, alternate))
+                if compilation_info:
+                    do_cache = False
+                    break
 
         if compilation_info:
             if file_dir not in file_directory_heuristic_map:
@@ -127,5 +133,5 @@ def FlagsForFile(file_name, **kwargs):
 
     return {
         'flags': final_flags,
-        'do_cache': True
+        'do_cache': do_cache
     }
