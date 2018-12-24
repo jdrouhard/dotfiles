@@ -5,7 +5,7 @@ export LC_ALL="$LANG"
 
 export EDITOR=vim
 
-BASE16_THEME_DEFAULT="atelierforest"
+BASE16_THEME_DEFAULT="gruvbox-dark-soft"
 
 #function gvim() { (/usr/bin/gvim -f "$@" &) }
 
