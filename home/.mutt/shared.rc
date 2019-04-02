@@ -4,8 +4,13 @@ source $HOME/.mutt/mutt-base16-dark.muttrc
 
 # imap settings
 set mail_check_stats             # check for mailbox counts periodically and at startup
+set timeout = 15                 # check for mail every 15 seconds
 set move = no                    # leave everything server-side
 bind index "^" imap-fetch-mail   # use caret to fetch new mail ($ also works to refresh your inbox)
+
+# misc settings
+set mime_forward
+set mime_forward_rest=yes
 
 # display settings
 set sort = threads
@@ -38,6 +43,7 @@ set sidebar_visible=yes
 set sidebar_folder_indent=yes
 set sidebar_short_path=yes
 set sidebar_format='%B%?F? [%F]?%* %?N?%N/?%S'
+set sidebar_sort_method = alpha
 
 bind index,pager \Ch sidebar-prev
 bind index,pager \Cl sidebar-next

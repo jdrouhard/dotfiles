@@ -23,7 +23,7 @@ mono  error         bold
 color sidebar_new       blue  default
 color sidebar_flagged   red   default
 color sidebar_divider   black color18
-color sidebar_highlight default color17
+#color sidebar_highlight default color17
 
 # index ----------------------------------------------------------------
 
