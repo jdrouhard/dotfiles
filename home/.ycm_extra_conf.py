@@ -127,6 +127,9 @@ def FlagsForFile(file_name, **kwargs):
             final_flags += SYSTEM_INCLUDES
             final_flags += ['-x', 'c++']
 
+    if file_name.endswith('_inline.h'):
+        return { 'flags': [] }
+
     if not final_flags:
         do_cache = False
         final_flags = MakeRelativePathsInFlagsAbsolute(DEFAULT_FLAGS, file_dir) + SYSTEM_INCLUDES
