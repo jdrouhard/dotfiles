@@ -18,6 +18,7 @@ Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
+Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
@@ -26,6 +27,9 @@ Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+if (has("nvim"))
+    Plug 'sakhnik/nvim-gdb', { 'branch': 'legacy' }
+endif
 
 " Manually managed
 Plug '~/.vim/bundle/YouCompleteMe', { 'for': [] }
@@ -65,8 +69,12 @@ if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")
     let g:onedark_terminal_italics=1
     let g:gruvbox_italic=1
     let g:gruvbox_contrast_dark='soft'
-    let g:airline_theme='gruvbox'
-    colorscheme gruvbox
+    let g:oceanic_next_terminal_italic=1
+    let g:oceanic_next_terminal_bold=1
+    "let g:airline_theme='gruvbox'
+    "colorscheme gruvbox
+    let g:airline_theme='oceanicnext'
+    colorscheme OceanicNext
 
     call toggletheme#maptruecolors("<F12>")
 else
@@ -158,10 +166,10 @@ endif
 set autoread                            " automatically reload a file when it has
                                         " been changed
 if (has("nvim"))
-    set shada^=%                        " Remember info about open buffers on close
+    "set shada^=%                        " Remember info about open buffers on close
     set inccommand=nosplit              " Don't show partial results in preview window
 else
-    set viminfo^=%                      " Remember info about open buffers on close
+    "set viminfo^=%                      " Remember info about open buffers on close
     set undodir=$HOME/.vim/undo         " persistent undo directory
     set dir=$HOME/.vim/swap             " set the swap directory
 endif
@@ -318,11 +326,17 @@ let Tlist_WinWidth=60
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Close_On_Select=0
 
+" Configure nvim-gdb
+let g:nvimgdb_config_override = {
+    \ 'key_frameup':    '<c-k>',
+    \ 'key_framedown':  '<c-j>',
+    \ }
+
 "-------------------------------------------------------------------------------
 " Configure autocommmands
 "-------------------------------------------------------------------------------
 
-command -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``
+command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``
 
 augroup vimrc_autocmd
     autocmd!
