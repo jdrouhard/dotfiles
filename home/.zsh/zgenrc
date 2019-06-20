@@ -37,7 +37,7 @@ if ! zgen saved; then
     zgen load rimraf/k
 
     # Lastly, theme
-    zgen oh-my-zsh themes/flazz
+    #zgen oh-my-zsh themes/flazz
 
     zgen save
 fi
