@@ -8,7 +8,7 @@ autoload -Uz vcs_info
 
 PROMPT_SYMBOL='▲'
 EXIT_VALUE_SYMBOL="%B%F{red}△%f%b"
-RPROMPT_SYMBOL='◇'
+PROMPT2_SYMBOL='◇'
 SEPARATOR="%B%F{magenta}::%f%b"
 
 USER_PROMPT_SYMBOL="%B%F{blue}$%f%b"
@@ -33,7 +33,7 @@ zstyle ':vcs_info:*' nopatch-format "[%n/%a]"
 zstyle ':vcs_info:*' unstagedstr    "$GIT_DIRTY"
 zstyle ':vcs_info:git*' formats        "%c %F{242}%b%f" "%u"
 zstyle ':vcs_info:git*' actionformats  "%c %F{242}%b%f" "%u" "%B%F{yellow}%a %m%f%%b"
-zstyle ':vcs_info:git*' check-for-changes false # handled by git-dirty/git-upstream hooks
+zstyle ':vcs_info:git*' check-for-changes false # handled by git-upstream/git-dirty hooks
 zstyle ':vcs_info:git*+set-message:*' hooks \
                                         git-hook-begin \
                                         git-upstream \
@@ -82,6 +82,7 @@ function +vi-git-dirty() {
     fi
 }
 
+RPROMPT_ASYNC_PGID=0
 function geometry_prompt() {
     case ${KEYMAP} in
         (main|viins)   TEXT="INSERT"; COLOR="cyan" ;;
@@ -101,16 +102,36 @@ function geometry_prompt() {
     messages+=( "%(!.$ROOT_PROMPT_SYMBOL.$USER_PROMPT_SYMBOL) " ) # root is red #, user is blue $
 
     PROMPT="${(j: :)messages}"
-    PROMPT2=' $RPROMPT_SYMBOL '
+    PROMPT2=' $PROMPT2_SYMBOL '
 
-    vcs_info
+    # RPROMPT should be done asynchronously
+    function rprompt_async() {
+        vcs_info
 
-    messages=()
-    [[ -n "$vcs_info_msg_2_" ]] && messages+=( "${vcs_info_msg_2_}" $SEPARATOR ) # action info (rebase/merge and [applied/total] patches)
-    [[ -n "$vcs_info_msg_0_" ]] && messages+=( "${vcs_info_msg_0_}" )            # branch info with arrows for ahead/behind upstream
-    [[ -n "$vcs_info_msg_1_" ]] && messages+=( $SEPARATOR "${vcs_info_msg_1_}" ) # clean -> green filled square, dirty -> red empty square
+        messages=()
+        [[ -n "$vcs_info_msg_2_" ]] && messages+=( $GIT_REBASE ${vcs_info_msg_2_} $SEPARATOR ) # action info (rebase/merge and [applied/total] patches)
+        [[ -n "$vcs_info_msg_0_" ]] && messages+=( ${vcs_info_msg_0_} )                        # branch info with arrows for ahead/behind upstream
+        [[ -n "$vcs_info_msg_1_" ]] && messages+=( $SEPARATOR ${vcs_info_msg_1_} )             # clean -> green filled square, dirty -> red empty square
 
-    RPROMPT="%(?..%F{red}%? ↵%f ) ${(j: :)messages}"
+        echo "%(?..%F{red}%? ↵%f ) ${(j: :)messages}" > /tmp/zsh_prompt_$$
+
+        kill -s USR1 $$
+    }
+
+    if [[ "$RPROMPT_ASYNC_PGID" != "0" ]]; then
+        kill -s HUP -- -$RPROMPT_ASYNC_PGID > /dev/null 2>&1 || :
+        [ -f /tmp/zsh_prompt_$RPROMPT_ASYNC_PGID ] && rm "/tmp/zsh_prompt_$RPROMPT_ASYNC_PGID"
+    fi
+
+    rprompt_async &!
+    RPROMPT_ASYNC_PGID=$!
+}
+
+function TRAPUSR1() {
+    RPROMPT="$(cat /tmp/zsh_prompt_$$)"
+    rm "/tmp/zsh_prompt_$$"
+    RPROMPT_ASYNC_PGID=0
+    zle reset-prompt
 }
 
 function zle-line-init zle-keymap-select {
