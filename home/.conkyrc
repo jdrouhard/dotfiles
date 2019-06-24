@@ -1,0 +1,32 @@
+conky.config = {
+    background       = false,
+    out_to_console   = true,
+    out_to_x         = false,
+    update_interval  = 2,
+    total_run_times  = 0,
+    short_units      = yes,
+    pad_percents     = 3,
+    temperature_unit = "fahrenheit",
+    if_up_strictness = "address"
+};
+
+conky.text = [[
+    ,[
+    {"full_text": " ${execi 3600 /home/jdrouhard/.local/bin/wallpaper.sh}"},
+    #{"full_text": " CPU $cpu% [${cpu cpu1}.${cpu cpu2}.${cpu cpu3}.${cpu cpu4}]", "color": "\#99D7FF", "name":"cpu"},
+    ${if_up eth0}
+        {"full_text": " ⬇ $downspeed ⬆ $upspeed", "color": "\#C38418", "name": "speed"},
+        {"full_text": " ${addr eth0} (${texeci 3600 /home/jdrouhard/.local/bin/linkspeed.sh})", "color": "\#7B9726"},
+    ${endif}
+    {"full_text": " ${uptime}", "color": "\#3D97B8"},
+    {"full_text": " CPU $cpu%", "color": "\#99D7FF", "name":"cpu"},
+    {"full_text": " RAM ${memperc}%", "color":"\#F3D194", "name":"mem"},
+    #{"full_text": " FS ${fs_free /} (${fs_free_perc /}%)", "color": "\#E98F15"},
+    {"full_text": " ${texeci 3600 /home/jdrouhard/.local/bin/get_lunch.py}", "color": "\#F44280", "name":"lunch"},
+    {"full_text": " ${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ KOJC temperature}°F ${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ KOJC cloud_cover} ", "color": "\#DF5320", "name": "weather"},
+    {"full_text": " Lon: ${tztime Europe/London %l:%M %p}", "color": "\#9C9491"},
+    {"full_text": " ${time %a %b %d %Y} ", "name": "date"},
+    {"full_text": " ⌚ ${time %l:%M %p} ", "name": "time"},
+    {"full_text": " "}
+    ]
+]]

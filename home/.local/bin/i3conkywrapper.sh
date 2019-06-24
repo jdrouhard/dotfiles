@@ -18,6 +18,12 @@ while read; do
         \"weather\")
             google-chrome http://www.weather.com/weather/today/l/Olathe+KS+66061 2>&1 >/dev/null
             ;;
+        \"lunch\")
+            url=$(get_lunch.py --url)
+            if [[ "$url" != "" ]]; then
+                google-chrome $(get_lunch.py --url) 2>/dev/null >/dev/null
+            fi
+            ;;
     esac
     IFS="}"
 done
