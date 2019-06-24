@@ -82,7 +82,7 @@ function +vi-git-dirty() {
     fi
 }
 
-RPROMPT_ASYNC_PGID=0
+RPROMPT_ASYNC_PPID=0
 function geometry_prompt() {
     case ${KEYMAP} in
         (main|viins)   TEXT="INSERT"; COLOR="cyan" ;;
@@ -118,19 +118,19 @@ function geometry_prompt() {
         kill -s USR1 $$
     }
 
-    if [[ "$RPROMPT_ASYNC_PGID" != "0" ]]; then
-        kill -s HUP -- -$RPROMPT_ASYNC_PGID > /dev/null 2>&1 || :
-        [ -f /tmp/zsh_prompt_$RPROMPT_ASYNC_PGID ] && rm "/tmp/zsh_prompt_$RPROMPT_ASYNC_PGID"
+    if [[ "$RPROMPT_ASYNC_PPID" != "0" ]]; then
+        kill -s HUP -- -$RPROMPT_ASYNC_PPID > /dev/null 2>&1 || :
+        [ -f /tmp/zsh_prompt_$RPROMPT_ASYNC_PPID ] && rm "/tmp/zsh_prompt_$RPROMPT_ASYNC_PPID"
     fi
 
     rprompt_async &!
-    RPROMPT_ASYNC_PGID=$!
+    RPROMPT_ASYNC_PPID=$!
 }
 
 function TRAPUSR1() {
     RPROMPT="$(cat /tmp/zsh_prompt_$$)"
     rm "/tmp/zsh_prompt_$$"
-    RPROMPT_ASYNC_PGID=0
+    RPROMPT_ASYNC_PPID=0
     zle reset-prompt
 }
 
