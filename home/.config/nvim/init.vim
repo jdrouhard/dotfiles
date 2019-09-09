@@ -348,8 +348,8 @@ augroup vimrc_autocmd
     au FileType cpp,python setlocal formatoptions=crqnj
 
     " Strip trailing white spaces in source code.
-    "au BufWritePre *.cpp,*.hpp,*.h,*.c :StripTrailingWhitespace
-    au BufWritePre .vimrc,*.js,*.php :StripTrailingWhitespace
+    "au BufWritePre *.cpp,*.hpp,*.h,*.c exe "norm! m`" | :StripTrailingWhitespace
+    au BufWritePre .vimrc,*.js,*.php exe "norm! m`" | :StripTrailingWhitespace
 
     " Add support for Doxygen comment leader.
     au FileType h,hpp,cpp,c setlocal comments^=:///

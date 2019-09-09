@@ -1,4 +1,4 @@
-Gsdiff :1
+Ghdiffsplit :1:%
 exe 1 . "wincmd w"
-Gvdiff!
+Gvdiffsplit!
 call feedkeys(winnr()."\<C-W>jgg", 'n')
