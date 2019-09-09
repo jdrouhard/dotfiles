@@ -118,9 +118,10 @@ function geometry_prompt() {
         kill -s USR1 $$
     }
 
-    if [[ "$RPROMPT_ASYNC_PPID" != "0" ]]; then
-        kill -s HUP -- -$RPROMPT_ASYNC_PPID > /dev/null 2>&1 || :
-        [ -f /tmp/zsh_prompt_$RPROMPT_ASYNC_PPID ] && rm "/tmp/zsh_prompt_$RPROMPT_ASYNC_PPID"
+    PREV_ASYNC_PPID=$RPROMPT_ASYNC_PPID
+    if [[ "$PREV_ASYNC_PPID" != "0" ]]; then
+        kill -s HUP -- -$PREV_ASYNC_PPID > /dev/null 2>&1 || :
+        [ -f /tmp/zsh_prompt_$PREV_ASYNC_PPID ] && rm "/tmp/zsh_prompt_$PREV_ASYNC_PPID"
     fi
 
     rprompt_async &!
