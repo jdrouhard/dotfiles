@@ -12,6 +12,8 @@ endif
 
 call plug#begin(s:plugin_dir)
 
+Plug 'Shougo/echodoc.vim'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'airblade/vim-gitgutter'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
@@ -28,19 +30,17 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 if (has("nvim"))
-    Plug 'sakhnik/nvim-gdb', { 'branch': 'legacy' }
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh'
+        \ }
+    Plug 'ncm2/ncm2'
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-path'
+    Plug 'ncm2/ncm2-ultisnips'
+    Plug 'roxma/nvim-yarp'
+    Plug 'sakhnik/nvim-gdb'
 endif
-
-" Manually managed
-Plug '~/.vim/bundle/YouCompleteMe', { 'for': [] }
-set updatetime=500
-augroup load_ycm
-    autocmd!
-    autocmd CursorHold,CursorHoldI * exe "normal! m\""
-                                 \ | call plug#load('YouCompleteMe')
-                                 \ | set updatetime=100
-                                 \ | autocmd! load_ycm
-augroup END
 
 call plug#end()
 
@@ -108,14 +108,11 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
-let g:airline#extensions#ycm#enabled=1
 function! GetTagname()
     silent! return Tlist_Get_Tagname_By_Line()
 endfunction
 call airline#parts#define_function("cfunc", "GetTagname")
 let g:airline_section_x = airline#section#create_right(["cfunc", "filetype"])
-
-highlight link YcmErrorSection ErrorMsg
 
 set backspace=indent,eol,start       " allow backspacing over everything in
                                      " insert mode
@@ -187,8 +184,10 @@ set nostartofline                       " do not change the X position of the
                                         " cursor when paging up and down
 set wildignore+=*.o,*.obj,*.dwo
 set path=$PWD/**
-set completeopt=longest,menuone         " Configure (keyword) completion.
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
+set updatetime=100
+
+set completeopt=noinsert,noselect,menuone " Configure (keyword) completion.
 
 "-------------------------------------------------------------------------------
 " Key remappings
@@ -207,24 +206,15 @@ map Y y$
 vnoremap < <gv
 vnoremap > >gv
 
-vmap <tab> >gv
-vmap <s-tab> <gv
-
 nnoremap <silent> <C-h> :bprevious<CR>
 nnoremap <silent> <C-l> :bnext<CR>
 
 nnoremap / /\v
 vnoremap / /\v
 
-" Open the current working directory in dirvish
-nnoremap <silent> <F2> :Dirvish<CR>
-
 " Close the current buffer
 map <leader>bd :Bclose<CR>
 map <C-q> :Bclose<CR>
-
-" Remap K to do nothing instead of searching the man pages.
-nnoremap K <nop>
 
 " Remap Q to do nothing instead of entering ex mode.
 nnoremap Q <nop>
@@ -238,7 +228,7 @@ nmap <silent> <C-k> :cp<CR>
 nmap <silent> <C-j> :cn<CR>
 
 " Split window into .h and .cpp using F3
-map <F3> :AS<CR>
+"map <F3> :AS<CR>
 " Switch between .h and .cpp using F4.
 map <F4> :A<CR>
 " Switch between .h and _inline.h using F5.
@@ -277,10 +267,6 @@ omap <leader><tab> <plug>(fzf-maps-o)
 nnoremap <silent> <leader>gg :Gblame<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 
-" YouCompleteMe mappings
-nnoremap <F6> :YcmForceCompileAndDiagnostics<CR>
-nnoremap <leader>jd :YcmCompleter GoTo<CR>
-
 " vim-easy-align mappings
 xmap ga <plug>(EasyAlign)
 nmap ga <plug>(EasyAlign)
@@ -288,20 +274,30 @@ nmap ga <plug>(EasyAlign)
 " Miscellaneous
 map <leader>w <C-w>
 
+if has("nvim")
+    " ncm2 mappings
+    inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    inoremap <silent><expr><CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
+
+    " LanguageServer-neovim mappings
+    function LC_maps()
+        if has_key(g:LanguageClient_serverCommands, &filetype)
+            nnoremap <buffer><silent> <F2>       :call LanguageClient_contextMenu()<CR>
+            nnoremap <buffer><silent> <F3>       :call LanguageClient#textDocument_references()<CR>
+            nnoremap <buffer><silent> K          :call LanguageClient#textDocument_hover()<CR>
+            nnoremap <buffer><silent> <leader>jd :call LanguageClient#textDocument_definition()<CR>
+        endif
+    endfunction
+    au FileType * call LC_maps()
+endif
+
 "-------------------------------------------------------------------------------
 " Configure plugins
 "-------------------------------------------------------------------------------
 " Configure "A" plugin
 " Never open a non-existing file
 let g:alternateNoDefaultAlternate = 1
-
-" Configure YouCompleteMe
-"let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_filepath_completion_use_working_dir = 1
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_global_ycm_extra_conf = expand("~/.ycm_extra_conf.py")
-let g:ycm_key_list_select_completion = ['<C-j>', '<Tab>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-k>', '<S-Tab>', '<Up>']
 
 " Configure vim-polyglot
 let g:polyglot_disabled = ['c/c++']
@@ -326,11 +322,50 @@ let Tlist_WinWidth=60
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Close_On_Select=0
 
-" Configure nvim-gdb
-let g:nvimgdb_config_override = {
-    \ 'key_frameup':    '<c-k>',
-    \ 'key_framedown':  '<c-j>',
-    \ }
+" Configure UltiSnips
+let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
+
+" Configure echodoc
+let g:echodoc#enable_at_startup = 1
+
+if has("nvim")
+    " make echodoc use floating window
+    let g:echodoc#type = 'floating'
+
+    " Configure nvim-gdb
+    let g:nvimgdb_config_override = {
+        \ 'key_frameup':    '<c-k>',
+        \ 'key_framedown':  '<c-j>',
+        \ }
+
+    " Configure LanguageClient-neovim
+    "let g:LanguageClient_serverCommands = {
+        "\ 'cpp': ['clangd',
+        "\         '--background-index',
+        "\         '--header-insertion-decorators=0',
+        "\         '-j=30'],
+        "\ 'python': ['pyls']
+        "\ }
+    let g:LanguageClient_serverCommands = {
+        \ 'c': ['ccls'],
+        \ 'cpp': ['ccls'],
+        \ 'python': ['pyls']
+        \ }
+    "let g:LanguageClient_serverStderr = expand('~/lsp.err')
+    let g:LanguageClient_settingsPath = expand("~/.config/nvim/settings.json")
+    let g:LanguageClient_hoverPreview = 'Always'
+    let g:LanguageClient_diagnosticsList = 'Location'
+    let g:LanguageClient_hasSnippetSupport = 1
+    let g:LanguageClient_completionPreferTextEdit = 1
+    let g:LanguageClient_changeThrottle = 1.0
+    let g:LanguageClient_waitOutputTimeout = 2
+    let g:LanguageClient_useVirtualText = 0
+
+    " enable ncm2 for all buffers
+    au BufEnter * call ncm2#enable_for_buffer()
+    au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+    au User Ncm2PopupClose set completeopt=menuone,longest
+endif
 
 "-------------------------------------------------------------------------------
 " Configure autocommmands
