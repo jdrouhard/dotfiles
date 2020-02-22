@@ -310,7 +310,7 @@ if has('nvim') || has('gui_running')
     let $FZF_DEFAULT_OPTS .= ' --inline-info --bind up:preview-up,down:preview-down,pgup:preview-page-up,pgdn:preview-page-down'
 endif
 
-let g:fzf_layout = { 'down': '~15%' }
+let g:fzf_layout = { 'window': {'width': 0.9, 'height': 0.6 }, 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
 
 " Configure taglist
@@ -339,18 +339,18 @@ if has("nvim")
         \ }
 
     " Configure LanguageClient-neovim
-    "let g:LanguageClient_serverCommands = {
-        "\ 'cpp': ['clangd',
-        "\         '--background-index',
-        "\         '--header-insertion-decorators=0',
-        "\         '-j=30'],
-        "\ 'python': ['pyls']
-        "\ }
     let g:LanguageClient_serverCommands = {
-        \ 'c': ['ccls'],
-        \ 'cpp': ['ccls'],
+        \ 'cpp': ['clangd',
+        \         '--background-index',
+        \         '--header-insertion-decorators=0',
+        \         '-j=30'],
         \ 'python': ['pyls']
         \ }
+    "let g:LanguageClient_serverCommands = {
+        "\ 'c': ['ccls'],
+        "\ 'cpp': ['ccls'],
+        "\ 'python': ['pyls']
+        "\ }
     "let g:LanguageClient_serverStderr = expand('~/lsp.err')
     let g:LanguageClient_settingsPath = expand("~/.config/nvim/settings.json")
     let g:LanguageClient_hoverPreview = 'Always'
@@ -359,7 +359,7 @@ if has("nvim")
     let g:LanguageClient_completionPreferTextEdit = 1
     let g:LanguageClient_changeThrottle = 1.0
     let g:LanguageClient_waitOutputTimeout = 2
-    let g:LanguageClient_useVirtualText = 0
+    let g:LanguageClient_useVirtualText = 'CodeLens'
 
     " enable ncm2 for all buffers
     au BufEnter * call ncm2#enable_for_buffer()
