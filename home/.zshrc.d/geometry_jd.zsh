@@ -82,7 +82,6 @@ function +vi-git-dirty() {
     fi
 }
 
-RPROMPT_ASYNC_PPID=0
 function geometry_prompt() {
     case ${KEYMAP} in
         (main|viins)   TEXT="INSERT"; COLOR="cyan" ;;
@@ -104,34 +103,24 @@ function geometry_prompt() {
     PROMPT="${(j: :)messages}"
     PROMPT2=' $PROMPT2_SYMBOL '
 
-    # RPROMPT should be done asynchronously
-    function rprompt_async() {
-        vcs_info
-
-        messages=()
-        [[ -n "$vcs_info_msg_2_" ]] && messages+=( $GIT_REBASE ${vcs_info_msg_2_} $SEPARATOR ) # action info (rebase/merge and [applied/total] patches)
-        [[ -n "$vcs_info_msg_0_" ]] && messages+=( ${vcs_info_msg_0_} )                        # branch info with arrows for ahead/behind upstream
-        [[ -n "$vcs_info_msg_1_" ]] && messages+=( $SEPARATOR ${vcs_info_msg_1_} )             # clean -> green filled square, dirty -> red empty square
-
-        echo "%(?..%F{red}%? ↵%f ) ${(j: :)messages}" > /tmp/zsh_prompt_$$
-
-        kill -s USR1 $$
-    }
-
-    PREV_ASYNC_PPID=$RPROMPT_ASYNC_PPID
-    if [[ "$PREV_ASYNC_PPID" != "0" ]]; then
-        kill -s HUP -- -$PREV_ASYNC_PPID > /dev/null 2>&1 || :
-        [ -f /tmp/zsh_prompt_$PREV_ASYNC_PPID ] && rm "/tmp/zsh_prompt_$PREV_ASYNC_PPID"
-    fi
-
-    rprompt_async &!
-    RPROMPT_ASYNC_PPID=$!
+    async_job geometry_rprompt_worker geometry_rprompt_async $PWD
 }
 
-function TRAPUSR1() {
-    RPROMPT="$(cat /tmp/zsh_prompt_$$)"
-    rm "/tmp/zsh_prompt_$$"
-    RPROMPT_ASYNC_PPID=0
+# RPROMPT should be done asynchronously
+function geometry_rprompt_async() {
+    cd -q $1
+    vcs_info
+
+    messages=()
+    [[ -n "$vcs_info_msg_2_" ]] && messages+=( $GIT_REBASE ${vcs_info_msg_2_} $SEPARATOR ) # action info (rebase/merge and [applied/total] patches)
+    [[ -n "$vcs_info_msg_0_" ]] && messages+=( ${vcs_info_msg_0_} )                        # branch info with arrows for ahead/behind upstream
+    [[ -n "$vcs_info_msg_1_" ]] && messages+=( $SEPARATOR ${vcs_info_msg_1_} )             # clean -> green filled square, dirty -> red empty square
+
+    print "%(?..%F{red}%? ↵%f ) ${(j: :)messages}"
+}
+
+function geometry_rprompt_update() {
+    RPROMPT="$3"
     zle reset-prompt
 }
 
@@ -139,6 +128,10 @@ function zle-line-init zle-keymap-select {
     geometry_prompt
     zle reset-prompt
 }
+
+async_init
+async_start_worker geometry_rprompt_worker -n
+async_register_callback geometry_rprompt_worker geometry_rprompt_update
 
 zle -N zle-line-init
 zle -N zle-keymap-select

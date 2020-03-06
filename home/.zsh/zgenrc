@@ -34,7 +34,8 @@ if ! zgen saved; then
 
     # Miscellaneous non oh-my-zsh plugins
     zgen load chrissicool/zsh-256color
-    zgen load rimraf/k
+    zgen load mafredri/zsh-async
+    zgen load supercrabtree/k
 
     # Lastly, theme
     #zgen oh-my-zsh themes/flazz
