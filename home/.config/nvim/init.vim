@@ -12,9 +12,8 @@ endif
 
 call plug#begin(s:plugin_dir)
 
-Plug 'Shougo/echodoc.vim'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'airblade/vim-gitgutter'
+Plug 'antoinemadec/coc-fzf'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
@@ -22,6 +21,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
 Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
+Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -30,16 +30,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 if (has("nvim"))
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh'
-        \ }
-    Plug 'ncm2/ncm2'
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
-    Plug 'ncm2/ncm2-ultisnips'
-    Plug 'roxma/nvim-yarp'
-    Plug 'sakhnik/nvim-gdb'
+    Plug 'sakhnik/nvim-gdb', { 'do': ':UpdateRemotePlugins' }
 endif
 
 call plug#end()
@@ -179,7 +170,7 @@ set hidden                              " be able to put the current buffer to t
                                         " background without writing to disk and
                                         " remember marks and undo-history when a
                                         " background buffer becomes current again
-set history=50                          " keep 50 lines of command line history
+"set history=50                          " keep 50 lines of command line history
 set nostartofline                       " do not change the X position of the
                                         " cursor when paging up and down
 set wildignore+=*.o,*.obj,*.dwo
@@ -187,7 +178,7 @@ set path=$PWD/**
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
 set updatetime=100
 
-set completeopt=noinsert,noselect,menuone " Configure (keyword) completion.
+set completeopt=longest,menuone         " Configure (keyword) completion.
 
 "-------------------------------------------------------------------------------
 " Key remappings
@@ -263,6 +254,11 @@ nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
+" coc.nvim mappings
+nmap <silent> <leader>jd <plug>(coc-definition)
+nmap <silent> <F3>       <plug>(coc-references)
+nmap <silent> K          :call CocActionAsync('doHover')<CR>
+
 " vim-fugitive mappings
 nnoremap <silent> <leader>gg :Gblame<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -273,24 +269,8 @@ nmap ga <plug>(EasyAlign)
 
 " Miscellaneous
 map <leader>w <C-w>
-
-if has("nvim")
-    " ncm2 mappings
-    inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-    inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-    inoremap <silent><expr><CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
-
-    " LanguageServer-neovim mappings
-    function LC_maps()
-        if has_key(g:LanguageClient_serverCommands, &filetype)
-            nnoremap <buffer><silent> <F2>       :call LanguageClient_contextMenu()<CR>
-            nnoremap <buffer><silent> <F3>       :call LanguageClient#textDocument_references()<CR>
-            nnoremap <buffer><silent> K          :call LanguageClient#textDocument_hover()<CR>
-            nnoremap <buffer><silent> <leader>jd :call LanguageClient#textDocument_definition()<CR>
-        endif
-    endfunction
-    au FileType * call LC_maps()
-endif
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 "-------------------------------------------------------------------------------
 " Configure plugins
@@ -322,49 +302,12 @@ let Tlist_WinWidth=60
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Close_On_Select=0
 
-" Configure UltiSnips
-let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
-
-" Configure echodoc
-let g:echodoc#enable_at_startup = 1
-
 if has("nvim")
-    " make echodoc use floating window
-    let g:echodoc#type = 'floating'
-
     " Configure nvim-gdb
     let g:nvimgdb_config_override = {
         \ 'key_frameup':    '<c-k>',
         \ 'key_framedown':  '<c-j>',
         \ }
-
-    " Configure LanguageClient-neovim
-    let g:LanguageClient_serverCommands = {
-        \ 'cpp': ['clangd',
-        \         '--background-index',
-        \         '--header-insertion-decorators=0',
-        \         '-j=30'],
-        \ 'python': ['pyls']
-        \ }
-    "let g:LanguageClient_serverCommands = {
-        "\ 'c': ['ccls'],
-        "\ 'cpp': ['ccls'],
-        "\ 'python': ['pyls']
-        "\ }
-    "let g:LanguageClient_serverStderr = expand('~/lsp.err')
-    let g:LanguageClient_settingsPath = expand("~/.config/nvim/settings.json")
-    let g:LanguageClient_hoverPreview = 'Always'
-    let g:LanguageClient_diagnosticsList = 'Location'
-    let g:LanguageClient_hasSnippetSupport = 1
-    let g:LanguageClient_completionPreferTextEdit = 1
-    let g:LanguageClient_changeThrottle = 1.0
-    let g:LanguageClient_waitOutputTimeout = 2
-    let g:LanguageClient_useVirtualText = 'CodeLens'
-
-    " enable ncm2 for all buffers
-    au BufEnter * call ncm2#enable_for_buffer()
-    au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-    au User Ncm2PopupClose set completeopt=menuone,longest
 endif
 
 "-------------------------------------------------------------------------------
@@ -438,7 +381,7 @@ else
     " Always start editing a file in case a swap file exists.
     augroup AutoSwap
         autocmd!
-        autocmd SwapExists * :let v:swapchoice = 'e'
+        autocmd SwapExists * let v:swapchoice = 'e'
     augroup END
 endif
 
