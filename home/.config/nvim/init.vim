@@ -10,6 +10,8 @@ if empty(glob(s:plug_file))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+let g:polyglot_disabled = ['c/c++']
+
 call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
@@ -21,7 +23,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
 Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
-Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -259,6 +261,11 @@ nmap <silent> <leader>jd <plug>(coc-definition)
 nmap <silent> <F3>       <plug>(coc-references)
 nmap <silent> K          :call CocActionAsync('doHover')<CR>
 
+xmap if <plug>(coc-funcobj-i)
+omap if <plug>(coc-funcobj-i)
+xmap ic <plug>(coc-classobj-i)
+omap ic <plug>(coc-classobj-i)
+
 " vim-fugitive mappings
 nnoremap <silent> <leader>gg :Gblame<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -338,6 +345,9 @@ augroup vimrc_autocmd
 
     " sqli files are actually sql files
     au BufRead,BufNewFile *.sqli setlocal filetype=sql
+
+    " inc files are actually cpp
+    au BufRead,BufNewFile *.inc setlocal filetype=cpp
 
     " Resize splits when the window is resized.
     au VimResized * exe "normal! \<c-w>="
