@@ -8,7 +8,7 @@ stty -ixon
 stty -ixoff
 
 export FZF_BASE=$HOME/.config/nvim/plugged/fzf
-export PATH=~/.local/bin${PATH:+:${PATH}}
+export PATH=~/.local/bin:/usr/local/bin${PATH:+:${PATH}}
 
 # Plugins
 source ~/.zsh/zgenrc
@@ -88,22 +88,27 @@ zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)*==34=34}:${(s.:.)LS_COLORS}")';
 
-# Honor old .zshrc.local customizations, but print depecation warning.
-if [ -f ~/.zshrc.local ]; then
-  source ~/.zshrc.local
-  echo ".zshrc.local is deprecated - use files in ~/.zshrc.d instead"
-fi
-
 # Make it easy to append your own customizations that override the above by
 # loading all files from .zshrc.d directory
-mkdir -p ~/.zshrc.d
-if [ -n "$(ls ~/.zshrc.d)" ]; then
-  for dotfile in ~/.zshrc.d/*
-  do
-    if [ -r "${dotfile}" ]; then
-      source "${dotfile}"
+function source_dir {
+    if [ -n "$(ls $1)" ]; then
+        for dotfile in $1/*; do
+            if [ -r "${dotfile}" ]; then
+                source "${dotfile}"
+            fi
+        done
     fi
-  done
+}
+source_dir ~/.zshrc.d
+
+# Make it easy to use other "castles" for customizations by providing a parent
+# directory that castles can by symlinked into
+if [ -d ~/.zshrc.other.d ]; then
+    if [ -n "$(ls ~/.zshrc.other.d)" ]; then
+        for dir in ~/.zshrc.other.d/*; do
+            source_dir $dir
+        done
+    fi
 fi
 
 # Dedupe the PATH environment variable
