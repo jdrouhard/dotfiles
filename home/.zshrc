@@ -89,27 +89,19 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)*==34=34}:${(s.:.)LS_COLORS}")';
 
 # Make it easy to append your own customizations that override the above by
-# loading all files from .zshrc.d directory
+# loading all files from .zshrc.d directory. Also load all files in
+# subdirectories of .zshrc.other.d to make it easy to symlink other castles
 function source_dir {
-    if [ -n "$(ls $1)" ]; then
-        for dotfile in $1/*; do
-            if [ -r "${dotfile}" ]; then
-                source "${dotfile}"
-            fi
-        done
-    fi
+    for dotfile in $1/*.zsh; do
+        if [ -r "${dotfile}" ]; then
+            source "${dotfile}"
+        fi
+    done
 }
 source_dir ~/.zshrc.d
-
-# Make it easy to use other "castles" for customizations by providing a parent
-# directory that castles can by symlinked into
-if [ -d ~/.zshrc.other.d ]; then
-    if [ -n "$(ls ~/.zshrc.other.d)" ]; then
-        for dir in ~/.zshrc.other.d/*; do
-            source_dir $dir
-        done
-    fi
-fi
+for dir in ~/.zshrc.other.d/*; do
+    source_dir $dir
+done
 
 # Dedupe the PATH environment variable
 typeset -U PATH path
