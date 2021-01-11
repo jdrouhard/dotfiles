@@ -35,9 +35,18 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 if has("nvim")
     Plug 'sakhnik/nvim-gdb', { 'do': ':UpdateRemotePlugins' }
+    if has("nvim-0.5.0")
+        Plug 'nvim-treesitter/nvim-treesitter'
+        Plug 'nvim-treesitter/playground'
+    endif
 endif
 
 call plug#end()
+
+if has("nvim-0.5.0")
+    lua require'treesitter_config'
+endif
+
 
 "-------------------------------------------------------------------------------
 " Text formatting
@@ -106,6 +115,12 @@ let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
 function! GetTagname()
+    if has("nvim-0.5.0")
+        let disp = nvim_treesitter#statusline(90)
+        if disp != v:null && disp != ''
+            return disp
+        endif
+    endif
     silent! return Tlist_Get_Tagname_By_Line()
 endfunction
 call airline#parts#define_function("cfunc", "GetTagname")
