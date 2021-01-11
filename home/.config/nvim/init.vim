@@ -15,6 +15,8 @@ let g:polyglot_disabled = ['c/c++']
 call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
+Plug 'bluz71/vim-moonfly-colors'
+Plug 'bluz71/vim-nightfly-guicolors'
 Plug 'antoinemadec/coc-fzf'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
@@ -31,7 +33,7 @@ Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
-if (has("nvim"))
+if has("nvim")
     Plug 'sakhnik/nvim-gdb', { 'do': ':UpdateRemotePlugins' }
 endif
 
@@ -66,8 +68,10 @@ if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")
     let g:oceanic_next_terminal_bold=1
     "let g:airline_theme='gruvbox'
     "colorscheme gruvbox
-    let g:airline_theme='oceanicnext'
-    colorscheme OceanicNext
+    "let g:airline_theme='oceanicnext'
+    "colorscheme OceanicNext
+    let g:airline_theme='nightfly'
+    colorscheme nightfly
 
     call toggletheme#maptruecolors("<F12>")
 else
@@ -81,12 +85,12 @@ else
     call toggletheme#map256("<F12>")
 endif
 
-if (!has("nvim"))
+if !has("nvim")
     set t_so=[7m                         " set escape codes for standout mode
     set t_se=[27m                        " set escape codes for standout mode
     set t_ZH=[3m                         " set escape codes for italics mode
     set t_ZR=[23m                        " set escape codes for italics mode
-    if (has("termguicolors"))
+    if has("termguicolors")
         let &t_8f = "\<esc>[38;2;%lu;%lu;%lum" " true color fix
         let &t_8b = "\<esc>[48;2;%lu;%lu;%lum" " true color fix
     endif
@@ -155,7 +159,7 @@ endif
 
 set autoread                            " automatically reload a file when it has
                                         " been changed
-if (has("nvim"))
+if has("nvim")
     "set shada^=%                        " Remember info about open buffers on close
     set inccommand=nosplit              " Don't show partial results in preview window
 else
@@ -181,6 +185,7 @@ set ttimeoutlen=0                       " don't wait for key codes (<ESC> is ins
 set updatetime=100
 
 set completeopt=longest,menuone         " Configure (keyword) completion.
+set shortmess+=c
 
 "-------------------------------------------------------------------------------
 " Key remappings
@@ -260,6 +265,7 @@ omap <leader><tab> <plug>(fzf-maps-o)
 nmap <silent> <leader>jd <plug>(coc-definition)
 nmap <silent> <F3>       <plug>(coc-references)
 nmap <silent> K          :call CocActionAsync('doHover')<CR>
+nmap <silent> <leader>ac :CocAction<CR>
 
 xmap if <plug>(coc-funcobj-i)
 omap if <plug>(coc-funcobj-i)
@@ -285,11 +291,6 @@ inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Configure "A" plugin
 " Never open a non-existing file
 let g:alternateNoDefaultAlternate = 1
-
-" Configure vim-polyglot
-let g:polyglot_disabled = ['c/c++']
-"let g:cpp_class_scope_highlight = 1
-"let g:cpp_experimental_simple_template_highlight = 1
 
 " Configure fzf
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
@@ -346,7 +347,8 @@ augroup vimrc_autocmd
     " sqli files are actually sql files
     au BufRead,BufNewFile *.sqli setlocal filetype=sql
 
-    " inc files are actually cpp
+    " Override vim-polyglot filetype detection of spec files
+    au BufRead,BufNewFile *.spec setlocal filetype=spec
     au BufRead,BufNewFile *.inc setlocal filetype=cpp
 
     " Resize splits when the window is resized.
@@ -372,7 +374,7 @@ augroup END
 "-------------------------------------------------------------------------------
 " Misc settings
 "-------------------------------------------------------------------------------
-if (has("nvim"))
+if has("nvim")
     function! AS_HandleSwapfile(filename, swapname)
         " if swapfile is older than file itself, just get rid of it
         if getftime(a:swapname) < getftime(a:filename)

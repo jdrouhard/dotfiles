@@ -1,3 +1,4 @@
 {
-    "http.proxyStrictSSL": false
+    "http.proxyStrictSSL": false,
+    "clangd.arguments": ["--header-insertion=never"]
 }
