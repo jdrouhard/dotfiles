@@ -10,14 +10,19 @@ if empty(glob(s:plug_file))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+let g:use_builtin_lsp = 1
+
 let g:polyglot_disabled = ['c/c++']
+
+if get(g:, 'use_builtin_lsp')
+    call add(g:polyglot_disabled, 'markdown')
+endif
 
 call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'bluz71/vim-nightfly-guicolors'
-Plug 'antoinemadec/coc-fzf'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
@@ -25,7 +30,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
 Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -38,12 +42,26 @@ if has("nvim")
     if has("nvim-0.5.0")
         Plug 'nvim-treesitter/nvim-treesitter'
         Plug 'nvim-treesitter/playground'
+        if get(g:, 'use_builtin_lsp', 0)
+            Plug 'neovim/nvim-lspconfig'
+            Plug 'nvim-lua/completion-nvim'
+            Plug 'ojroques/nvim-lspfuzzy'
+        endif
     endif
 endif
+
+if (!has("nvim") || !get(g:, 'use_builtin_lsp', 0))
+    Plug 'antoinemadec/coc-fzf'
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+endif
+
 
 call plug#end()
 
 if has("nvim-0.5.0")
+    if get(g:, 'use_builtin_lsp', 0)
+        lua require'lsp_config'
+    endif
     lua require'treesitter_config'
 endif
 
@@ -125,6 +143,17 @@ function! GetTagname()
 endfunction
 call airline#parts#define_function("cfunc", "GetTagname")
 let g:airline_section_x = airline#section#create_right(["cfunc", "filetype"])
+if get(g:, 'use_builtin_lsp', 0)
+    function! LspStatus() abort
+        return airline#util#shorten(get(g:, 'lsp_status', ''), 91, 9)
+    endfunction
+    call airline#parts#define('lsp_status', {
+                \ 'raw': '',
+                \ 'accent': 'bold'
+                \ })
+    call airline#parts#define_function('lsp_status', 'LspStatus')
+    let g:airline_section_c = airline#section#create_right(['%<', 'path', g:airline_symbols.space, 'readonly', 'lsp_status'])
+endif
 
 set backspace=indent,eol,start       " allow backspacing over everything in
                                      " insert mode
@@ -199,12 +228,21 @@ set path=$PWD/**
 set ttimeoutlen=0                       " don't wait for key codes (<ESC> is instant)
 set updatetime=100
 
-set completeopt=longest,menuone         " Configure (keyword) completion.
+if get(g:, 'use_builtin_lsp', 0)
+    set completeopt=menuone,noinsert,noselect         " Configure (keyword) completion.
+else
+    set completeopt=longest,menuone         " Configure (keyword) completion.
+endif
+
 set shortmess+=c
 
 "-------------------------------------------------------------------------------
 " Key remappings
 "-------------------------------------------------------------------------------
+
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+            \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+            \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 let mapleader=" "                    " set our personal modifier key to space
 
