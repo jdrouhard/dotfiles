@@ -10,7 +10,7 @@ if empty(glob(s:plug_file))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-let g:use_builtin_lsp = 1
+let g:use_builtin_lsp = 0
 
 let g:polyglot_disabled = ['c/c++']
 
@@ -21,18 +21,18 @@ endif
 call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
-Plug 'bluz71/vim-moonfly-colors'
+"Plug 'bluz71/vim-moonfly-colors'
 Plug 'bluz71/vim-nightfly-guicolors'
-Plug 'joshdick/onedark.vim'
-Plug 'junegunn/fzf', { 'do': './install --bin' } | Plug 'junegunn/fzf.vim'
-Plug 'junegunn/gv.vim'
+"Plug 'joshdick/onedark.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
-Plug 'mhartington/oceanic-next'
-Plug 'morhetz/gruvbox'
+"Plug 'mhartington/oceanic-next'
+"Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdcommenter'
-Plug 'sheerun/vim-polyglot'
-Plug 'tmux-plugins/vim-tmux-focus-events'
+"Plug 'sheerun/vim-polyglot'
+"Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -157,6 +157,7 @@ endif
 
 set backspace=indent,eol,start       " allow backspacing over everything in
                                      " insert mode
+set cursorline                       " Highlight line of cursor
 set nofoldenable                     " disable code folding by default
 set number                           " always show line numbers
 set numberwidth=5                    " we are good for up to 99999 lines
@@ -293,10 +294,10 @@ nnoremap j gj
 nnoremap k gk
 
 " Configure fzf mappings
-nnoremap          <leader>s   :Ag<space>
-nnoremap <silent> <leader>ag  :Ag <C-R><C-W><CR>
-nnoremap <silent> <leader>AG  :Ag <C-R><C-A><CR>
-xnoremap <silent> <leader>ag  y:Ag <C-R>"<CR>
+nnoremap          <leader>s   :Rg<space>
+nnoremap <silent> <leader>ag  :Rg <C-R><C-W><CR>
+nnoremap <silent> <leader>AG  :Rg <C-R><C-A><CR>
+xnoremap <silent> <leader>ag  y:Rg <C-R>"<CR>
 
 nnoremap <silent> <C-p>       :Files<CR>
 nnoremap <silent> <leader>l   :Buffer<CR>
@@ -346,7 +347,6 @@ inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 let g:alternateNoDefaultAlternate = 1
 
 " Configure fzf
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 if has('nvim') || has('gui_running')
     let $FZF_DEFAULT_OPTS .= ' --inline-info --bind up:preview-up,down:preview-down,pgup:preview-page-up,pgdn:preview-page-down'
 endif
@@ -416,8 +416,8 @@ augroup vimrc_autocmd
     au VimEnter * command! -bang -nargs=? -complete=dir Files
                 \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-    au VimEnter * command! -bang -nargs=* Ag
-                \ call fzf#vim#ag(<q-args>,
+    au VimEnter * command! -bang -nargs=* Rg
+                \ call fzf#vim#grep('rg --vimgrep --color=always --ignore-case '.shellescape(<q-args>), 1,
                 \                 <bang>0 ? fzf#vim#with_preview('up:60%')
                 \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
                 \                 <bang>0)
