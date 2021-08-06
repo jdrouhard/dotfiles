@@ -6,8 +6,6 @@ local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', 
 local index = 0
 local status_timer = vim.loop.new_timer()
 
-local M = {}
-
 local function get_statusline()
   if #vim.lsp.buf_get_clients() == 0 then
     return ''
@@ -37,7 +35,7 @@ local function get_statusline()
     end
   end
 
-  for _, client in ipairs(vim.lsp.get_active_clients()) do
+  for _, client in ipairs(vim.lsp.buf_get_clients()) do
     local name = aliases[client.name] or client.name
     if not msgs[name] then
       msgs[name] = {}
@@ -59,13 +57,11 @@ local function get_statusline()
   return result
 end
 
-function M.update_text()
+local function update_text()
   vim.g.lsp_status = get_statusline()
 end
 
 status_timer:start(100, 100, vim.schedule_wrap(function()
   index = (index + 1) % #spinner_frames
-  M.update_text()
+  update_text()
 end))
-
-return M

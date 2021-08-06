@@ -12,39 +12,47 @@ endif
 
 let g:use_builtin_lsp = 0
 
-let g:polyglot_disabled = ['c/c++']
-
-if get(g:, 'use_builtin_lsp')
-    call add(g:polyglot_disabled, 'markdown')
-endif
+"if get(g:, 'use_builtin_lsp')
+    "call add(g:polyglot_disabled, 'markdown')
+"endif
 
 call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
-"Plug 'bluz71/vim-moonfly-colors'
+Plug 'bfrg/vim-cpp-modern'
+Plug 'bluz71/vim-moonfly-colors'
 Plug 'bluz71/vim-nightfly-guicolors'
-"Plug 'joshdick/onedark.vim'
+"Plug 'fratajczak/one-monokai-vim'
+Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
 "Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
-"Plug 'mhartington/oceanic-next'
-"Plug 'morhetz/gruvbox'
+Plug 'mhartington/oceanic-next'
+Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdcommenter'
 "Plug 'sheerun/vim-polyglot'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
-if has("nvim")
+"Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+"Plug 'pacha/vem-tabline'
+
+if has('nvim')
     Plug 'sakhnik/nvim-gdb', { 'do': ':UpdateRemotePlugins' }
-    if has("nvim-0.5.0")
+    if has('nvim-0.5.0')
         Plug 'nvim-treesitter/nvim-treesitter'
         Plug 'nvim-treesitter/playground'
+        Plug 'shadmansaleh/lualine.nvim'
+        Plug 'akinsho/nvim-bufferline.lua'
+        "Plug 'romgrk/barbar.nvim'
+        Plug 'kyazdani42/nvim-web-devicons'
+        Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
         if get(g:, 'use_builtin_lsp', 0)
             Plug 'neovim/nvim-lspconfig'
-            Plug 'nvim-lua/completion-nvim'
+            Plug 'hrsh7th/nvim-compe'
+            Plug 'hrsh7th/vim-vsnip'
             Plug 'ojroques/nvim-lspfuzzy'
         endif
     endif
@@ -58,11 +66,78 @@ endif
 
 call plug#end()
 
-if has("nvim-0.5.0")
+if has('nvim-0.5.0')
     if get(g:, 'use_builtin_lsp', 0)
         lua require'lsp_config'
     endif
-    lua require'treesitter_config'
+
+lua<<EOF
+    require'treesitter_config'
+
+    local function coc_status()
+        local status = vim.g.coc_status or ''
+        return status:gsub("%%", "%%%1")
+    end
+    local lualine_config = require'lualine.config'.get_config()
+    local sections = lualine_config.sections
+    table.insert(sections.lualine_b, 1, { 'diff', colored = false })
+    sections.lualine_c = { { 'filename', path = 1 }, coc_status }
+    table.insert(sections.lualine_x, 1, 'GetTagname')
+    require'lualine'.setup{
+        options = {
+            theme = 'tokyonight',
+            section_separators = '',
+            component_separators = ''
+        },
+        extensions = { 'quickfix', 'fugitive', 'fzf' },
+        sections = sections
+    }
+    local color_config = require'tokyonight.config'
+    local colors = require'tokyonight.colors'.setup(color_config)
+    require'bufferline'.setup{
+        options = {
+            numbers = "buffer_id",
+            number_style = "",
+            show_tab_indicators = true,
+            show_buffer_close_icons = false,
+            show_close_icon = false,
+            max_name_length = 64
+        },
+        highlights = {
+            fill = {
+                guibg = colors.bg_statusline,
+                guifg = colors.fg_sidebar
+            },
+            background = {
+                guibg = colors.bg_statusline,
+                guifg = colors.fg_sidebar
+            },
+--            buffer_selected = {
+--                gui = "",
+--                guifg = colors.black,
+--                guibg = colors.blue
+--            },
+            modified = {
+                guibg = colors.blue,
+                guifg = colors.black
+            },
+            modified_selected = {
+                gui = "bold,italic",
+                guibg = colors.green,
+                guifg = colors.black
+            },
+            modified_visible = {
+                guibg = colors.blue,
+                guifg = colors.black
+            }
+        }
+    }
+--    vim.g.bufferline = {
+--        closable = false,
+--        clickable = false,
+--        maximum_length = 64
+--    }
+EOF
 endif
 
 
@@ -86,40 +161,70 @@ set wrap                             " wrap overlong lines
 "-------------------------------------------------------------------------------
 
 set background=dark
-if (has("termguicolors") && (has("nvim") || v:version >= 800 || has("patch1942")) || has("gui_running"))
+if (has('termguicolors') && (has('nvim') || v:version >= 800 || has('patch1942')) || has('gui_running'))
     set termguicolors
     let g:onedark_terminal_italics=1
     let g:gruvbox_italic=1
     let g:gruvbox_contrast_dark='soft'
     let g:oceanic_next_terminal_italic=1
     let g:oceanic_next_terminal_bold=1
+    let g:tokyonight_italic_functions=1
     "let g:airline_theme='gruvbox'
     "colorscheme gruvbox
-    "let g:airline_theme='oceanicnext'
-    "colorscheme OceanicNext
-    let g:airline_theme='nightfly'
-    colorscheme nightfly
+    let g:airline_theme='oceanicnext'
+    colorscheme tokyonight
+    "let g:airline_theme='nightfly'
+    "colorscheme my_nightfly
 
-    call toggletheme#maptruecolors("<F12>")
+    hi! link TSKeywordAccess Statement
+    hi! link TSStatement Statement
+    hi! link TSStorageClass StorageClass
+    hi! link TSStructure Structure
+
+    "hi! link CocSem_class Type
+    ""hi! link CocSem_comment
+    ""hi! link CocSem_concept
+    "hi! link CocSem_enum Label
+    "hi! link CocSem_enumMember Constant
+    "hi! link CocSem_function Function
+    ""hi! link CocSem_interface
+    "hi! link CocSem_macro Macro
+    "hi! link CocSem_method Function
+    "hi! link CocSem_namespace Statement
+    ""hi! link CocSem_parameter
+    "hi! link CocSem_property Identifier
+    "hi! link CocSem_type Type
+    ""hi! link CocSem_typeParameter
+    ""hi! link CocSem_unknown
+    ""hi! link CocSem_variable
+
+    hi! link CocSem_variable None
+    hi! link CocSem_parameter None
+    hi! link CocErrorHighlight LspDiagnosticsUnderlineError
+    hi! link CocWarningHighlight LspDiagnosticsUnderlineWarning
+    hi! link CocInfoHighlight LspDiagnosticsUnderlineInformation
+    hi! link CocHintHighlight LspDiagnosticsUnderlineHint
+
+    call toggletheme#maptruecolors('<F12>')
 else
     let g:base16_termtrans=1
     let g:base16_term_italics=1
     let g:airline_theme='solarized'
     colorscheme base16
 
-    call toggletheme#maptransparency("<F10>")
-    call toggletheme#mapbg("<F11>")
-    call toggletheme#map256("<F12>")
+    call toggletheme#maptransparency('<F10>')
+    call toggletheme#mapbg('<F11>')
+    call toggletheme#map256('<F12>')
 endif
 
-if !has("nvim")
+if !has('nvim')
     set t_so=[7m                         " set escape codes for standout mode
     set t_se=[27m                        " set escape codes for standout mode
     set t_ZH=[3m                         " set escape codes for italics mode
     set t_ZR=[23m                        " set escape codes for italics mode
-    if has("termguicolors")
-        let &t_8f = "\<esc>[38;2;%lu;%lu;%lum" " true color fix
-        let &t_8b = "\<esc>[48;2;%lu;%lu;%lum" " true color fix
+    if has('termguicolors')
+        let &t_8f = '\<esc>[38;2;%lu;%lu;%lum' " true color fix
+        let &t_8b = '\<esc>[48;2;%lu;%lu;%lum' " true color fix
     endif
 endif
 
@@ -132,8 +237,14 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
+
+let g:vem_tabline_show=2
+let g:vem_tabline_show_number='buffnr'
+
+let g:coc_default_semantic_highlight_groups=1
+
 function! GetTagname()
-    if has("nvim-0.5.0")
+    if has('nvim-0.5.0')
         let disp = nvim_treesitter#statusline(90)
         if disp != v:null && disp != ''
             return disp
@@ -141,18 +252,18 @@ function! GetTagname()
     endif
     silent! return Tlist_Get_Tagname_By_Line()
 endfunction
-call airline#parts#define_function("cfunc", "GetTagname")
-let g:airline_section_x = airline#section#create_right(["cfunc", "filetype"])
+"call airline#parts#define_function('cfunc', 'GetTagname')
+"let g:airline_section_x = airline#section#create_right(['cfunc', 'filetype'])
 if get(g:, 'use_builtin_lsp', 0)
     function! LspStatus() abort
         return airline#util#shorten(get(g:, 'lsp_status', ''), 91, 9)
     endfunction
-    call airline#parts#define('lsp_status', {
-                \ 'raw': '',
-                \ 'accent': 'bold'
-                \ })
-    call airline#parts#define_function('lsp_status', 'LspStatus')
-    let g:airline_section_c = airline#section#create_right(['%<', 'path', g:airline_symbols.space, 'readonly', 'lsp_status'])
+    "call airline#parts#define('lsp_status', {
+                "\ 'raw': '',
+                "\ 'accent': 'bold'
+                "\ })
+    "call airline#parts#define_function('lsp_status', 'LspStatus')
+    "let g:airline_section_c = airline#section#create_right(['%<', 'path', g:airline_symbols.space, 'readonly', 'lsp_status'])
 endif
 
 set backspace=indent,eol,start       " allow backspacing over everything in
@@ -204,7 +315,7 @@ endif
 
 set autoread                            " automatically reload a file when it has
                                         " been changed
-if has("nvim")
+if has('nvim')
     "set shada^=%                        " Remember info about open buffers on close
     set inccommand=nosplit              " Don't show partial results in preview window
 else
@@ -230,7 +341,7 @@ set ttimeoutlen=0                       " don't wait for key codes (<ESC> is ins
 set updatetime=100
 
 if get(g:, 'use_builtin_lsp', 0)
-    set completeopt=menuone,noinsert,noselect         " Configure (keyword) completion.
+    set completeopt=menuone,noselect         " Configure (keyword) completion.
 else
     set completeopt=longest,menuone         " Configure (keyword) completion.
 endif
@@ -261,8 +372,8 @@ vnoremap > >gv
 nnoremap <silent> <C-h> :bprevious<CR>
 nnoremap <silent> <C-l> :bnext<CR>
 
-nnoremap / /\v
-vnoremap / /\v
+"nnoremap / /\v
+"vnoremap / /\v
 
 " Close the current buffer
 map <leader>bd :Bclose<CR>
@@ -300,7 +411,7 @@ nnoremap <silent> <leader>AG  :Rg <C-R><C-A><CR>
 xnoremap <silent> <leader>ag  y:Rg <C-R>"<CR>
 
 nnoremap <silent> <C-p>       :Files<CR>
-nnoremap <silent> <leader>l   :Buffer<CR>
+nnoremap <silent> <leader>l   :Buffers<CR>
 nnoremap <silent> <leader>t   :GFiles<CR>
 nnoremap <silent> <leader>h   :Commands<CR>
 nnoremap <silent> <leader>?   :Helptags<CR>
@@ -317,6 +428,10 @@ omap <leader><tab> <plug>(fzf-maps-o)
 
 " coc.nvim mappings
 nmap <silent> <leader>jd <plug>(coc-definition)
+nmap <silent> gD         <plug>(coc-declaration)
+nmap <silent> gd         <plug>(coc-definition)
+nmap <silent> gi         <plug>(coc-implementation)
+nmap <silent> gr         <plug>(coc-references)
 nmap <silent> <F3>       <plug>(coc-references)
 nmap <silent> K          :call CocActionAsync('doHover')<CR>
 nmap <silent> <leader>ac :CocAction<CR>
@@ -326,8 +441,11 @@ omap if <plug>(coc-funcobj-i)
 xmap ic <plug>(coc-classobj-i)
 omap ic <plug>(coc-classobj-i)
 
+xmap <leader>f <plug>(coc-format-selected)
+nmap <leader>f <plug>(coc-format)
+
 " vim-fugitive mappings
-nnoremap <silent> <leader>gg :Gblame<CR>
+nnoremap <silent> <leader>gg :Git blame<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 
 " vim-easy-align mappings
@@ -336,8 +454,17 @@ nmap ga <plug>(EasyAlign)
 
 " Miscellaneous
 map <leader>w <C-w>
-inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+if get(g:, 'use_builtin_lsp', 0)
+    inoremap <silent><expr><C-Space> compe#complete()
+    inoremap <silent><expr><CR>      compe#confirm('<CR>')
+    inoremap <silent><expr><C-e>     compe#close('<C-e>')
+    inoremap <silent><expr><C-f>     compe#scroll({ 'delta': +4 })
+    inoremap <silent><expr><C-d>     compe#scroll({ 'delta': -4 })
+else
+    inoremap <silent><expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+endif
 
 "-------------------------------------------------------------------------------
 " Configure plugins
@@ -363,7 +490,7 @@ let Tlist_WinWidth=60
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Close_On_Select=0
 
-if has("nvim")
+if has('nvim')
     " Configure nvim-gdb
     let g:nvimgdb_config_override = {
         \ 'key_frameup':    '<c-k>',
@@ -379,6 +506,13 @@ command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``
 
 augroup vimrc_autocmd
     autocmd!
+
+    " Update signature help on jump placeholder.
+    if !get(g:, 'use_builtin_lsp', 0)
+        au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+        au CursorHold * silent call CocActionAsync('highlight')
+    endif
+
     " Modify default tabstop and textwidth/formatting
     au FileType cmake,xml setlocal tabstop=2
     au FileType cmake,xml setlocal shiftwidth=2
@@ -427,28 +561,28 @@ augroup END
 "-------------------------------------------------------------------------------
 " Misc settings
 "-------------------------------------------------------------------------------
-if has("nvim")
-    function! AS_HandleSwapfile(filename, swapname)
-        " if swapfile is older than file itself, just get rid of it
-        if getftime(a:swapname) < getftime(a:filename)
-            call delete(a:swapname)
-            let v:swapchoice = 'e'
-        endif
-    endfunction
+"if has("nvim")
+    "function! AS_HandleSwapfile(filename, swapname)
+        """ if swapfile is older than file itself, just get rid of it
+        "if getftime(a:swapname) < getftime(a:filename)
+            "call delete(a:swapname)
+            "let v:swapchoice = 'e'
+        "endif
+    "endfunction
 
-    augroup AutoSwap
-        autocmd!
-        autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
-                \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
-        autocmd SwapExists * call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
-    augroup END
-else
-    " Always start editing a file in case a swap file exists.
+    "augroup AutoSwap
+        "autocmd!
+        "autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+                "\ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+        "autocmd SwapExists * call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
+    "augroup END
+"else
+    "" Always start editing a file in case a swap file exists.
     augroup AutoSwap
         autocmd!
         autocmd SwapExists * let v:swapchoice = 'e'
     augroup END
-endif
+"endif
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
@@ -462,22 +596,22 @@ function! <SID>BufcloseCloseIt()
      bnext
    endif
 
-   if bufnr("%") == l:currentBufNum
+   if bufnr('%') == l:currentBufNum
      new
    endif
 
    if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
+     execute('bdelete! '.l:currentBufNum)
    endif
 endfunction
 
 " Read local machine settings
-if filereadable(expand("~/.localvimrc"))
+if filereadable(expand('~/.localvimrc'))
     so ~/.localvimrc
 endif
 
 " Read in a custom Vim configuration local to the working directory.
-if filereadable(".project.vim")
+if filereadable('.project.vim')
     so .project.vim
 endif
 
