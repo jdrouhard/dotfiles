@@ -20,7 +20,13 @@ local function init()
 
     use 'wbthomason/packer.nvim'
 
-    use 'airblade/vim-gitgutter'
+    use {
+        'lewis6991/gitsigns.nvim',
+        requires = 'nvim-lua/plenary.nvim',
+        config = function()
+            require'gitsigns'.setup{ current_line_blame = true }
+        end
+    }
     use 'bfrg/vim-cpp-modern'
 
     use {
@@ -37,7 +43,7 @@ local function init()
         end
     }
 
-    use { 'mhinz/vim-sayonara', cmd = 'Sayonara' }
+    use { 'ojroques/nvim-bufdel', cmd = 'BufDel' }
 
     use {
         'junegunn/fzf',
@@ -86,12 +92,9 @@ local function init()
     }
 
     use {
-        'akinsho/nvim-bufferline.lua',
-        requires = {
-            'kyazdani42/nvim-web-devicons',
-            'folke/tokyonight.nvim',
-        },
-        config  = [[require'config.bufferline']]
+        'jose-elias-alvarez/buftabline.nvim',
+        requires = 'kyazdani42/nvim-web-devicons',
+        config = [[require'config.buftabline']]
     }
 
     use {

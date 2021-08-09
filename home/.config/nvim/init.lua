@@ -13,6 +13,7 @@ opt.ttimeoutlen   = 0
 opt.updatetime    = 100
 opt.undofile      = true
 opt.wildignore    = "*.o,*.obj,*.dwo"
+opt.path          = vim.env.PWD .. '/**'
 opt.shortmess:append("c")
 
 opt.termguicolors = true
@@ -43,8 +44,6 @@ opt.inccommand    = "nosplit"
 opt.list          = true
 opt.listchars     = "tab:▸ ,trail:·"
 
-local silent = { silent = true }
-
 -- editing
 map('i', 'jk', '<ESC>')
 map('n', 'j',  'gj')
@@ -58,10 +57,12 @@ map('i', '<tab>',   'pumvisible() ? "<C-n>" : "<tab>"',   { silent = true, expr 
 map('i', '<s-tab>', 'pumvisible() ? "<C-p>" : "<s-tab>"', { silent = true, expr = true })
 
 -- buffers
+g.alternateNoDefaultAlternate = true
+
 map('n', '<c-h>',      '<cmd>bprevious<CR>')
 map('n', '<c-l>',      '<cmd>bnext<CR>')
-map('',  '<leader>bd', '<cmd>Sayonara!<CR>', { silent = true, nowait = true })
-map('',  '<c-q>',      '<cmd>Sayonara!<CR>', { silent = true, nowait = true })
+map('',  '<leader>bd', '<cmd>BufDel<CR>', { silent = true, nowait = true })
+map('',  '<c-q>',      '<cmd>BufDel<CR>', { silent = true, nowait = true })
 map('',  '<leader>w',  '<c-w>')
 map('',  '<F4>',       '<cmd>A<CR>')
 map('',  '<F5>',       '<cmd>AI<CR>')
