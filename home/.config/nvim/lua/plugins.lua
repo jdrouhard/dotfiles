@@ -48,7 +48,15 @@ local function init()
     use {
         'junegunn/fzf',
         run = function() fn['fzf#install']() end,
-        requires = 'junegunn/fzf.vim',
+        --requires = 'junegunn/fzf.vim',
+        requires = {
+            { 'ibhagwan/fzf-lua',
+                requires = {
+                    'vijaymarupudi/nvim-fzf',
+                    'kyazdani42/nvim-web-devicons'
+                }
+            }
+        },
         config = [[require'config.fzf']]
     }
 
@@ -82,6 +90,7 @@ local function init()
         run = ':TSUpdate',
         config = [[require'config.treesitter']]
     }
+
     use {
         'shadmansaleh/lualine.nvim',
         requires = {
