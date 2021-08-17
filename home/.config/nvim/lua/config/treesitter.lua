@@ -8,7 +8,7 @@ cmd [[hi! link TSStructure Structure]]
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = true,
+    --additional_vim_regex_highlighting = true,
     custom_captures = {
       ["statement"] = "TSStatement",
       ["keyword.access"] = "TSKeywordAccess",
@@ -17,7 +17,7 @@ require'nvim-treesitter.configs'.setup {
     },
   },
   indent = {
-    enable = true,
+    enable = false,
   },
   playground = {
     enable = false,

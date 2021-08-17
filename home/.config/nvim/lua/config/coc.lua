@@ -6,8 +6,9 @@ local cmd = vim.cmd
 
 g.coc_default_semantic_highlight_groups = true
 
-cmd [[hi! link CocSem_variable None]]
-cmd [[hi! link CocSem_parameter None]]
+cmd [[hi! link CocSem_variable TSVariable]]
+cmd [[hi! link CocSem_parameter TSParameter]]
+cmd [[hi! link CocSem_property TSProperty]]
 cmd [[hi! link CocErrorHighlight LspDiagnosticsUnderlineError]]
 cmd [[hi! link CocWarningHighlight LspDiagnosticsUnderlineWarning]]
 cmd [[hi! link CocInfoHighlight LspDiagnosticsUnderlineInformation]]

@@ -29,21 +29,57 @@ local function init()
     }
     use 'bfrg/vim-cpp-modern'
 
+    use 'bluz71/vim-nightfly-guicolors'
+    use 'mhartington/oceanic-next'
+    --'bluz71/vim-moonfly-colors',
+    --'joshdick/onedark.vim',
+    --'morhetz/gruvbox',
+
     use {
         'folke/tokyonight.nvim', branch = 'main',
-        --use 'bluz71/vim-moonfly-colors'
-        --use 'bluz71/vim-nightfly-guicolors'
-        --use 'joshdick/onedark.vim'
-        --use 'mhartington/oceanic-next'
-        --use 'morhetz/gruvbox'
 
         config = function()
+            vim.g.oceanic_next_terminal_italic=1
+            vim.g.oceanic_next_terminal_bold=1
             vim.g.tokyonight_italic_functions = true
             vim.cmd [[colorscheme tokyonight]]
+            --vim.cmd [[colorscheme OceanicNext]]
+            --vim.cmd [[colorscheme nightfly]]
+        end,
+    }
+
+    use {
+        'rose-pine/neovim', as = 'rose-pine',
+        disable = true,
+        config = function()
+            vim.g.rose_pine_variant = 'moon'
+            vim.g.rose_pine_enable_italics = true
+            --require('rose-pine').set()
+
+            vim.cmd [[colorscheme rose-pine]]
+
+            vim.defer_fn(function()
+                vim.cmd [[hi! link CocSem_variable None]]
+                vim.cmd [[hi! link CocSem_property None ]]
+                vim.cmd [[hi! link CocSem_parameter TSParameter ]]
+                vim.cmd [[hi! link CocSem_namespace Label ]]
+                vim.cmd [[hi! link CocSem_function Error ]]
+                vim.cmd [[hi! link CocSem_macro TSFunction ]]
+                vim.cmd [[hi! link TSField TSVariable]]
+                vim.cmd [[hi! link TSProperty TSVariable]]
+            end, 10)
         end
     }
 
-    use { 'ojroques/nvim-bufdel', cmd = 'BufDel' }
+    use {
+        'famiu/bufdelete.nvim',
+        cmd = { 'Bdelete', 'Bwipeout' },
+        setup = function()
+            local map = require'utils'.map
+            map('',  '<leader>bd', '<cmd>Bdelete!<CR>', { silent = true, nowait = true })
+            map('',  '<c-q>',      '<cmd>Bdelete!<CR>', { silent = true, nowait = true })
+        end,
+    }
 
     use {
         'junegunn/fzf',
@@ -67,8 +103,6 @@ local function init()
             map({'n', 'x'}, 'ga', '<plug>(EasyAlign)', { noremap = false })
         end
     }
-
-    use { 'sakhnik/nvim-gdb', run = ':UpdateRemotePlugins' }
 
     use 'justinmk/vim-dirvish'
     use { 'tpope/vim-dispatch', cmd = { 'Dispatch', 'Make', 'Focus', 'Start' } }
@@ -101,7 +135,7 @@ local function init()
     }
 
     use {
-        'jose-elias-alvarez/buftabline.nvim',
+        'jdrouhard/buftabline.nvim',
         requires = 'kyazdani42/nvim-web-devicons',
         config = [[require'config.buftabline']]
     }
@@ -110,9 +144,9 @@ local function init()
         'neoclide/coc.nvim',
         disable = use_builtin_lsp,
         branch = 'release',
-        requires = {
-            'antoinemadec/coc-fzf'
-        },
+        --requires = {
+            --'antoinemadec/coc-fzf'
+        --},
         config = [[require'config.coc']]
     }
 

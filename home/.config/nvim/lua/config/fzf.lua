@@ -16,25 +16,34 @@ require'fzf-lua'.setup {
         'pgdn:preview-page-down'
     },
     preview_horizontal = 'right:50%',
+    previewers = {
+        bat = {
+            cmd = "bat",
+            args = "--style=numbers,changes --color always",
+            theme = 'TwoDark',
+            --config = '/home/jdrouhard/.config/bat/config'
+        }
+    },
     grep = {
-        --rg_opts = '--vimgrep --hidden'
-        rg_opts = "--hidden --column --line-number --no-heading " ..
-                  "--color=always --smart-case -g '!{.git,node_modules}/*'",
+        rg_opts = '--vimgrep --line-buffered --smart-case --color=always',
+        --rg_opts = "--hidden --column --line-number --no-heading " ..
+                  --"--color=always --smart-case -g '!{.git,node_modules}/*'",
     },
     files = {
-        cmd = [[rg --files --hidden]]
+        cmd = [[rg --files --hidden --line-buffered]],
     }
 }
 
 map('n', '<leader>s',  '<cmd>FzfLua grep<CR>')
 map('n', '<leader>ag', '<cmd>FzfLua grep_cword<CR>')
+map('n', '<leader>rg', '<cmd>FzfLua live_grep<CR>')
 map('n', '<leader>AG', '<cmd>FzfLua grep_cWORD<CR>')
-map('x', '<leader>ag', 'y:FzfLua grep search=<C-R>"<CR>')
+map('x', '<leader>ag', '<cmd>FzfLua grep_visual<CR>')
 
 map('n', '<c-p>',       '<cmd>FzfLua files<CR>')
 map('n', '<leader>l',   '<cmd>FzfLua buffers<CR>')
 map('n', '<leader>t',   '<cmd>FzfLua git_files<CR>')
---map('n', '<leader>h', '<cmd>FzfLua commands<CR>') -- not yet implemented
+map('n', '<leader>h',   '<cmd>FzfLua commands<CR>')
 map('n', '<leader>?',   '<cmd>FzfLua help_tags<CR>')
 map('n', '<leader>gs',  '<cmd>FzfLua git_files<CR>')
 map('n', '<leader>gl',  '<cmd>FzfLua git_commits<CR>')

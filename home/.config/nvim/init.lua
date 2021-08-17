@@ -1,5 +1,6 @@
 local g = vim.g
 local cmd = vim.cmd
+local fn = vim.fn
 local opt = vim.opt
 local utils = require'utils'
 local autocmd = utils.autocmd
@@ -14,7 +15,7 @@ opt.updatetime    = 100
 opt.undofile      = true
 opt.wildignore    = "*.o,*.obj,*.dwo"
 opt.path          = vim.env.PWD .. '/**'
-opt.shortmess:append("c")
+opt.shortmess     :append("c")
 
 opt.termguicolors = true
 opt.showmode      = false
@@ -25,7 +26,7 @@ opt.number        = true
 opt.numberwidth   = 5
 opt.signcolumn    = "yes"
 opt.cmdheight     = 2
-opt.cul           = true
+--opt.cul           = true
 opt.lazyredraw    = true
 opt.smartcase     = true
 opt.visualbell    = true
@@ -61,16 +62,20 @@ g.alternateNoDefaultAlternate = true
 
 map('n', '<c-h>',      '<cmd>bprevious<CR>')
 map('n', '<c-l>',      '<cmd>bnext<CR>')
-map('',  '<leader>bd', '<cmd>BufDel<CR>', { silent = true, nowait = true })
-map('',  '<c-q>',      '<cmd>BufDel<CR>', { silent = true, nowait = true })
+map('',  '<leader>bd', '<cmd>bdelete!<CR>', { silent = true, nowait = true })
+map('',  '<c-q>',      '<cmd>bdelete!<CR>', { silent = true, nowait = true })
 map('',  '<leader>w',  '<c-w>')
 map('',  '<F4>',       '<cmd>A<CR>')
 map('',  '<F5>',       '<cmd>AI<CR>')
 
 -- misc
+local resolved_vimrc = fn.resolve(vim.env.MYVIMRC)
+local resolved_plugins = fn.resolve(fn.stdpath('config') .. '/lua/plugins.lua')
 map('n', '<leader>m',  '<cmd>make<CR>')
-map('n', '<leader>ev', '<cmd>e $MYVIMRC<CR>')
-map('n', '<leader>ep', '<cmd>e ' .. vim.fn.stdpath('config') .. '/lua/plugins.lua<CR>')
+map('n', '<C-k>',      '<cmd>cp<CR>', { silent = true })
+map('n', '<C-j>',      '<cmd>cn<CR>', { silent = true })
+map('n', '<leader>ev', '<cmd>e ' .. resolved_vimrc .. '<CR>')
+map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 
 autocmd('filetypes', {
     [[FileType            cmake,xml  setlocal tabstop=2 | setlocal shiftwidth=2]],

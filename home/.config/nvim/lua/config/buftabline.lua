@@ -6,9 +6,11 @@ require'buftabline'.setup {
     go_to_maps = false,
     hlgroups = {
         spacing = 'lualine_c_normal',
+        current = 'lualine_a_normal',
+        normal = 'lualine_c_normal',
         modified_current = "lualine_a_insert",
-        modified_normal = "lualine_b_command",
-        modified_active = "lualine_b_command",
+        modified_normal = "lualine_b_insert",
+        modified_active = "lualine_b_insert",
     },
     show_tabpages = 'always',
 }
