@@ -83,6 +83,7 @@ local function init()
 
     use {
         'junegunn/fzf',
+        disable = true,
         run = function() fn['fzf#install']() end,
         --requires = 'junegunn/fzf.vim',
         requires = {
@@ -94,6 +95,16 @@ local function init()
             }
         },
         config = [[require'config.fzf']]
+    }
+
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'fannheyward/telescope-coc.nvim',
+            { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+        },
+        config = [[require'config.telescope']]
     }
 
     use {
