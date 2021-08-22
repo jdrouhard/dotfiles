@@ -223,8 +223,8 @@ if !has('nvim')
     set t_ZH=[3m                         " set escape codes for italics mode
     set t_ZR=[23m                        " set escape codes for italics mode
     if has('termguicolors')
-        let &t_8f = '\<esc>[38;2;%lu;%lu;%lum' " true color fix
-        let &t_8b = '\<esc>[48;2;%lu;%lu;%lum' " true color fix
+        let &t_8f = '[38;2;%lu;%lu;%lum' " true color fix
+        let &t_8b = '[48;2;%lu;%lu;%lum' " true color fix
     endif
 endif
 

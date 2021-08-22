@@ -10,6 +10,8 @@ require'fzf-lua'.setup {
     },
     fzf_binds = {
         'f2:toggle-preview',
+        'alt-a:select-all',
+        'alt-d:deselect-all',
         'up:preview-up',
         'down:preview-down',
         'pgup:preview-page-up',
@@ -18,8 +20,8 @@ require'fzf-lua'.setup {
     preview_horizontal = 'right:50%',
     previewers = {
         bat = {
-            cmd = "bat",
-            args = "--style=numbers,changes --color always",
+            cmd = 'bat',
+            args = '--style=numbers,changes --color always',
             theme = 'TwoDark',
             --config = '/home/jdrouhard/.config/bat/config'
         }

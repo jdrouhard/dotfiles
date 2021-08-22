@@ -28,7 +28,7 @@ local function lsp_status()
 end
 
 local function tag_name()
-    local tag = fn['nvim_treesitter#statusline'](90)
+    local tag = fn['nvim_treesitter#statusline'](45)
     return tag or fn['Tlist_Get_Tagname_By_Line']()
 end
 

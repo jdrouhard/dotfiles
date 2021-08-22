@@ -77,6 +77,8 @@ map('n', '<C-j>',      '<cmd>cn<CR>', { silent = true })
 map('n', '<leader>ev', '<cmd>e ' .. resolved_vimrc .. '<CR>')
 map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 
+vim.cmd[[command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``]]
+
 autocmd('filetypes', {
     [[FileType            cmake,xml  setlocal tabstop=2 | setlocal shiftwidth=2]],
     [[FileType            cpp,python setlocal textwidth=90 | setlocal formatoptions=crqnj]],

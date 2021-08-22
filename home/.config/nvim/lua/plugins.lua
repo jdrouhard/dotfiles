@@ -49,25 +49,11 @@ local function init()
     }
 
     use {
-        'rose-pine/neovim', as = 'rose-pine',
-        disable = true,
+        'EdenEast/nightfox.nvim',
         config = function()
-            vim.g.rose_pine_variant = 'moon'
-            vim.g.rose_pine_enable_italics = true
-            --require('rose-pine').set()
-
-            vim.cmd [[colorscheme rose-pine]]
-
-            vim.defer_fn(function()
-                vim.cmd [[hi! link CocSem_variable None]]
-                vim.cmd [[hi! link CocSem_property None ]]
-                vim.cmd [[hi! link CocSem_parameter TSParameter ]]
-                vim.cmd [[hi! link CocSem_namespace Label ]]
-                vim.cmd [[hi! link CocSem_function Error ]]
-                vim.cmd [[hi! link CocSem_macro TSFunction ]]
-                vim.cmd [[hi! link TSField TSVariable]]
-                vim.cmd [[hi! link TSProperty TSVariable]]
-            end, 10)
+            vim.g.nightfox_italic_comments = true
+            vim.g.nightfox_italic_functions = true
+            --vim.cmd [[colorscheme nightfox]]
         end
     }
 

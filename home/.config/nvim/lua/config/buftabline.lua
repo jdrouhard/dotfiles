@@ -1,7 +1,7 @@
 require'buftabline'.setup {
     tab_format = "▎#{n}: #{i} #{b}#{f} ",
     icon_colors = 'normal',
-    buffer_id_index = true,
+    --buffer_id_index = true,
     disable_commands = true,
     go_to_maps = false,
     hlgroups = {

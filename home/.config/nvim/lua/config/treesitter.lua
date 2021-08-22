@@ -6,6 +6,7 @@ cmd [[hi! link TSStorageClass StorageClass]]
 cmd [[hi! link TSStructure Structure]]
 
 require'nvim-treesitter.configs'.setup {
+  ensure_installed = {'cpp', 'python', 'bash', 'cmake', 'lua' },
   highlight = {
     enable = true,
     --additional_vim_regex_highlighting = true,
