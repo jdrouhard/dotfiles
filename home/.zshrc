@@ -7,7 +7,7 @@ setopt rm_star_silent
 stty -ixon
 stty -ixoff
 
-export FZF_BASE=$HOME/.local/share/nvim/site/pack/packer/start/fzf
+export FZF_BASE=$HOME/.local/share/nvim/site/pack/packer/opt/fzf
 export PATH=~/.local/bin:/usr/local/bin${PATH:+:${PATH}}
 
 # Plugins

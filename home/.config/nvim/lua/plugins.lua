@@ -1,5 +1,5 @@
 local fn = vim.fn
-local utils = require'utils'
+local utils = require('utils')
 local autocmd = utils.autocmd
 local map = utils.map
 local packer = nil
@@ -8,8 +8,9 @@ local use_builtin_lsp = false
 
 local function init()
     if packer == nil then
-        packer = require'packer'
+        packer = require('packer')
         packer.init {
+            compile_path = vim.fn.stdpath('data') .. 'site/plugin/packer_compiled.lua',
             disable_commands = true,
             display = { open_cmd = 'vnew \\[packer\\]' }
         }
@@ -20,13 +21,6 @@ local function init()
 
     use 'wbthomason/packer.nvim'
 
-    use {
-        'lewis6991/gitsigns.nvim',
-        requires = 'nvim-lua/plenary.nvim',
-        config = function()
-            require'gitsigns'.setup{ current_line_blame = true }
-        end
-    }
     use 'bfrg/vim-cpp-modern'
 
     use 'bluz71/vim-nightfly-guicolors'
@@ -37,7 +31,6 @@ local function init()
 
     use {
         'folke/tokyonight.nvim', branch = 'main',
-
         config = function()
             vim.g.oceanic_next_terminal_italic=1
             vim.g.oceanic_next_terminal_bold=1
@@ -61,7 +54,7 @@ local function init()
         'famiu/bufdelete.nvim',
         cmd = { 'Bdelete', 'Bwipeout' },
         setup = function()
-            local map = require'utils'.map
+            local map = require('utils').map
             map('',  '<leader>bd', '<cmd>Bdelete!<CR>', { silent = true, nowait = true })
             map('',  '<c-q>',      '<cmd>Bdelete!<CR>', { silent = true, nowait = true })
         end,
@@ -69,34 +62,43 @@ local function init()
 
     use {
         'junegunn/fzf',
-        disable = true,
         run = function() fn['fzf#install']() end,
+        opt = true,
         --requires = 'junegunn/fzf.vim',
-        requires = {
-            { 'ibhagwan/fzf-lua',
-                requires = {
-                    'vijaymarupudi/nvim-fzf',
-                    'kyazdani42/nvim-web-devicons'
-                }
-            }
-        },
-        config = [[require'config.fzf']]
+        --requires = {
+            --{ 'ibhagwan/fzf-lua',
+                --requires = {
+                    --'vijaymarupudi/nvim-fzf',
+                    --'kyazdani42/nvim-web-devicons'
+                --}
+            --}
+        --},
+        --config = [[require('config.fzf')]]
+    }
+
+    use {
+        'nvim-lua/plenary.nvim',
+        config = function()
+            require('plenary.filetype').add_file('overrides')
+        end
     }
 
     use {
         'nvim-telescope/telescope.nvim',
         requires = {
-            'nvim-lua/plenary.nvim',
-            'fannheyward/telescope-coc.nvim',
+            { 'nvim-lua/plenary.nvim', after = 'telescope.nvim' },
+            { 'fannheyward/telescope-coc.nvim', after = 'telescope.nvim' },
             { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
         },
-        config = [[require'config.telescope']]
+        cmd = { 'Telescope', 'Tgrep' },
+        setup = [[require('config.telescope_setup')]],
+        config = [[require('config.telescope')]]
     }
 
     use {
         'junegunn/vim-easy-align',
         config = function()
-            local map = require'utils'.map
+            local map = require('utils').map
             map({'n', 'x'}, 'ga', '<plug>(EasyAlign)', { noremap = false })
         end
     }
@@ -107,19 +109,30 @@ local function init()
     use {
         'tpope/vim-fugitive',
         config = function()
-            local map = require'utils'.map
+            local map = require('utils').map
             map('n', '<leader>gg', '<cmd>Git blame<CR>')
             map('n', '<leader>gd', '<cmd>Gdiff<CR>')
         end
     }
 
+    use {
+        'lewis6991/gitsigns.nvim',
+        requires = { 'nvim-lua/plenary.nvim', after = 'gitsigns.nvim' },
+        event = 'BufRead',
+        config = function()
+            require('gitsigns').setup{ current_line_blame = true }
+        end
+    }
+
     use 'scrooloose/nerdcommenter'
+
+    use 'kyazdani42/nvim-web-devicons'
 
     use {
         'nvim-treesitter/nvim-treesitter',
         requires = 'nvim-treesitter/playground',
         run = ':TSUpdate',
-        config = [[require'config.treesitter']]
+        config = [[require('config.treesitter')]]
     }
 
     use {
@@ -128,13 +141,20 @@ local function init()
             'kyazdani42/nvim-web-devicons',
             'folke/tokyonight.nvim'
         },
-        config = [[require'config.lualine']]
+        config = [[require('config.lualine')]]
+    }
+
+    use {
+        'akinsho/nvim-bufferline.lua',
+        requires = 'kyazdani42/nvim-web-devicons',
+        config = [[require('config.bufferline')]],
     }
 
     use {
         'jdrouhard/buftabline.nvim',
+        opt = true,
         requires = 'kyazdani42/nvim-web-devicons',
-        config = [[require'config.buftabline']]
+        config = [[require('config.buftabline')]]
     }
 
     use {
@@ -144,7 +164,11 @@ local function init()
         --requires = {
             --'antoinemadec/coc-fzf'
         --},
-        config = [[require'config.coc']]
+        event = 'BufRead',
+        setup = function()
+            vim.g.coc_default_semantic_highlight_groups = true
+        end,
+        config = [[require('config.coc')]]
     }
 
     use {
@@ -154,8 +178,10 @@ local function init()
             'ojroques/nvim-lspfuzzy',
             { 'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip' }
         },
-        config = [[require'lsp_config']]
+        config = [[require('lsp_config')]]
     }
+
+    use { 'dstein64/vim-startuptime', cmd = 'StartupTime', config = [[vim.g.startuptime_tries = 10]] }
 
 end
 

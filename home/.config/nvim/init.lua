@@ -2,11 +2,11 @@ local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
 local opt = vim.opt
-local utils = require'utils'
+local utils = require('utils')
 local autocmd = utils.autocmd
 local map = utils.map
 
-require 'bootstrap'
+require('plugin_bootstrap')
 
 g.mapleader = [[ ]]
 

@@ -1,4 +1,4 @@
-local util = require 'vim.lsp.util'
+local util = require('vim.lsp.util')
 local aliases = {
   pyls_ms = 'MPLS',
 }

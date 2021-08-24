@@ -1,8 +1,8 @@
 local g = vim.g
-local utils = require'utils'
+local utils = require('utils')
 local map = utils.map
 
-require'fzf-lua'.setup {
+require('fzf-lua').setup {
     fzf_layout = 'default',
     winopts = {
         win_height = 0.6,

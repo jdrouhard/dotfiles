@@ -1,4 +1,4 @@
-require'buftabline'.setup {
+require('buftabline').setup {
     tab_format = "▎#{n}: #{i} #{b}#{f} ",
     icon_colors = 'normal',
     --buffer_id_index = true,

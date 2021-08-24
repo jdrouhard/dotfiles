@@ -1,7 +1,7 @@
-local utils = require 'utils'
+local utils = require('utils')
 local map = utils.map
-local lsp_status = require 'lsp_status'
-local lsp_clangd_ext = require 'lsp_clangd_ext'
+local lsp_status = require('lsp_status')
+local lsp_clangd_ext = require('lsp_clangd_ext')
 
 local custom_lsp_attach = function(client)
     -- See `:help nvim_buf_set_keymap()` for more information
@@ -27,7 +27,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     }
 }
 
-require'lspconfig'.clangd.setup {
+require('lspconfig').clangd.setup {
     cmd = { '/home/jdrouhard/clang-dev/bin/clangd', '--header-insertion=never' },
     on_attach = custom_lsp_attach,
     handlers = lsp_clangd_ext.handlers,
@@ -37,9 +37,9 @@ require'lspconfig'.clangd.setup {
     capabilities = capabilities,
 }
 
-require'lspfuzzy'.setup {}
+require('lspfuzzy').setup {}
 
-require'compe'.setup {
+require('compe').setup {
     enabled = true;
     source = {
         path = true;

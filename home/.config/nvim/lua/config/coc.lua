@@ -1,10 +1,8 @@
 local g = vim.g
-local utils = require'utils'
+local utils = require('utils')
 local autocmd = utils.autocmd
 local map = utils.map
 local cmd = vim.cmd
-
-g.coc_default_semantic_highlight_groups = true
 
 cmd [[hi! link CocSem_variable TSVariable]]
 cmd [[hi! link CocSem_parameter TSParameter]]

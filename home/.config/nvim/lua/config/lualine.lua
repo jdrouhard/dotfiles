@@ -2,7 +2,7 @@ local vim = vim
 local fn = vim.fn
 local b = vim.b
 local g = vim.g
-local lualine_config = require'lualine.config'.get_config()
+local lualine_config = require('lualine.config').get_config()
 local sections = lualine_config.sections
 
 local function git_info()
@@ -38,7 +38,7 @@ sections.lualine_b = { git_info }
 sections.lualine_c = { { 'filename', path = 1 }, coc_status, lsp_status }
 table.insert(sections.lualine_x, 1, tag_name)
 
-require'lualine'.setup{
+require('lualine').setup{
     options = {
         theme = 'tokyonight',
         section_separators = '',
