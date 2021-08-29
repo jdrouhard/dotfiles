@@ -120,7 +120,14 @@ function geometry_rprompt_async() {
 }
 
 function geometry_rprompt_update() {
-    RPROMPT="$3"
+    local name=$1 code=$2 output=$3
+    if (( code == 2)) || (( code == 3 )) || (( code == 130 )); then
+        async_stop_worker geometry_rprompt_worker
+        async_start_worker geometry_rprompt_worker
+        async_register_callback geometry_rprompt_worker geometry_rprompt_update
+    elif (( code )); then
+    fi;
+    RPROMPT="$output"
     zle reset-prompt
 }
 
@@ -130,7 +137,7 @@ function zle-line-init zle-keymap-select {
 }
 
 async_init
-async_start_worker geometry_rprompt_worker -n
+async_start_worker geometry_rprompt_worker
 async_register_callback geometry_rprompt_worker geometry_rprompt_update
 
 zle -N zle-line-init
