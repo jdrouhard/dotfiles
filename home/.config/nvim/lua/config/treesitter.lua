@@ -1,10 +1,5 @@
 local cmd = vim.cmd
 
-cmd [[hi! link TSKeywordAccess Statement]]
-cmd [[hi! link TSStatement Statement]]
-cmd [[hi! link TSStorageClass StorageClass]]
-cmd [[hi! link TSStructure Structure]]
-
 require('nvim-treesitter.configs').setup {
   ensure_installed = {'cpp', 'python', 'bash', 'cmake', 'lua' },
   highlight = {

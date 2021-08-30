@@ -29,29 +29,33 @@ local function init()
     use 'bfrg/vim-cpp-modern'
 
     use 'bluz71/vim-nightfly-guicolors'
-    use 'mhartington/oceanic-next'
+    use {
+        'mhartington/oceanic-next',
+        setup = function()
+            vim.g.oceanic_next_terminal_italic = true
+            vim.g.oceanic_next_terminal_bold = true
+        end,
+    }
     --'bluz71/vim-moonfly-colors',
     --'joshdick/onedark.vim',
     --'morhetz/gruvbox',
 
     use {
         'folke/tokyonight.nvim', branch = 'main',
-        config = function()
-            vim.g.oceanic_next_terminal_italic=1
-            vim.g.oceanic_next_terminal_bold=1
+        setup = function()
             vim.g.tokyonight_italic_functions = true
-            vim.cmd [[colorscheme tokyonight]]
-            --vim.cmd [[colorscheme OceanicNext]]
-            --vim.cmd [[colorscheme nightfly]]
+        end,
+        config = function()
+            local theme = require('config.theme').theme
+            vim.cmd([[colorscheme ]] .. theme)
         end,
     }
 
     use {
         'EdenEast/nightfox.nvim',
-        config = function()
+        setup = function()
             vim.g.nightfox_italic_comments = true
             vim.g.nightfox_italic_functions = true
-            --vim.cmd [[colorscheme nightfox]]
         end
     }
 

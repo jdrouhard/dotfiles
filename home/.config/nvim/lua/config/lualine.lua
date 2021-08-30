@@ -40,7 +40,7 @@ table.insert(sections.lualine_x, 1, tag_name)
 
 require('lualine').setup{
     options = {
-        theme = 'tokyonight',
+        theme = require('config.theme').lualine_theme,
         section_separators = '',
         component_separators = ''
     },
