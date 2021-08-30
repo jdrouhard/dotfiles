@@ -2,7 +2,7 @@ local vim = vim
 local fn = vim.fn
 local b = vim.b
 local g = vim.g
-local lualine_config = require('lualine.config').get_config()
+local lualine_config = require('lualine_config').get_config()
 local sections = lualine_config.sections
 
 local function git_info()
