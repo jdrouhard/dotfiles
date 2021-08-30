@@ -1,3 +1,5 @@
+local M = {}
+
 local actions = require('telescope.actions')
 local mappings = {
     ["<c-k>"] = actions.move_selection_previous,
@@ -5,6 +7,16 @@ local mappings = {
     ["<c-b>"] = actions.preview_scrolling_up,
     ["<c-f>"] = actions.preview_scrolling_down,
 }
+
+M.grep = function()
+    local term = vim.fn.input("Grep For > ")
+    if not term or term == '' then
+        return
+    end
+    return require('telescope.builtin').grep_string({ search = term })
+end
+
+vim.cmd[[command! Tgrep lua require('config.telescope').grep()]]
 
 require('telescope').setup {
     defaults = {
@@ -32,3 +44,5 @@ require('telescope').setup {
 }
 
 require('telescope').load_extension('fzf')
+
+return M

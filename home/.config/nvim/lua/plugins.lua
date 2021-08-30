@@ -12,7 +12,10 @@ local function init()
         packer.init {
             compile_path = vim.fn.stdpath('data') .. '/site/plugin/packer_compiled.lua',
             disable_commands = true,
-            display = { open_cmd = 'vnew \\[packer\\]' }
+            display = { open_cmd = 'vnew \\[packer\\]' },
+            luarocks = {
+                python_cmd = 'python3'
+            },
         }
     end
 
@@ -20,6 +23,8 @@ local function init()
     packer.reset()
 
     use 'wbthomason/packer.nvim'
+
+    use { 'lewis6991/impatient.nvim', rocks = 'mpack' }
 
     use 'bfrg/vim-cpp-modern'
 

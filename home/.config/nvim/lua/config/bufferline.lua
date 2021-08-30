@@ -4,7 +4,6 @@ local map = require('utils').map
 require('bufferline').setup{
     options = {
         numbers = 'ordinal',
-        number_style = '',
         show_tab_indicators = true,
         show_buffer_close_icons = false,
         show_close_icon = false,
