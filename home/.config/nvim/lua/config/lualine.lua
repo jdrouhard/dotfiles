@@ -2,7 +2,7 @@ local vim = vim
 local fn = vim.fn
 local b = vim.b
 local g = vim.g
-local lualine_config = require('lualine_config').get_config()
+local lualine_config = require('lualine.config').get_config()
 local sections = lualine_config.sections
 
 local function git_info()
@@ -28,8 +28,11 @@ local function lsp_status()
 end
 
 local function tag_name()
-    local tag = fn['nvim_treesitter#statusline'](45)
-    return tag or fn['Tlist_Get_Tagname_By_Line']()
+    local success, val = pcall(fn['nvim_treesitter#statusline'], 45)
+    if success then
+        return val
+    end
+    return fn['Tlist_Get_Tagname_By_Line']()
 end
 
 

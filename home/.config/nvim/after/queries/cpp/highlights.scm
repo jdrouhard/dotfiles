@@ -45,4 +45,4 @@
 [
  "static_assert"
  "sizeof"
-] @operator
+] @keyword.operator

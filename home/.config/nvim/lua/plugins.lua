@@ -43,6 +43,7 @@ local function init()
     use {
         'folke/tokyonight.nvim', branch = 'main',
         setup = function()
+            vim.g.tokyonight_style = 'night'
             vim.g.tokyonight_italic_functions = true
         end,
         config = function()
@@ -74,34 +75,62 @@ local function init()
         run = function() fn['fzf#install']() end,
         opt = true,
         --requires = 'junegunn/fzf.vim',
-        --requires = {
-            --{ 'ibhagwan/fzf-lua',
-                --requires = {
-                    --'vijaymarupudi/nvim-fzf',
-                    --'kyazdani42/nvim-web-devicons'
-                --}
-            --}
-        --},
-        --config = [[require('config.fzf')]]
+    }
+
+    use {
+        {
+            'ibhagwan/fzf-lua',
+            requires = {
+                'nvim-fzf',
+                'kyazdani42/nvim-web-devicons'
+            },
+            wants = 'nvim-fzf',
+            cmd = { 'FzfLua', 'FzfCocLocations' },
+            setup = [[require('config.fzf_setup')]],
+            config = [[require('config.fzf')]],
+            module = 'fzf',
+        },
+        {
+            'vijaymarupudi/nvim-fzf',
+            after = 'fzf-lua'
+        }
     }
 
     use {
         'nvim-lua/plenary.nvim',
+        opt = true,
         config = function()
             require('plenary.filetype').add_file('overrides')
         end
     }
 
     use {
-        'nvim-telescope/telescope.nvim',
-        requires = {
-            { 'nvim-lua/plenary.nvim', after = 'telescope.nvim' },
-            { 'fannheyward/telescope-coc.nvim', after = 'telescope.nvim' },
-            { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+        {
+            'nvim-telescope/telescope.nvim',
+            requires = {
+                'plenary.nvim',
+                'telescope-coc.nvim',
+                'telescope-fzf-native.nvim',
+            },
+            wants = {
+                'plenary.nvim',
+                'telescope-coc.nvim',
+                'telescope-fzf-native.nvim'
+            },
+            cmd = { 'Telescope', 'Tgrep' },
+            --setup = [[require('config.telescope_setup')]],
+            config = [[require('config.telescope')]],
+            module = 'telescope',
         },
-        cmd = { 'Telescope', 'Tgrep' },
-        setup = [[require('config.telescope_setup')]],
-        config = [[require('config.telescope')]]
+        {
+            'fannheyward/telescope-coc.nvim',
+            after = 'telescope.nvim'
+        },
+        {
+            'nvim-telescope/telescope-fzf-native.nvim',
+            after = 'telescope.nvim',
+            run = 'make'
+        }
     }
 
     use {
@@ -126,14 +155,18 @@ local function init()
 
     use {
         'lewis6991/gitsigns.nvim',
-        requires = { 'nvim-lua/plenary.nvim', after = 'gitsigns.nvim' },
+        requires = 'plenary.nvim',
+        wants = 'plenary.nvim',
         event = 'BufRead',
         config = function()
             require('gitsigns').setup{ current_line_blame = true }
         end
     }
 
-    use 'scrooloose/nerdcommenter'
+    use {
+        'scrooloose/nerdcommenter',
+        event = 'BufRead',
+    }
 
     use 'kyazdani42/nvim-web-devicons'
 
@@ -170,9 +203,6 @@ local function init()
         'neoclide/coc.nvim',
         disable = use_builtin_lsp,
         branch = 'release',
-        --requires = {
-            --'antoinemadec/coc-fzf'
-        --},
         event = 'BufRead',
         setup = function()
             vim.g.coc_default_semantic_highlight_groups = true
