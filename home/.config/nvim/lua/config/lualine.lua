@@ -37,13 +37,13 @@ end
 
 
 --table.insert(sections.lualine_b, 1, { 'diff', colored = false })
-sections.lualine_b = { git_info }
+sections.lualine_b = { git_info, { 'diagnostics', sources = { 'nvim_lsp', 'coc' } } }
 sections.lualine_c = { { 'filename', path = 1 }, coc_status, lsp_status }
 table.insert(sections.lualine_x, 1, tag_name)
 
 require('lualine').setup{
     options = {
-        theme = require('config.theme').lualine_theme,
+        theme = require('theme').lualine_theme,
         section_separators = '',
         component_separators = ''
     },

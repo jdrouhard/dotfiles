@@ -13,9 +13,6 @@ local function init()
             compile_path = vim.fn.stdpath('data') .. '/site/plugin/packer_compiled.lua',
             disable_commands = true,
             display = { open_cmd = 'vnew \\[packer\\]' },
-            luarocks = {
-                python_cmd = 'python3'
-            },
         }
     end
 
@@ -24,49 +21,24 @@ local function init()
 
     use 'wbthomason/packer.nvim'
 
-    use { 'lewis6991/impatient.nvim', rocks = 'mpack' }
+    use 'lewis6991/impatient.nvim'
 
     use 'bfrg/vim-cpp-modern'
 
+    use 'EdenEast/nightfox.nvim'
     use 'bluz71/vim-nightfly-guicolors'
-    use {
-        'mhartington/oceanic-next',
-        setup = function()
-            vim.g.oceanic_next_terminal_italic = true
-            vim.g.oceanic_next_terminal_bold = true
-        end,
-    }
+    use 'folke/tokyonight.nvim'
+    use 'mhartington/oceanic-next'
     --'bluz71/vim-moonfly-colors',
     --'joshdick/onedark.vim',
     --'morhetz/gruvbox',
 
     use {
-        'folke/tokyonight.nvim', branch = 'main',
-        setup = function()
-            vim.g.tokyonight_style = 'night'
-            vim.g.tokyonight_italic_functions = true
-        end,
-        config = function()
-            local theme = require('config.theme').theme
-            vim.cmd([[colorscheme ]] .. theme)
-        end,
-    }
-
-    use {
-        'EdenEast/nightfox.nvim',
-        setup = function()
-            vim.g.nightfox_italic_comments = true
-            vim.g.nightfox_italic_functions = true
-        end
-    }
-
-    use {
-        'famiu/bufdelete.nvim',
-        cmd = { 'Bdelete', 'Bwipeout' },
+        'mhinz/vim-sayonara',
+        cmd = 'Sayonara',
         setup = function()
             local map = require('utils').map
-            map('',  '<leader>bd', '<cmd>Bdelete!<CR>', { silent = true, nowait = true })
-            map('',  '<c-q>',      '<cmd>Bdelete!<CR>', { silent = true, nowait = true })
+            map('', '<c-q>', '<cmd>Sayonara!<CR>', {silent = true, nowait = true})
         end,
     }
 
@@ -82,11 +54,12 @@ local function init()
             'ibhagwan/fzf-lua',
             requires = {
                 'nvim-fzf',
+                'plenary.nvim',
                 'kyazdani42/nvim-web-devicons'
             },
-            wants = 'nvim-fzf',
+            wants = {'nvim-fzf', 'plenary.nvim' },
             cmd = { 'FzfLua', 'FzfCocLocations' },
-            setup = [[require('config.fzf_setup')]],
+            --setup = [[require('config.fzf_setup')]],
             config = [[require('config.fzf')]],
             module = 'fzf',
         },
@@ -118,7 +91,7 @@ local function init()
                 'telescope-fzf-native.nvim'
             },
             cmd = { 'Telescope', 'Tgrep' },
-            --setup = [[require('config.telescope_setup')]],
+            setup = [[require('config.telescope_setup')]],
             config = [[require('config.telescope')]],
             module = 'telescope',
         },
@@ -168,7 +141,19 @@ local function init()
         event = 'BufRead',
     }
 
-    use 'kyazdani42/nvim-web-devicons'
+    use {
+        'kyazdani42/nvim-web-devicons',
+        config = function() require('nvim-web-devicons').setup({
+            override = {
+                ["tex"] = {
+                    icon = '⁦'.. 'ﭨ' .. '⁩',
+                    color = "#3D6117",
+                    name = "Tex"
+                }
+            }
+        })
+        end,
+    }
 
     use {
         'nvim-treesitter/nvim-treesitter',
@@ -190,13 +175,6 @@ local function init()
         'akinsho/nvim-bufferline.lua',
         requires = 'kyazdani42/nvim-web-devicons',
         config = [[require('config.bufferline')]],
-    }
-
-    use {
-        'jdrouhard/buftabline.nvim',
-        opt = true,
-        requires = 'kyazdani42/nvim-web-devicons',
-        config = [[require('config.buftabline')]]
     }
 
     use {

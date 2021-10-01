@@ -25,12 +25,12 @@ require('fzf-lua').setup {
         }
     },
     grep = {
-        rg_opts = '--vimgrep --line-buffered --smart-case --color=always',
+        rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
         --rg_opts = "--hidden --column --line-number --no-heading " ..
                   --"--color=always --smart-case -g '!{.git,node_modules}/*'",
     },
     files = {
-        cmd = [[rg --files --hidden --line-buffered]],
+        cmd = [[rg --files --hidden -g '!{.git,node_modules}/*']],
     }
 }
 
@@ -52,7 +52,7 @@ function M.locations(opts)
     for _, entry in ipairs(locations) do
         entry = core.make_entry_lcol(opts, entry)
         entry = core.make_entry_file(opts, entry)
-        table.insert(entries, entry)
+        entries[#entries+1] = entry
     end
 
     opts.fzf_fn = entries

@@ -9,6 +9,7 @@ require('bufferline').setup{
         show_close_icon = false,
         max_name_length = 64,
         separator_style = 'slant',
+        diagnostics = 'coc',
     },
     --highlights = {
         --fill = {

@@ -9,6 +9,8 @@ local autocmd = utils.autocmd
 local map = utils.map
 
 require('plugin_bootstrap')
+require('theme').setup()
+
 
 g.mapleader = [[ ]]
 

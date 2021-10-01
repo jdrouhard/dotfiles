@@ -11,7 +11,6 @@ map('n', 'gD',         '<plug>(coc-declaration)', opts)
 map('n', 'gd',         '<plug>(coc-definition)', opts)
 map('n', 'gi',         '<plug>(coc-implementation)', opts)
 map('n', 'gr',         '<plug>(coc-references)', opts)
-map('n', '<F3>',       '<plug>(coc-references)', opts)
 map('n', 'K',          "<cmd>call CocActionAsync('definitionHover')<CR>")
 map('n', '<leader>ac', '<cmd>CocAction<CR>')
 

@@ -1,4 +1,5 @@
 local cmd = vim.cmd
+local opt = vim.opt
 
 require('nvim-treesitter.configs').setup {
   ensure_installed = {'cpp', 'python', 'bash', 'cmake', 'lua' },
@@ -22,3 +23,6 @@ require('nvim-treesitter.configs').setup {
     persist_queries = false, -- whether the query persists across vim sessions
   }
 }
+
+opt.foldmethod = "expr"
+opt.foldexpr   = "nvim_treesitter#foldexpr()"

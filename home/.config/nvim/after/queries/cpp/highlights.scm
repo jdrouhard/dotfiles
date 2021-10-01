@@ -3,8 +3,9 @@
 (auto) @type
 
 [
- "friend"
- "namespace"
+ ;"friend"
+ ;"namespace"
+ "thread_local"
 ] @keyword
 
 [
@@ -40,6 +41,7 @@
  "const"
  "mutable"
  "constexpr"
+ "thread_local"
 ] @storageclass
 
 [

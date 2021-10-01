@@ -36,13 +36,17 @@ require('telescope').setup {
         }
     },
     pickers = {
+        grep_string = {
+            use_regex = true,
+        },
         buffers = {
             sort_lastused = true,
-            previewer = false,
+            --previewer = false,
         }
     }
 }
 
 require('telescope').load_extension('fzf')
+require('telescope').load_extension('coc')
 
 return M
