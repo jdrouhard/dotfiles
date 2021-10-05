@@ -11,7 +11,6 @@ local map = utils.map
 require('plugin_bootstrap')
 require('theme').setup()
 
-
 g.mapleader = [[ ]]
 
 opt.ttimeoutlen   = 0
@@ -21,7 +20,6 @@ opt.wildignore    = "*.o,*.obj,*.dwo"
 opt.path          = vim.env.PWD .. '/**'
 opt.shortmess     :append("c")
 
-opt.termguicolors = true
 opt.showmode      = false
 opt.ruler         = false
 opt.hidden        = true
@@ -73,15 +71,14 @@ map('',  '<F4>',       '<cmd>A<CR>')
 map('',  '<F5>',       '<cmd>AI<CR>')
 
 -- misc
-local resolved_vimrc = fn.resolve(vim.env.MYVIMRC)
 local resolved_plugins = fn.resolve(fn.stdpath('config') .. '/lua/plugins.lua')
 map('n', '<leader>m',  '<cmd>make<CR>')
 map('n', '<C-k>',      '<cmd>cp<CR>', { silent = true })
 map('n', '<C-j>',      '<cmd>cn<CR>', { silent = true })
-map('n', '<leader>ev', '<cmd>e ' .. resolved_vimrc .. '<CR>')
+map('n', '<leader>ev', '<cmd>e $MYVIMRC<CR>')
 map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 
-vim.cmd[[command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``]]
+vim.cmd[[command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | noh | norm! ``]]
 
 autocmd('filetypes', {
     [[FileType            cmake,xml  setlocal tabstop=2 | setlocal shiftwidth=2]],

@@ -1,4 +1,5 @@
 local g = vim.g
+local opt = vim.opt
 local cmd = vim.cmd
 local autocmd = require('utils').autocmd
 
@@ -25,6 +26,7 @@ function M.apply_highlights()
 end
 
 function M.setup()
+    opt.termguicolors = true
     g.nightfox_italic_comments = true
     g.nightfox_italic_functions = true
 
@@ -34,9 +36,8 @@ function M.setup()
     g.tokyonight_style = 'night'
     g.tokyonight_italic_functions = true
 
+    autocmd('highlights', [[ColorScheme * lua require('theme').apply_highlights()]])
     cmd([[silent! colorscheme ]] .. M.theme)
 end
-
-autocmd('highlights', [[ColorScheme * lua require('theme').apply_highlights()]])
 
 return M

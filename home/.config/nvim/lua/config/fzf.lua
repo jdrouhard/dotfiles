@@ -2,26 +2,24 @@ require('fzf-lua').setup {
     fzf_layout = 'default',
     winopts = {
         --win_height = 0.6,
-        win_width = 0.9
+        win_width = 0.9,
+        hl_border = 'FloatBorder',
     },
-    fzf_binds = {
-        'f2:toggle-preview',
-        'alt-a:select-all',
-        'alt-d:deselect-all',
-        'up:preview-up',
-        'down:preview-down',
-        'ctrl-b:preview-page-up',
-        'ctrl-f:preview-page-down'
-    },
-    preview_horizontal = 'right:50%',
-    previewers = {
+    keymap = {
+        fzf = {
+            ['f2'] = 'toggle-preview',
+            ['alt-a'] = 'select-all',
+            ['alt-d'] = 'deselect-all',
+            ['up'] = 'preview-up',
+            ['down'] = 'preview-down',
+            ['ctrl-b'] = 'preview-page-up',
+            ['ctrl-f'] = 'preview-page-down'
+        },
         builtin = {
-            keymap = {
-                page_up = '<c-b>',
-                page_down = '<c-f>',
-                toggle_full = '<f4>',
-                toggle_hide = '<f2>'
-            }
+            ['<f2>'] = 'toggle-preview',
+            ['<f4>'] = 'toggle-fullscreen',
+            ['<c-b>'] = 'preview-page-up',
+            ['<c-f>'] = 'preview-page-down',
         }
     },
     grep = {

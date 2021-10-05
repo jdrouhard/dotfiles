@@ -59,9 +59,8 @@ local function init()
             },
             wants = {'nvim-fzf', 'plenary.nvim' },
             cmd = { 'FzfLua', 'FzfCocLocations' },
-            --setup = [[require('config.fzf_setup')]],
+            setup = [[require('config.fzf_setup')]],
             config = [[require('config.fzf')]],
-            module = 'fzf',
         },
         {
             'vijaymarupudi/nvim-fzf',
@@ -91,7 +90,7 @@ local function init()
                 'telescope-fzf-native.nvim'
             },
             cmd = { 'Telescope', 'Tgrep' },
-            setup = [[require('config.telescope_setup')]],
+            --setup = [[require('config.telescope_setup')]],
             config = [[require('config.telescope')]],
             module = 'telescope',
         },
