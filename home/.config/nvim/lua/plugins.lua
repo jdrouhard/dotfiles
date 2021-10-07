@@ -176,11 +176,12 @@ local function init()
         config = [[require('config.bufferline')]],
     }
 
+    use 'antoinemadec/FixCursorHold.nvim'
+
     use {
         'neoclide/coc.nvim',
-        disable = use_builtin_lsp,
+        opt = use_builtin_lsp,
         branch = 'release',
-        event = 'BufRead',
         setup = function()
             vim.g.coc_default_semantic_highlight_groups = true
         end,
@@ -189,12 +190,22 @@ local function init()
 
     use {
         'neovim/nvim-lspconfig',
-        disable = not use_builtin_lsp,
-        requires = {
-            'ojroques/nvim-lspfuzzy',
-            { 'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip' }
-        },
+        opt = not use_builtin_lsp,
         config = [[require('lsp_config')]]
+    }
+
+    use {
+        'hrsh7th/nvim-cmp',
+        requires = {
+            'L3MON4D3/LuaSnip',
+            'hrsh7th/cmp-nvim-lsp',
+            { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
+            { 'hrsh7th/cmp-path', after = 'nvim-cmp' },
+            { 'hrsh7th/cmp-nvim-lua', after = 'nvim-cmp' },
+            { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' },
+        },
+        config = [[require('config.cmp')]],
+        event = 'InsertEnter *',
     }
 
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime', config = [[vim.g.startuptime_tries = 10]] }

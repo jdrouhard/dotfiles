@@ -1,67 +1,149 @@
-local util = require('vim.lsp.util')
-local aliases = {
-  pyls_ms = 'MPLS',
-}
+local lsp_util = require('vim.lsp.util')
+local utils = require('utils')
+local autocmd = utils.autocmd
+
 local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
 local index = 0
-local status_timer = vim.loop.new_timer()
+local status_timer = nil
+local progress_cache = {}
+local requests_cache = {}
+local active_requests = {}
+local debouncing_requests = {}
 
-local function get_statusline()
-  if #vim.lsp.buf_get_clients() == 0 then
-    return ''
+local M = {}
+
+local function update_timer()
+  local need_timer = not (vim.tbl_isempty(progress_cache) and vim.tbl_isempty(requests_cache))
+  if status_timer == nil and need_timer then
+    status_timer = vim.loop.new_timer()
+    status_timer:start(100, 100, vim.schedule_wrap(function()
+      index = (index + 1) % #spinner_frames
+      vim.api.nvim_command('redrawstatus')
+    end))
+  elseif status_timer ~= nil and not need_timer then
+    status_timer:close()
+    status_timer = nil
   end
+end
 
-  local lsp_messages = util.get_progress_messages()
+function M.update_progress()
+  local lsp_messages = lsp_util.get_progress_messages()
   local msgs = {}
   for _, msg in ipairs(lsp_messages) do
-    local name = aliases[msg.name] or msg.name
+    local name = msg.name
     if not msgs[name] then
       msgs[name] = {}
     end
+    local result = msgs[name]
     if msg.progress then
-      local contents = msg.title
+      local contents = { msg.title }
       if msg.message then
-        contents = contents .. ' ' .. msg.message
+        contents[#contents+1] = msg.message
       end
 
-      if msg.percentage and msg.percentage > 0 then
-        contents = contents .. ' (' .. math.ceil(msg.percentage) .. '%)'
+      if msg.done then
+        vim.defer_fn(M.update_progress, 500)
+      elseif msg.percentage and msg.percentage > 0 then
+        contents[#contents+1] = '(' .. math.ceil(msg.percentage) .. '%%)'
       end
 
-      contents = spinner_frames[index + 1] .. ' ' .. contents
-      table.insert(msgs[name], contents)
+      result[#result + 1] = table.concat(contents, ' ')
     else
-      table.insert(msgs[name], msg.content)
+      result[#result + 1] = msg.content
     end
   end
+  progress_cache = msgs
+  update_timer()
+end
 
+function M.update_requests()
+  requests_cache = {}
   for _, client in ipairs(vim.lsp.buf_get_clients()) do
-    local name = aliases[client.name] or client.name
-    if not msgs[name] then
-      msgs[name] = {}
+    local name = client.name
+    local result = {}
+    local ids = {}
+    for id, method in pairs(client.active_requests) do
+      ids[#ids + 1] = id
+      if not active_requests[id] and not debouncing_requests[id] then
+        debouncing_requests[id] = vim.defer_fn(function()
+          active_requests[id] = method
+          debouncing_requests[id] = nil
+          M.update_requests()
+        end, 100)
+      end
     end
+    for id, timer in pairs(debouncing_requests) do
+      if not vim.tbl_contains(ids, id) then
+        timer:close()
+        debouncing_requests[id] = nil
+      end
+    end
+    for id, method in pairs(active_requests) do
+      if not vim.tbl_contains(ids, id) then
+        active_requests[id] = nil
+      else
+        result[#result + 1] = string.format("requesting %s", string.sub(method, string.find(method, '/')+1))
+      end
+    end
+    for _, method in pairs(client.cancel_requests) do
+      result[#result + 1] = string.format("cancelling %s", string.sub(method, string.find(method, '/')+1))
+    end
+    if not vim.tbl_isempty(result) then
+      requests_cache[name] = result
+    end
+  end
+  update_timer()
+end
+
+local function get_status()
+  local msgs = {}
+  for _, client in ipairs(vim.lsp.buf_get_clients()) do
+    local name = client.name
     local status = client.status
     if status then
       local uri = vim.uri_from_bufnr(0)
       if status[uri] then
-        table.insert(msgs[name], 1, status[uri])
+        msgs[name] = status[uri]
       end
     end
   end
+  return msgs
+end
 
-  local result = ''
-  for name, msgs in pairs(msgs) do
-    result = result .. name .. ': '
-    result = result .. vim.trim(table.concat(msgs, ' '))
+function M.statusline()
+  if #vim.lsp.buf_get_clients() == 0 then
+    return ''
   end
-  return result
+
+  local msgs = {}
+  local function extend(section, add_spinner)
+    for name, contents in pairs(section) do
+      if not msgs[name] then
+        msgs[name] = {}
+      end
+      local client_msgs = msgs[name]
+      if add_spinner then
+        client_msgs[#client_msgs + 1] = spinner_frames[index + 1]
+      end
+      vim.list_extend(client_msgs, contents)
+    end
+  end
+  extend(requests_cache, true)
+  extend(get_status())
+  extend(progress_cache, true)
+
+  local result = {}
+
+  for name, msgs in pairs(msgs) do
+    result[#result + 1] = string.format("%s: %s", name, table.concat(msgs, ' '))
+  end
+
+  return table.concat(result, '; ')
 end
 
-local function update_text()
-  vim.g.lsp_status = get_statusline()
-end
+autocmd('lsp_status', {
+  [[User LspRequestChange lua require('lsp_status').update_requests()]],
+  [[User LspProgressUpdate lua require('lsp_status').update_progress()]],
+})
 
-status_timer:start(100, 100, vim.schedule_wrap(function()
-  index = (index + 1) % #spinner_frames
-  update_text()
-end))
+return M

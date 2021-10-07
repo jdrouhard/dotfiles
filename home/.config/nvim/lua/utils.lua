@@ -1,5 +1,6 @@
 local cmd = vim.cmd
 local map_key = vim.api.nvim_set_keymap
+local buf_map_key = vim.api.nvim_set_keymap
 
 local M = {}
 
@@ -17,6 +18,14 @@ function M.map(modes, lhs, rhs, opts)
     opts.noremap = opts.noremap == nil and true or opts.noremap
     if type(modes) == 'string' then modes = {modes} end
     for _, mode in ipairs(modes) do map_key(mode, lhs, rhs, opts) end
+end
+
+function M.buf_map(modes, lhs, rhs, opts)
+    opts = opts or {}
+    opts.noremap = opts.noremap == nil and true or opts.noremap
+    opts.silent = opts.silent == nil and true or opts.silent
+    if type(modes) == 'string' then modes = {modes} end
+    for _, mode in ipairs(modes) do buf_map_key(mode, lhs, rhs, opts) end
 end
 
 return M

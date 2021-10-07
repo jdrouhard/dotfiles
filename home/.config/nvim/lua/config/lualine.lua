@@ -23,8 +23,7 @@ local function coc_status()
 end
 
 local function lsp_status()
-    local status = g.lsp_status or ''
-    return status:gsub("%%", "%%%1")
+    return require('lsp_status').statusline()
 end
 
 local function tag_name()

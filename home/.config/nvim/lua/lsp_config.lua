@@ -1,91 +1,58 @@
+local cmd = vim.cmd
 local utils = require('utils')
-local map = utils.map
+local buf_map = utils.buf_map
 local lsp_status = require('lsp_status')
 local lsp_clangd_ext = require('lsp_clangd_ext')
 
-local custom_lsp_attach = function(client)
-    -- See `:help nvim_buf_set_keymap()` for more information
-    map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
-    map('n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
-    map('n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
-    map('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+local function on_attach(client)
+    --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
-    -- Use LSP as the handler for omnifunc.
-    --    See `:help omnifunc` and `:help ins-completion` for more information.
-    --vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
+    buf_map('n', 'gd',         '<cmd>lua require"telescope.builtin".lsp_definitions()<CR>')
+    buf_map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
+    buf_map('n', 'gi',         '<cmd>lua require"telescope.builtin".lsp_implementations()<CR>')
+    buf_map('n', 'gS',         '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+    buf_map('n', 'gTD',        '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    buf_map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+    buf_map('n', 'gr',         '<cmd>lua require"telescope.builtin".lsp_references()<CR>')
+    buf_map('n', '<leader>ac', '<cmd>lua require"telescope.builtin".lsp_code_actions()<CR>')
+    --buf_map('n', 'gA',         '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    buf_map('n', ']e',         '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
+    buf_map('n', '[e',         '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
 
-    -- For plugins with an `on_attach` callback, call them here. For example:
+    if client.resolved_capabilities.document_formatting then
+        buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    end
+
+    if client.resolved_capabilities.document_range_formatting then
+        -- TODO: support <cmd> with a smart function to get *current* visual selection
+        -- Follow neovim/neovim#13896
+        buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
+    end
+
+    cmd 'augroup lsp_aucmds'
+    if client.resolved_capabilities.document_highlight then
+        cmd 'au CursorHold <buffer> lua vim.lsp.buf.document_highlight()'
+        cmd 'au CursorMoved <buffer> lua vim.lsp.buf.clear_references()'
+    end
+
+    --cmd 'au CursorHold,CursorHoldI <buffer> lua require"nvim-lightbulb".update_lightbulb {sign = {enabled = false}, virtual_text = {enabled = true, text = ""}, float = {enabled = false, text = "", win_opts = {winblend = 100, anchor = "NE"}}}'
+    cmd 'augroup END'
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = {
-        'documentation',
-        'detail',
-        'additionalTextEdits',
-    }
+    properties = { 'documentation', 'detail', 'additionalTextEdits', }
 }
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 require('lspconfig').clangd.setup {
-    cmd = { '/home/jdrouhard/clang-dev/bin/clangd', '--header-insertion=never' },
-    on_attach = custom_lsp_attach,
+    cmd = { 'clangd', '--header-insertion=never' },
+    on_attach = on_attach,
     handlers = lsp_clangd_ext.handlers,
     init_options = {
         clangdFileStatus = true
     },
     capabilities = capabilities,
 }
-
-require('lspfuzzy').setup {}
-
-require('compe').setup {
-    enabled = true;
-    source = {
-        path = true;
-        buffer = true;
-        calc = true;
-        nvim_lsp = true;
-        vsnip = true;
-    };
-}
-
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif vim.fn.call("vsnip#available", {1}) == 1 then
-    return t "<Plug>(vsnip-expand-or-jump)"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-p>"
-  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-    return t "<Plug>(vsnip-jump-prev)"
-  else
-    return t "<S-Tab>"
-  end
-end
-
-map({'i', 's'}, '<Tab>',   'v:lua.tab_complete()', {expr = true, noremap = false})
-map({'i', 's'}, '<S-Tab>', 'v:lua.s_tab_complete()', {expr = true, noremap = false})
