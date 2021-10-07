@@ -8,14 +8,18 @@ local function on_attach(client)
     --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
     buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
-    buf_map('n', 'gd',         '<cmd>lua require"telescope.builtin".lsp_definitions()<CR>')
+    --buf_map('n', 'gd',         '<cmd>lua require"telescope.builtin".lsp_definitions()<CR>')
+    buf_map('n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
     buf_map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
-    buf_map('n', 'gi',         '<cmd>lua require"telescope.builtin".lsp_implementations()<CR>')
+    --buf_map('n', 'gi',         '<cmd>lua require"telescope.builtin".lsp_implementations()<CR>')
+    buf_map('n', 'gi',         '<cmd>lua vim.lsp.buf.implementation()<CR>')
     buf_map('n', 'gS',         '<cmd>lua vim.lsp.buf.signature_help()<CR>')
     buf_map('n', 'gTD',        '<cmd>lua vim.lsp.buf.type_definition()<CR>')
     buf_map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-    buf_map('n', 'gr',         '<cmd>lua require"telescope.builtin".lsp_references()<CR>')
-    buf_map('n', '<leader>ac', '<cmd>lua require"telescope.builtin".lsp_code_actions()<CR>')
+    --buf_map('n', 'gr',         '<cmd>lua require"telescope.builtin".lsp_references()<CR>')
+    --buf_map('n', '<leader>ac', '<cmd>lua require"telescope.builtin".lsp_code_actions()<CR>')
+    buf_map('n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
+    buf_map('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>')
     --buf_map('n', 'gA',         '<cmd>lua vim.lsp.buf.code_action()<CR>')
     buf_map('n', ']e',         '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
     buf_map('n', '[e',         '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
@@ -35,6 +39,7 @@ local function on_attach(client)
         cmd 'au CursorHold <buffer> lua vim.lsp.buf.document_highlight()'
         cmd 'au CursorMoved <buffer> lua vim.lsp.buf.clear_references()'
     end
+    cmd [[au CursorMoved <buffer> lua require('utils').lsp_cancel_pending_requests()]]
 
     --cmd 'au CursorHold,CursorHoldI <buffer> lua require"nvim-lightbulb".update_lightbulb {sign = {enabled = false}, virtual_text = {enabled = true, text = ""}, float = {enabled = false, text = "", win_opts = {winblend = 100, anchor = "NE"}}}'
     cmd 'augroup END'

@@ -8,11 +8,7 @@ local file_status_update = function(_, message, ctx, _)
     if not client.status then
         client.status = {}
     end
-    if message.state == 'idle' then
-      client.status = {}
-    else
-      client.status[message.uri] = message.state;
-    end
+    client.status[message.uri] = message.state ~= 'idle' and message.state or nil;
 end;
 
 local M = {}

@@ -5,15 +5,15 @@ local autocmd = utils.autocmd
 local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
 local index = 0
 local status_timer = nil
-local progress_cache = {}
-local requests_cache = {}
+local progress_cache = nil
+local requests_cache = nil
 local active_requests = {}
 local debouncing_requests = {}
 
 local M = {}
 
 local function update_timer()
-  local need_timer = not (vim.tbl_isempty(progress_cache) and vim.tbl_isempty(requests_cache))
+  local need_timer = not (vim.tbl_isempty(progress_cache or {}) and vim.tbl_isempty(requests_cache or {}))
   if status_timer == nil and need_timer then
     status_timer = vim.loop.new_timer()
     status_timer:start(100, 100, vim.schedule_wrap(function()
@@ -24,6 +24,11 @@ local function update_timer()
     status_timer:close()
     status_timer = nil
   end
+end
+
+function M.invalidate_requests()
+    requests_cache = nil
+    update_timer()
 end
 
 function M.update_progress()
@@ -58,11 +63,12 @@ end
 
 function M.update_requests()
   requests_cache = {}
+  local bufnr = vim.api.nvim_get_current_buf()
   for _, client in ipairs(vim.lsp.buf_get_clients()) do
     local name = client.name
     local result = {}
     local ids = {}
-    for id, method in pairs(client.active_requests) do
+    for id, method in pairs(client.active_requests[bufnr] or {}) do
       ids[#ids + 1] = id
       if not active_requests[id] and not debouncing_requests[id] then
         debouncing_requests[id] = vim.defer_fn(function()
@@ -74,25 +80,49 @@ function M.update_requests()
     end
     for id, timer in pairs(debouncing_requests) do
       if not vim.tbl_contains(ids, id) then
+        timer:stop()
         timer:close()
         debouncing_requests[id] = nil
       end
     end
+    local request_set = {}
     for id, method in pairs(active_requests) do
       if not vim.tbl_contains(ids, id) then
         active_requests[id] = nil
-      else
-        result[#result + 1] = string.format("requesting %s", string.sub(method, string.find(method, '/')+1))
+      elseif not request_set[method] then
+        request_set[method] = true
+        if not method:find('documentHighlight') then
+          result[#result + 1] = string.format("requesting %s", string.sub(method, string.find(method, '/')+1))
+        end
       end
     end
-    for _, method in pairs(client.cancel_requests) do
-      result[#result + 1] = string.format("cancelling %s", string.sub(method, string.find(method, '/')+1))
+    for _, method in pairs(client.cancel_requests[bufnr] or {}) do
+      if not request_set[method] then
+        request_set[method] = true
+        if not method:find('documentHighlight') then
+          result[#result + 1] = string.format("cancelling %s", string.sub(method, string.find(method, '/')+1))
+        end
+      end
     end
     if not vim.tbl_isempty(result) then
       requests_cache[name] = result
     end
   end
   update_timer()
+end
+
+local function get_progress()
+  if not progress_cache then
+    M.update_progress()
+  end
+  return progress_cache or {}
+end
+
+local function get_requests()
+  if not requests_cache then
+    M.update_requests()
+  end
+  return requests_cache or {}
 end
 
 local function get_status()
@@ -103,7 +133,7 @@ local function get_status()
     if status then
       local uri = vim.uri_from_bufnr(0)
       if status[uri] then
-        msgs[name] = status[uri]
+        msgs[name] = { status[uri] }
       end
     end
   end
@@ -128,9 +158,9 @@ function M.statusline()
       vim.list_extend(client_msgs, contents)
     end
   end
-  extend(requests_cache, true)
+  extend(get_requests(), true)
   extend(get_status())
-  extend(progress_cache, true)
+  extend(get_progress(), true)
 
   local result = {}
 
@@ -144,6 +174,7 @@ end
 autocmd('lsp_status', {
   [[User LspRequestChange lua require('lsp_status').update_requests()]],
   [[User LspProgressUpdate lua require('lsp_status').update_progress()]],
+  [[BufLeave * lua require('lsp_status').invalidate_requests()]],
 })
 
 return M
