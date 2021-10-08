@@ -36,25 +36,23 @@ function M.update_progress()
   local msgs = {}
   for _, msg in ipairs(lsp_messages) do
     local name = msg.name
-    if not msgs[name] then
-      msgs[name] = {}
-    end
-    local result = msgs[name]
     if msg.progress then
       local contents = { msg.title }
       if msg.message then
-        contents[#contents+1] = msg.message
+        contents[#contents + 1] = msg.message
+      end
+
+      if msg.percentage and msg.percentage > 0 then
+        contents[#contents + 1] = '(' .. math.ceil(msg.percentage) .. '%%)'
       end
 
       if msg.done then
         vim.defer_fn(M.update_progress, 500)
-      elseif msg.percentage and msg.percentage > 0 then
-        contents[#contents+1] = '(' .. math.ceil(msg.percentage) .. '%%)'
       end
 
-      result[#result + 1] = table.concat(contents, ' ')
+      msgs[name] = table.concat(contents, ' ')
     else
-      result[#result + 1] = msg.content
+      msgs[name] = msg.content
     end
   end
   progress_cache = msgs
@@ -80,9 +78,11 @@ function M.update_requests()
     end
     for id, timer in pairs(debouncing_requests) do
       if not vim.tbl_contains(ids, id) then
-        timer:stop()
-        timer:close()
-        debouncing_requests[id] = nil
+        vim.schedule_wrap(function()
+          timer:stop()
+          timer:close()
+          debouncing_requests[id] = nil
+        end)
       end
     end
     local request_set = {}
@@ -105,7 +105,7 @@ function M.update_requests()
       end
     end
     if not vim.tbl_isempty(result) then
-      requests_cache[name] = result
+      requests_cache[name] = string.format('[%s]', table.concat(result, ', '))
     end
   end
   update_timer()
@@ -133,7 +133,7 @@ local function get_status()
     if status then
       local uri = vim.uri_from_bufnr(0)
       if status[uri] then
-        msgs[name] = { status[uri] }
+        msgs[name] = status[uri]
       end
     end
   end
@@ -155,7 +155,7 @@ function M.statusline()
       if add_spinner then
         client_msgs[#client_msgs + 1] = spinner_frames[index + 1]
       end
-      vim.list_extend(client_msgs, contents)
+      client_msgs[#client_msgs + 1] = contents
     end
   end
   extend(get_requests(), true)
@@ -171,10 +171,12 @@ function M.statusline()
   return table.concat(result, '; ')
 end
 
-autocmd('lsp_status', {
-  [[User LspRequestChange lua require('lsp_status').update_requests()]],
-  [[User LspProgressUpdate lua require('lsp_status').update_progress()]],
-  [[BufLeave * lua require('lsp_status').invalidate_requests()]],
-})
+function M.on_attach()
+  autocmd('lsp_status', {
+    [[User LspRequestChange <buffer> lua require('lsp_status').update_requests()]],
+    [[User LspProgressUpdate <buffer> lua require('lsp_status').update_progress()]],
+    [[BufLeave <buffer> lua require('lsp_status').invalidate_requests()]],
+  })
+end
 
 return M

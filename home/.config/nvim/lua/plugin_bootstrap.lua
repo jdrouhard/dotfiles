@@ -17,6 +17,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
     })
     package.loaded['bootstrap'] = nil
 else
+    require('packer_compiled')
+
     cmd [[command! PackerInstall           lua require('plugins').install()]]
     cmd [[command! PackerUpdate            lua require('plugins').update()]]
     cmd [[command! PackerSync              lua require('plugins').sync()]]

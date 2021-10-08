@@ -1,6 +1,6 @@
 local cmd = vim.cmd
 local map_key = vim.api.nvim_set_keymap
-local buf_map_key = vim.api.nvim_set_keymap
+local buf_map_key = vim.api.nvim_buf_set_keymap
 
 local M = {}
 
@@ -10,7 +10,7 @@ function M.autocmd(group, cmds, clear)
   cmd('augroup ' .. group)
   if clear then cmd [[au!]] end
   for _, c in ipairs(cmds) do cmd('autocmd ' .. c) end
-  cmd [[augroup END]]
+  cmd('augroup END')
 end
 
 function M.map(modes, lhs, rhs, opts)
@@ -25,7 +25,7 @@ function M.buf_map(modes, lhs, rhs, opts)
   opts.noremap = opts.noremap == nil and true or opts.noremap
   opts.silent = opts.silent == nil and true or opts.silent
   if type(modes) == 'string' then modes = {modes} end
-  for _, mode in ipairs(modes) do buf_map_key(mode, lhs, rhs, opts) end
+  for _, mode in ipairs(modes) do buf_map_key(0, mode, lhs, rhs, opts) end
 end
 
 function M.lsp_cancel_pending_requests()

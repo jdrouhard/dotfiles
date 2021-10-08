@@ -5,6 +5,7 @@ local lsp_status = require('lsp_status')
 local lsp_clangd_ext = require('lsp_clangd_ext')
 
 local function on_attach(client)
+    require('lsp_status').on_attach()
     --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
     buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')

@@ -2,7 +2,7 @@ local cmd = vim.cmd
 local opt = vim.opt
 
 require('nvim-treesitter.configs').setup {
-  ensure_installed = {'cpp', 'python', 'bash', 'cmake', 'lua' },
+  ensure_installed = {'cpp', 'python', 'bash', 'cmake', 'lua', 'query'},
   highlight = {
     enable = true,
     --additional_vim_regex_highlighting = true,

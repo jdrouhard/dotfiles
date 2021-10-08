@@ -8,9 +8,6 @@ local utils = require('utils')
 local autocmd = utils.autocmd
 local map = utils.map
 
-require('plugin_bootstrap')
-require('theme').setup()
-
 g.mapleader = [[ ]]
 
 opt.ttimeoutlen   = 0
@@ -46,6 +43,9 @@ opt.showmatch     = true
 opt.inccommand    = "nosplit"
 opt.list          = true
 opt.listchars     = "tab:▸ ,trail:·"
+
+require('plugin_bootstrap')
+require('theme').setup()
 
 -- editing
 map('i', 'jk', '<ESC>')

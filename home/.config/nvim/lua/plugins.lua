@@ -10,7 +10,7 @@ local function init()
     if packer == nil then
         packer = require('packer')
         packer.init {
-            compile_path = vim.fn.stdpath('data') .. '/site/plugin/packer_compiled.lua',
+            compile_path = vim.fn.stdpath('data') .. '/site/lua/packer_compiled.lua',
             disable_commands = true,
             display = { open_cmd = 'vnew \\[packer\\]' },
         }
