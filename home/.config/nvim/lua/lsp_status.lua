@@ -66,14 +66,16 @@ function M.update_requests()
     local name = client.name
     local result = {}
     local ids = {}
-    for id, method in pairs(client.active_requests[bufnr] or {}) do
-      ids[#ids + 1] = id
-      if not active_requests[id] and not debouncing_requests[id] then
-        debouncing_requests[id] = vim.defer_fn(function()
-          active_requests[id] = method
-          debouncing_requests[id] = nil
-          M.update_requests()
-        end, 100)
+    for id, request in pairs(client.pending_requests or {}) do
+      if request.bufnr == bufnr then
+        ids[#ids + 1] = id
+        if not active_requests[id] and not debouncing_requests[id] then
+          debouncing_requests[id] = vim.defer_fn(function()
+            active_requests[id] = request
+            debouncing_requests[id] = nil
+            M.update_requests()
+          end, 100)
+        end
       end
     end
     for id, timer in pairs(debouncing_requests) do
@@ -86,7 +88,8 @@ function M.update_requests()
       end
     end
     local request_set = {}
-    for id, method in pairs(active_requests) do
+    for id, request in pairs(active_requests) do
+      local method = request.method
       if not vim.tbl_contains(ids, id) then
         active_requests[id] = nil
       elseif not request_set[method] then
@@ -96,7 +99,8 @@ function M.update_requests()
         end
       end
     end
-    for _, method in pairs(client.cancel_requests[bufnr] or {}) do
+    for _, request in pairs(client.cancel_requests or {}) do
+      local method = request.method
       if not request_set[method] then
         request_set[method] = true
         if not method:find('documentHighlight') then
@@ -172,10 +176,15 @@ function M.statusline()
 end
 
 function M.on_attach()
-  autocmd('lsp_status', {
-    [[User LspRequestChange <buffer> lua require('lsp_status').update_requests()]],
-    [[User LspProgressUpdate <buffer> lua require('lsp_status').update_progress()]],
+  autocmd('lsp_status_attach', {
     [[BufLeave <buffer> lua require('lsp_status').invalidate_requests()]],
+  })
+end
+
+function M.setup()
+  autocmd('lsp_status', {
+    [[User LspRequestChange lua require('lsp_status').update_requests()]],
+    [[User LspProgressUpdate lua require('lsp_status').update_progress()]],
   })
 end
 

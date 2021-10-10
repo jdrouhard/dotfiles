@@ -44,9 +44,6 @@ opt.inccommand    = "nosplit"
 opt.list          = true
 opt.listchars     = "tab:▸ ,trail:·"
 
-require('plugin_bootstrap')
-require('theme').setup()
-
 -- editing
 map('i', 'jk', '<ESC>')
 map('n', 'j',  'gj')
@@ -81,13 +78,13 @@ map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 vim.cmd[[command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | noh | norm! ``]]
 
 autocmd('filetypes', {
-    [[FileType            cmake,xml  setlocal tabstop=2 | setlocal shiftwidth=2]],
-    [[FileType            cpp,python setlocal textwidth=90 | setlocal formatoptions=crqnj]],
-    [[FileType            gitcommit  setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s*]],
-    [[FileType            gitcommit  setlocal formatoptions+=n]],
-    [[BufRead,BufNewFile *.sqli      setlocal filetype=sql]],
-    [[BufRead,BufNewFile *.spec      setlocal filetype=spec]],
-    [[BufRead,BufNewFile *.inc       setlocal filetype=cpp]]
+    [[FileType            cmake,xml,lua setlocal tabstop=2 | setlocal shiftwidth=2]],
+    [[FileType            cpp,python    setlocal textwidth=90 | setlocal formatoptions=crqnj]],
+    [[FileType            gitcommit     setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s*]],
+    [[FileType            gitcommit     setlocal formatoptions+=n]],
+    [[BufRead,BufNewFile *.sqli         setlocal filetype=sql]],
+    [[BufRead,BufNewFile *.spec         setlocal filetype=spec]],
+    [[BufRead,BufNewFile *.inc          setlocal filetype=cpp]]
 })
 
 autocmd('window', {
@@ -96,6 +93,14 @@ autocmd('window', {
 })
 
 autocmd('autoswap', [[SwapExists  * let v:swapchoice = 'e']])
+
+local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
+if fn.filereadable(local_init) > 0 then
+  cmd('luafile ' .. local_init)
+end
+
+require('plugin_bootstrap')
+require('theme').setup()
 
 local disabled_builtins = {
     "netrw",

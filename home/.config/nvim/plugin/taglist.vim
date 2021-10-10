@@ -66,22 +66,24 @@ endif
 set cpo&vim
 
 function! s:CheckForExCtags() abort
-    let ctagsbins  = []
-    let ctagsbins += ['ctags-exuberant'] " Debian
-    let ctagsbins += ['exuberant-ctags']
-    let ctagsbins += ['exctags'] " FreeBSD, NetBSD
-    let ctagsbins += ['/usr/local/bin/ctags'] " Homebrew
-    let ctagsbins += ['/opt/local/bin/ctags'] " Macports
-    let ctagsbins += ['ectags'] " OpenBSD
-    let ctagsbins += ['ctags']
-    let ctagsbins += ['ctags.exe']
-    let ctagsbins += ['tags']
-    for ctags in ctagsbins
-        if executable(ctags)
-            let g:Tlist_Ctags_Cmd = ctags
-            break
-        endif
-    endfor
+    if !exists('g:Tlist_Ctags_Cmd')
+        let ctagsbins  = []
+        let ctagsbins += ['ctags-exuberant'] " Debian
+        let ctagsbins += ['exuberant-ctags']
+        let ctagsbins += ['exctags'] " FreeBSD, NetBSD
+        let ctagsbins += ['/usr/local/bin/ctags'] " Homebrew
+        let ctagsbins += ['/opt/local/bin/ctags'] " Macports
+        let ctagsbins += ['ectags'] " OpenBSD
+        let ctagsbins += ['ctags']
+        let ctagsbins += ['ctags.exe']
+        let ctagsbins += ['tags']
+        for ctags in ctagsbins
+            if executable(ctags)
+                let g:Tlist_Ctags_Cmd = ctags
+                break
+            endif
+        endfor
+    endif
     if !exists('g:Tlist_Ctags_Cmd')
         return 0
     endif

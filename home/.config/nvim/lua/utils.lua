@@ -28,12 +28,14 @@ function M.buf_map(modes, lhs, rhs, opts)
   for _, mode in ipairs(modes) do buf_map_key(0, mode, lhs, rhs, opts) end
 end
 
-function M.lsp_cancel_pending_requests()
+function M.lsp_cancel_pending_requests(bufnr)
   vim.schedule(function()
-    local bufnr = vim.api.nvim_get_current_buf()
+    bufnr = (bufnr == nil or bufnr == 0) and vim.api.nvim_get_current_buf() or bufnr
     for _, client in ipairs(vim.lsp.buf_get_clients(bufnr)) do
-      for id, _ in pairs(client.active_requests[bufnr] or {}) do
-        client.cancel_request(id)
+      for id, request in pairs(client.pending_requests or {}) do
+        if request.bufnr == bufnr then
+          client.cancel_request(id)
+        end
       end
     end
   end)

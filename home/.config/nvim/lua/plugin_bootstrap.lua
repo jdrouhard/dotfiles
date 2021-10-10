@@ -7,7 +7,7 @@ local autocmd = require('utils').autocmd
 local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 
-if fn.empty(fn.glob(install_path)) > 0 then
+if not fn.filereadable(install_path) then
     api.nvim_echo({{'Installing packer.nvim', 'Type'}}, true, {})
     fn.system({'git', 'clone', packer_repo, install_path})
     execute('packadd packer.nvim')
