@@ -66,7 +66,7 @@ function M.update_requests()
     local name = client.name
     local result = {}
     local ids = {}
-    for id, request in pairs(client.pending_requests or {}) do
+    for id, request in pairs(client.requests or {}) do
       if request.bufnr == bufnr then
         ids[#ids + 1] = id
         if not active_requests[id] and not debouncing_requests[id] then
@@ -87,24 +87,16 @@ function M.update_requests()
         end)
       end
     end
-    local request_set = {}
+    local request_set = { ['pending'] = {}, ['cancel'] = {} }
     for id, request in pairs(active_requests) do
+      local type = request.type
       local method = request.method
       if not vim.tbl_contains(ids, id) then
         active_requests[id] = nil
-      elseif not request_set[method] then
-        request_set[method] = true
+      elseif not request_set[type][method] then
+        request_set[type][method] = true
         if not method:find('documentHighlight') then
-          result[#result + 1] = string.format("requesting %s", string.sub(method, string.find(method, '/')+1))
-        end
-      end
-    end
-    for _, request in pairs(client.cancel_requests or {}) do
-      local method = request.method
-      if not request_set[method] then
-        request_set[method] = true
-        if not method:find('documentHighlight') then
-          result[#result + 1] = string.format("cancelling %s", string.sub(method, string.find(method, '/')+1))
+          result[#result + 1] = string.format("%s %s", type == 'pending' and 'requesting' or 'cancelling', string.sub(method, string.find(method, '/')+1))
         end
       end
     end
@@ -183,7 +175,7 @@ end
 
 function M.setup()
   autocmd('lsp_status', {
-    [[User LspRequestChange lua require('lsp_status').update_requests()]],
+    [[User LspRequest lua require('lsp_status').update_requests()]],
     [[User LspProgressUpdate lua require('lsp_status').update_progress()]],
   })
 end
