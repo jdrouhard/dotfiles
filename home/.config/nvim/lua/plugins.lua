@@ -1,10 +1,7 @@
 local fn = vim.fn
-local utils = require('utils')
-local autocmd = utils.autocmd
-local map = utils.map
 local packer = nil
 
-local use_builtin_lsp = false
+local use_builtin_lsp = true
 
 local function init()
     if packer == nil then
@@ -27,9 +24,9 @@ local function init()
 
     use 'EdenEast/nightfox.nvim'
     use 'bluz71/vim-nightfly-guicolors'
+    use 'bluz71/vim-moonfly-colors'
     use 'folke/tokyonight.nvim'
     use 'mhartington/oceanic-next'
-    --'bluz71/vim-moonfly-colors',
     --'joshdick/onedark.vim',
     --'morhetz/gruvbox',
 
@@ -131,7 +128,11 @@ local function init()
         wants = 'plenary.nvim',
         event = 'BufRead',
         config = function()
+            local autocmd = require('utils').autocmd
             require('gitsigns').setup{ current_line_blame = true }
+            vim.schedule_wrap(function()
+              autocmd('gitsigns_update', [[BufWinEnter * lua require('gitsigns').refresh()]])
+            end)
         end
     }
 
@@ -162,10 +163,11 @@ local function init()
     }
 
     use {
-        'shadmansaleh/lualine.nvim',
+        'nvim-lualine/lualine.nvim',
         requires = {
             'kyazdani42/nvim-web-devicons',
-            'folke/tokyonight.nvim'
+            'folke/tokyonight.nvim',
+            'lewis6991/gitsigns.nvim',
         },
         config = [[require('config.lualine')]]
     }
@@ -176,7 +178,12 @@ local function init()
         config = [[require('config.bufferline')]],
     }
 
-    use 'antoinemadec/FixCursorHold.nvim'
+    use {
+      'antoinemadec/FixCursorHold.nvim',
+      setup = function()
+        vim.g.cursorhold_updatetime = 100
+      end
+    }
 
     use {
         'neoclide/coc.nvim',
@@ -199,6 +206,7 @@ local function init()
         requires = {
             'L3MON4D3/LuaSnip',
             'hrsh7th/cmp-nvim-lsp',
+            'onsails/lspkind-nvim',
             { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
             { 'hrsh7th/cmp-path', after = 'nvim-cmp' },
             { 'hrsh7th/cmp-nvim-lua', after = 'nvim-cmp' },

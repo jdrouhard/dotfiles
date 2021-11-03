@@ -11,7 +11,7 @@ local map = utils.map
 g.mapleader = [[ ]]
 
 opt.ttimeoutlen   = 0
-opt.updatetime    = 100
+opt.updatetime    = 1000
 opt.undofile      = true
 opt.wildignore    = "*.o,*.obj,*.dwo"
 opt.path          = vim.env.PWD .. '/**'

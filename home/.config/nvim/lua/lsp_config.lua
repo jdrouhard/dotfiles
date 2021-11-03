@@ -1,6 +1,7 @@
 local cmd = vim.cmd
 local utils = require('utils')
 local buf_map = utils.buf_map
+local lspconfig = require('lspconfig')
 local lsp_status = require('lsp_status')
 local lsp_clangd_ext = require('lsp_clangd_ext')
 
@@ -35,16 +36,32 @@ local function on_attach(client)
         buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
     end
 
-    cmd 'augroup lsp_aucmds'
+    cmd [[augroup lsp_aucmds]]
     if client.resolved_capabilities.document_highlight then
-        cmd 'au CursorHold <buffer> lua vim.lsp.buf.document_highlight()'
-        cmd 'au CursorMoved <buffer> lua vim.lsp.buf.clear_references()'
+        cmd [[au CursorHold <buffer> lua vim.lsp.buf.document_highlight()]]
+        cmd [[au CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+    end
+    if client.resolved_capabilities.semantic_tokens_full then
+        cmd [[au BufEnter,CursorHold,InsertLeave <buffer> lua require'vim.lsp.semantic_tokens'.refresh()]]
     end
     cmd [[au CursorMoved <buffer> lua require('utils').lsp_cancel_pending_requests()]]
 
     --cmd 'au CursorHold,CursorHoldI <buffer> lua require"nvim-lightbulb".update_lightbulb {sign = {enabled = false}, virtual_text = {enabled = true, text = ""}, float = {enabled = false, text = "", win_opts = {winblend = 100, anchor = "NE"}}}'
     cmd 'augroup END'
 end
+
+lsp_status.setup()
+
+local servers = {
+  clangd = {
+    cmd = { 'clangd', '--header-insertion=never' },
+    handlers = lsp_clangd_ext.handlers,
+    init_options = {
+        clangdFileStatus = true
+    },
+  },
+  jedi_language_server = {},
+}
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -53,14 +70,12 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 }
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
-lsp_status.setup()
-
-require('lspconfig').clangd.setup {
-    cmd = { 'clangd', '--header-insertion=never' },
-    on_attach = on_attach,
-    handlers = lsp_clangd_ext.handlers,
-    init_options = {
-        clangdFileStatus = true
-    },
-    capabilities = capabilities,
-}
+for client, config in pairs(servers) do
+  config.on_attach = on_attach
+  config.capabilities = vim.tbl_deep_extend(
+    'keep',
+    config.capabilities or {},
+    capabilities
+  )
+  lspconfig[client].setup(config)
+end

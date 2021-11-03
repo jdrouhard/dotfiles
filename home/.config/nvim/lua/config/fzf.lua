@@ -26,6 +26,7 @@ require('fzf-lua').setup {
         rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
         --rg_opts = "--hidden --column --line-number --no-heading " ..
                   --"--color=always --smart-case -g '!{.git,node_modules}/*'",
+        no_esc = true,
     },
     files = {
         cmd = [[rg --files --hidden -g '!{.git,node_modules}/*']],

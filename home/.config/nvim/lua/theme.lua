@@ -23,6 +23,21 @@ function M.apply_highlights()
     cmd [[hi! link CocWarningHighlight LspDiagnosticsUnderlineWarning]]
     cmd [[hi! link CocInfoHighlight LspDiagnosticsUnderlineInformation]]
     cmd [[hi! link CocHintHighlight LspDiagnosticsUnderlineHint]]
+
+    cmd [[hi! link LspClass TSType]]
+    cmd [[hi! link LspComment TSComment]]
+    cmd [[hi! link LspEnum TSType]]
+    cmd [[hi! link LspEnumMember TSConstant]]
+    cmd [[hi! link LspFunction TSFunction]]
+    cmd [[hi! link LspMacro TSMacro]]
+    cmd [[hi! link LspMethod TSFunction]]
+    cmd [[hi! link LspNamespace TSNamespace]]
+    cmd [[hi! link LspParameter TSParameter]]
+    cmd [[hi! link LspProperty TSProperty]]
+    cmd [[hi! link LspType TSType]]
+    cmd [[hi! link LspTypeParameter TSType]]
+
+    cmd [[hi! LspDeprecated term=strikethrough cterm=strikethrough gui=strikethrough]]
 end
 
 function M.setup()

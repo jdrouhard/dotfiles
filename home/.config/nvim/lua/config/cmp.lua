@@ -1,6 +1,10 @@
+local api = vim.api
 local cmp = require 'cmp'
---local lspkind = require 'lspkind'
+local lspkind = require 'lspkind'
 local luasnip = require 'luasnip'
+
+api.nvim_del_keymap('i', '<tab>')
+api.nvim_del_keymap('i', '<s-tab>')
 
 local function check_backspace()
     local col = vim.fn.col('.') - 1
@@ -20,12 +24,15 @@ cmp.setup {
             luasnip.lsp_expand(args.body)
         end,
     },
-    --formatting = {
-        --format = function(_, vim_item)
-            --vim_item.kind = lspkind.presets.default[vm_item.kind] .. ' ' .. vim_item.kind
-            --return vim_item
-        --end,
-    --},
+    formatting = {
+        format = lspkind.cmp_format({ with_text = true, menu = ({
+            buffer = "[Buffer]",
+            nvim_lsp = "[LSP]",
+            luasnip = "[LuaSnip]",
+            nvim_lua = "[Lua]",
+            path = "[Path]",
+        })}),
+    },
     mapping = {
         ['<cr>'] = cmp.mapping.confirm(),
         ['<tab>'] = cmp.mapping(function(fallback)
@@ -38,10 +45,7 @@ cmp.setup {
             else
                 fallback()
             end
-        end, {
-            'i',
-            's',
-        }),
+        end, { 'i', 's' }),
         ['<s-tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
@@ -50,10 +54,7 @@ cmp.setup {
             else
                 fallback()
             end
-        end, {
-            'i',
-            's',
-        }),
+        end, { 'i', 's' }),
     },
     sources = {
         { name = 'buffer' },
