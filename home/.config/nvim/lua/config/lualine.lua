@@ -22,10 +22,6 @@ local function coc_status()
     return status:gsub("%%", "%%%1")
 end
 
-local function lsp_status()
-    return require('lsp_status').statusline()
-end
-
 local function tag_name()
     local success, val = pcall(fn['nvim_treesitter#statusline'], 45)
     if success then
@@ -37,7 +33,7 @@ end
 
 --table.insert(sections.lualine_b, 1, { 'diff', colored = false })
 sections.lualine_b = { git_info, { 'diagnostics', sources = { 'nvim_diagnostic', 'coc' } } }
-sections.lualine_c = { { 'filename', path = 1 }, coc_status, lsp_status }
+sections.lualine_c = { { 'filename', path = 1 }, coc_status, 'g:lsp_status' }
 table.insert(sections.lualine_x, 1, tag_name)
 
 require('lualine').setup{

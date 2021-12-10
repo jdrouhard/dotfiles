@@ -1,3 +1,4 @@
+local g = vim.g
 local lsp_util = require('vim.lsp.util')
 local utils = require('utils')
 local autocmd = utils.autocmd
@@ -10,6 +11,8 @@ local requests_cache = nil
 local active_requests = {}
 local debouncing_requests = {}
 
+local ignore_methods = {'documentHighlight', 'semanticTokens', 'codeAction'}
+
 local M = {}
 
 local function update_timer()
@@ -18,12 +21,13 @@ local function update_timer()
     status_timer = vim.loop.new_timer()
     status_timer:start(100, 100, vim.schedule_wrap(function()
       index = (index + 1) % #spinner_frames
-      vim.api.nvim_command('redrawstatus')
+      g.lsp_status = M.statusline()
     end))
   elseif status_timer ~= nil and not need_timer then
     status_timer:close()
     status_timer = nil
   end
+  g.lsp_status = M.statusline()
 end
 
 function M.invalidate_requests()
@@ -95,7 +99,15 @@ function M.update_requests()
         active_requests[id] = nil
       elseif not request_set[type][method] then
         request_set[type][method] = true
-        if not method:find('documentHighlight') then
+        ignore = false
+        for _, i in ipairs(ignore_methods) do
+          if method:find(i) then
+            ignore = true
+            break
+          end
+        end
+
+        if not ignore then
           result[#result + 1] = string.format("%s %s", type == 'pending' and 'requesting' or 'cancelling', string.sub(method, string.find(method, '/')+1))
         end
       end

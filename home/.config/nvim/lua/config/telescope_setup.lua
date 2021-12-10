@@ -17,6 +17,8 @@ map('n', '<leader>gl',  '<cmd>Telescope git_commits<CR>')
 map('n', '<leader>gbl', '<cmd>Telescope git_bcommits<CR>')
 map('n', '<leader>qf',  '<cmd>Telescope quickfix<CR>')
 
+map('n', 'gr',          '<cmd>Telescope coc references<CR>')
+
 vim.g.coc_enable_locationlist = false
 
 vim.cmd[[

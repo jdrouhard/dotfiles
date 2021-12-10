@@ -14,9 +14,9 @@ end
 local feedkeys = vim.fn.feedkeys
 local pumvisible = vim.fn.pumvisible
 local replace_termcodes = vim.api.nvim_replace_termcodes
-local backspace_keys = replace_termcodes('<tab>', true, true, true)
-local snippet_next_keys = replace_termcodes('<plug>luasnip-expand-or-jump', true, true, true)
-local snippet_prev_keys = replace_termcodes('<plug>luasnip-jump-prev', true, true, true)
+local backspace_keys = replace_termcodes('<Tab>', true, true, true)
+local snippet_next_keys = replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true)
+local snippet_prev_keys = replace_termcodes('<Plug>luasnip-jump-prev', true, true, true)
 
 cmp.setup {
     snippet = {
@@ -34,8 +34,8 @@ cmp.setup {
         })}),
     },
     mapping = {
-        ['<cr>'] = cmp.mapping.confirm(),
-        ['<tab>'] = cmp.mapping(function(fallback)
+        ['<CR>'] = cmp.mapping.confirm(),
+        ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
@@ -46,7 +46,7 @@ cmp.setup {
                 fallback()
             end
         end, { 'i', 's' }),
-        ['<s-tab>'] = cmp.mapping(function(fallback)
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then

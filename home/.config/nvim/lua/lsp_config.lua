@@ -46,11 +46,12 @@ local function on_attach(client)
     end
     cmd [[au CursorMoved <buffer> lua require('utils').lsp_cancel_pending_requests()]]
 
-    --cmd 'au CursorHold,CursorHoldI <buffer> lua require"nvim-lightbulb".update_lightbulb {sign = {enabled = false}, virtual_text = {enabled = true, text = ""}, float = {enabled = false, text = "", win_opts = {winblend = 100, anchor = "NE"}}}'
-    cmd 'augroup END'
+    cmd [[au CursorHold,CursorHoldI <buffer> lua require('nvim-lightbulb').update_lightbulb() ]]
+    cmd [[augroup END]]
 end
 
 lsp_status.setup()
+vim.fn.sign_define('LightBulbSign', { text = "", texthl = "LspDiagnosticsDefaultInformation", linehl="", numhl="" })
 
 local servers = {
   clangd = {

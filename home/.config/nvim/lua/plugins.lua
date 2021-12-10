@@ -121,6 +121,7 @@ local function init()
             map('n', '<leader>gd', '<cmd>Gdiff<CR>')
         end
     }
+    use { 'tpope/vim-repeat' }
 
     use {
         'lewis6991/gitsigns.nvim',
@@ -139,6 +140,12 @@ local function init()
     use {
         'scrooloose/nerdcommenter',
         event = 'BufRead',
+    }
+
+    use {
+        'ggandor/lightspeed.nvim',
+        event = 'BufRead',
+        requires = 'tpope/vim-repeat'
     }
 
     use {
@@ -214,6 +221,11 @@ local function init()
         },
         config = [[require('config.cmp')]],
         event = 'InsertEnter *',
+    }
+
+    use {
+        'kosayoda/nvim-lightbulb',
+        event = 'BufRead'
     }
 
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime', config = [[vim.g.startuptime_tries = 10]] }
