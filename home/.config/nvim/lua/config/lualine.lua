@@ -36,7 +36,7 @@ end
 
 
 --table.insert(sections.lualine_b, 1, { 'diff', colored = false })
-sections.lualine_b = { git_info, { 'diagnostics', sources = { 'nvim_lsp', 'coc' } } }
+sections.lualine_b = { git_info, { 'diagnostics', sources = { 'nvim_diagnostic', 'coc' } } }
 sections.lualine_c = { { 'filename', path = 1 }, coc_status, lsp_status }
 table.insert(sections.lualine_x, 1, tag_name)
 
