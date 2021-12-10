@@ -16,8 +16,8 @@ set mime_forward_rest=yes
 set sort = threads
 set sort_browser = date
 set sort_aux = reverse-last-date-received
-set header_cache = "~/.mutt/cache/headers"
-set message_cachedir = "~/.mutt/cache/bodies"
+set header_cache = `mkdir -p $HOME/.mutt/cache; echo $HOME/.mutt/cache/headers`
+set message_cachedir = `mkdir -p $HOME/.mutt/cache; echo $HOME/.mutt/cache/bodies`
 
 set date_format = "%a %Y-%m-%d %H:%M:%S"
 set index_format = "%4C %Z %D %-15.15L (%?l?%4l&%4c?) %s"
@@ -43,7 +43,8 @@ set sidebar_visible=yes
 set sidebar_folder_indent=yes
 set sidebar_short_path=yes
 set sidebar_format='%B%?F? [%F]?%* %?N?%N/?%S'
-set sidebar_sort_method = alpha
+#set sidebar_sort_method = alpha
+set sidebar_sort_method = unsorted
 
 bind index,pager \Ch sidebar-prev
 bind index,pager \Cl sidebar-next
@@ -72,6 +73,7 @@ bind index,pager L list-reply
 
 bind index,pager <F1> help
 
+bind index g noop
 bind index j next-entry
 bind index k previous-entry
 bind index J next-thread
@@ -79,6 +81,7 @@ bind index K previous-thread
 bind index gg first-entry
 bind index G last-entry
 
+bind pager g noop
 bind pager j next-line
 bind pager k previous-line
 bind pager <down> next-line
