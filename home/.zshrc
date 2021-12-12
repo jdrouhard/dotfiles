@@ -55,6 +55,7 @@ done
 # aliases
 alias sudo="/usr/bin/sudo -E"
 alias which="builtin which"
+alias glom="git log HEAD..origin/\$(git_main_branch)"
 
 # set some history options
 setopt append_history
