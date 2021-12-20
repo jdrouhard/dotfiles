@@ -138,8 +138,9 @@ local function init()
     }
 
     use {
-        'scrooloose/nerdcommenter',
+        'numToStr/Comment.nvim',
         event = 'BufRead',
+        config = [[require('Comment').setup()]]
     }
 
     use {
@@ -164,7 +165,10 @@ local function init()
 
     use {
         'nvim-treesitter/nvim-treesitter',
-        requires = 'nvim-treesitter/playground',
+        requires = {
+          'nvim-treesitter/playground',
+          'nvim-treesitter/nvim-treesitter-textobjects',
+        },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
     }
