@@ -47,22 +47,11 @@ local function init()
     }
 
     use {
-        {
-            'ibhagwan/fzf-lua',
-            requires = {
-                'nvim-fzf',
-                'plenary.nvim',
-                'kyazdani42/nvim-web-devicons'
-            },
-            wants = {'nvim-fzf', 'plenary.nvim' },
-            cmd = { 'FzfLua', 'FzfCocLocations' },
-            setup = [[require('config.fzf_setup')]],
-            config = [[require('config.fzf')]],
-        },
-        {
-            'vijaymarupudi/nvim-fzf',
-            after = 'fzf-lua'
-        }
+        'ibhagwan/fzf-lua',
+        requires = 'kyazdani42/nvim-web-devicons',
+        cmd = { 'FzfLua', 'FzfCocLocations' },
+        setup = [[require('config.fzf_setup')]],
+        config = [[require('config.fzf')]],
     }
 
     use {

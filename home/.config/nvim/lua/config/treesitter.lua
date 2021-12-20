@@ -28,8 +28,7 @@ require('nvim-treesitter.configs').setup {
     },
   },
   playground = {
-    enable = false,
-    disable = {},
+    enable = true,
     updatetime = 25, -- debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- whether the query persists across vim sessions
   }
