@@ -129,7 +129,7 @@ local function init()
     use {
         'numToStr/Comment.nvim',
         event = 'BufRead',
-        config = [[require('Comment').setup()]]
+        config = [[require('config.comment')]]
     }
 
     use {
