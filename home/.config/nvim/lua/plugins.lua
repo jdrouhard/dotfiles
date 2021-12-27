@@ -1,16 +1,20 @@
 local fn = vim.fn
 local packer = nil
 
+local packer_repo = 'https://github.com/wbthomason/packer.nvim'
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local compile_path = fn.stdpath('data') .. '/site/lua/packer_compiled.lua'
+
 local use_builtin_lsp = true
 
 local function init()
-    if packer == nil then
-        packer = require('packer')
-        packer.init {
-            compile_path = vim.fn.stdpath('data') .. '/site/lua/packer_compiled.lua',
-            disable_commands = true,
-            display = { open_cmd = 'vnew \\[packer\\]' },
-        }
+    if not packer then
+      packer = require('packer')
+      packer.init {
+        compile_path = compile_path,
+        disable_commands = true,
+        display = { open_cmd = 'vnew \\[packer\\]' },
+      }
     end
 
     local use = packer.use
@@ -134,7 +138,7 @@ local function init()
 
     use {
         'ggandor/lightspeed.nvim',
-        event = 'BufRead',
+        keys = { "s", "S", "t", "T", "f", "F" },
         requires = 'tpope/vim-repeat'
     }
 
@@ -155,8 +159,8 @@ local function init()
     use {
         'nvim-treesitter/nvim-treesitter',
         requires = {
-          'nvim-treesitter/playground',
-          'nvim-treesitter/nvim-treesitter-textobjects',
+          { 'nvim-treesitter/playground', after = 'nvim-treesitter' },
+          { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
         },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
@@ -226,10 +230,37 @@ local function init()
 end
 
 local plugins = setmetatable({}, {
-    __index = function(_, key)
-        init()
-        return packer[key]
-    end,
+  __index = function(_, key)
+    init()
+    return packer[key]
+  end,
 })
+
+function plugins.bootstrap()
+  local autocmd = require('utils').autocmd
+  local api = vim.api
+  local cmd = vim.cmd
+
+  if fn.empty(fn.glob(install_path)) > 0 then
+    api.nvim_echo({{'Installing packer.nvim', 'Type'}}, true, {})
+    fn.system({'git', 'clone', packer_repo, install_path})
+    api.nvim_command('packadd packer.nvim')
+    autocmd('bootstrap', [[User PackerComplete ++once ++nested luafile $MYVIMRC]])
+    plugins.sync()
+  else
+    require('packer_compiled')
+
+    cmd [[command! PackerInstall           lua require('plugins').install()]]
+    cmd [[command! PackerUpdate            lua require('plugins').update()]]
+    cmd [[command! PackerSync              lua require('plugins').sync()]]
+    cmd [[command! PackerClean             lua require('plugins').clean()]]
+    cmd [[command! -nargs=* PackerCompile  lua require('plugins').compile(<q-args>)]]
+    cmd [[command! PackerStatus            lua require('plugins').status()]]
+    cmd [[command! PackerProfile           lua require('plugins').profile_output()]]
+    cmd [[command! -nargs=+ -complete=customlist,v:lua.require('plugins').loader_complete PackerLoad lua require('plugins').loader(<q-args>)]]
+
+    autocmd('plugin_reload', [[BufWritePost plugins.lua source <afile> | execute "lua package.loaded['plugins'] = nil" | PackerCompile]])
+  end
+end
 
 return plugins

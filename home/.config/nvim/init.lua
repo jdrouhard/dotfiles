@@ -99,7 +99,7 @@ if fn.filereadable(local_init) > 0 then
   cmd('luafile ' .. local_init)
 end
 
-require('plugin_bootstrap')
+require('plugins').bootstrap()
 require('theme').setup()
 
 local disabled_builtins = {
