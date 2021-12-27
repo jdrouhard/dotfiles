@@ -23,9 +23,9 @@ local function coc_status()
 end
 
 local function tag_name()
-    local success, val = pcall(fn['nvim_treesitter#statusline'], 45)
-    if success then
-        return val
+    local success, gps = pcall(require, 'nvim-gps')
+    if success and gps.is_available() then
+        return gps.get_location()
     end
     return fn['Tlist_Get_Tagname_By_Line']()
 end

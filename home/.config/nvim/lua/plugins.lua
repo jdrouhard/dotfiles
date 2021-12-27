@@ -172,8 +172,16 @@ local function init()
             'kyazdani42/nvim-web-devicons',
             'folke/tokyonight.nvim',
             'lewis6991/gitsigns.nvim',
+            'SmiteshP/nvim-gps',
         },
         config = [[require('config.lualine')]]
+    }
+
+    use {
+        'SmiteshP/nvim-gps',
+        requires = 'nvim-treesitter/nvim-treesitter',
+        after = 'nvim-treesitter',
+        config = [[require('nvim-gps').setup()]]
     }
 
     use {
