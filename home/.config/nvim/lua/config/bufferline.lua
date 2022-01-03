@@ -12,6 +12,6 @@ require('bufferline').setup {
     },
 }
 
-map('n', 'gb', '<cmd>BufferLinePick<cr>')
+map('n', '<leader>b', '<cmd>BufferLinePick<cr>')
 map('n', '<c-h>', '<cmd>BufferLineCyclePrev<cr>')
 map('n', '<c-l>', '<cmd>BufferLineCycleNext<cr>')

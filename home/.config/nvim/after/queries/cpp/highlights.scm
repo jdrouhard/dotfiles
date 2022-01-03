@@ -3,12 +3,6 @@
 (auto) @type
 
 [
- ;"friend"
- ;"namespace"
- "thread_local"
-] @keyword
-
-[
  "class"
  "struct"
  "union"

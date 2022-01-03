@@ -61,7 +61,6 @@ g.alternateNoDefaultAlternate = true
 
 map('n', '<c-h>',      '<cmd>bprevious<CR>')
 map('n', '<c-l>',      '<cmd>bnext<CR>')
-map('',  '<leader>bd', '<cmd>bdelete!<CR>', { silent = true, nowait = true })
 map('',  '<c-q>',      '<cmd>bdelete!<CR>', { silent = true, nowait = true })
 map('',  '<leader>w',  '<c-w>')
 map('',  '<F4>',       '<cmd>A<CR>')

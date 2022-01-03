@@ -91,7 +91,10 @@ function M.update_requests()
         end)
       end
     end
-    local request_set = { ['pending'] = {}, ['cancel'] = {} }
+    local request_set = {
+      pending = {},
+      cancel = {},
+    }
     for id, request in pairs(active_requests) do
       local type = request.type
       local method = request.method

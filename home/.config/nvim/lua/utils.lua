@@ -28,6 +28,12 @@ function M.buf_map(modes, lhs, rhs, opts)
   for _, mode in ipairs(modes) do buf_map_key(0, mode, lhs, rhs, opts) end
 end
 
+function M.wrap_rtl_text(text)
+  local lri = '⁦'
+  local pdi = '⁩'
+  return lri .. text .. pdi
+end
+
 function M.lsp_cancel_pending_requests(bufnr)
   vim.schedule(function()
     bufnr = (bufnr == nil or bufnr == 0) and vim.api.nvim_get_current_buf() or bufnr

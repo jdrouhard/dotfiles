@@ -144,10 +144,12 @@ local function init()
 
     use {
         'kyazdani42/nvim-web-devicons',
-        config = function() require('nvim-web-devicons').setup({
+        config = function()
+          local utils = require('utils')
+          require('nvim-web-devicons').setup({
             override = {
                 ["tex"] = {
-                    icon = '⁦'.. 'ﭨ' .. '⁩',
+                    icon = utils.wrap_rtl_text('ﭨ'),
                     color = "#3D6117",
                     name = "Tex"
                 }
@@ -162,6 +164,8 @@ local function init()
           { 'nvim-treesitter/playground', after = 'nvim-treesitter' },
           { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
         },
+        event = 'BufRead',
+        ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query' },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
     }
@@ -181,7 +185,14 @@ local function init()
         'SmiteshP/nvim-gps',
         requires = 'nvim-treesitter/nvim-treesitter',
         after = 'nvim-treesitter',
-        config = [[require('nvim-gps').setup()]]
+        config = function()
+          local utils = require('utils')
+          require('nvim-gps').setup {
+          icons = {
+            ["container-name"] = utils.wrap_rtl_text('ﮅ '),
+          }
+        }
+        end
     }
 
     use {
@@ -199,7 +210,7 @@ local function init()
 
     use {
         'neoclide/coc.nvim',
-        opt = use_builtin_lsp,
+        cond = not use_builtin_lsp,
         branch = 'release',
         setup = function()
             vim.g.coc_default_semantic_highlight_groups = true
@@ -209,7 +220,7 @@ local function init()
 
     use {
         'neovim/nvim-lspconfig',
-        opt = not use_builtin_lsp,
+        cond = use_builtin_lsp,
         config = [[require('lsp_config')]]
     }
 
