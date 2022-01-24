@@ -1,8 +1,8 @@
 require('fzf-lua').setup {
     fzf_layout = 'default',
     winopts = {
-        --win_height = 0.6,
-        win_width = 0.9,
+        --height = 0.6,
+        width = 0.9,
         hl_border = 'FloatBorder',
     },
     keymap = {

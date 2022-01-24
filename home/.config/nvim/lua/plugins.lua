@@ -114,20 +114,26 @@ local function init()
             map('n', '<leader>gd', '<cmd>Gdiff<CR>')
         end
     }
-    use { 'tpope/vim-repeat' }
+    use 'tpope/vim-repeat'
+
+    use {
+      'haya14busa/vim-asterisk',
+      config = function()
+        local map = require('utils').map
+        vim.g['asterisk#keeppos'] = true
+        map({'n', 'x'}, '*',  '<plug>(asterisk-z*)',  { noremap = false })
+        map({'n', 'x'}, '#',  '<plug>(asterisk-z#)',  { noremap = false })
+        map({'n', 'x'}, 'g*', '<plug>(asterisk-gz*)', { noremap = false })
+        map({'n', 'x'}, 'g#', '<plug>(asterisk-gz#)', { noremap = false })
+      end
+    }
 
     use {
         'lewis6991/gitsigns.nvim',
         requires = 'plenary.nvim',
         wants = 'plenary.nvim',
         event = 'BufRead',
-        config = function()
-            local autocmd = require('utils').autocmd
-            require('gitsigns').setup{ current_line_blame = true }
-            vim.schedule_wrap(function()
-              autocmd('gitsigns_update', [[BufWinEnter * lua require('gitsigns').refresh()]])
-            end)
-        end
+        config = [[require('config.gitsigns')]]
     }
 
     use {
@@ -188,17 +194,28 @@ local function init()
         config = function()
           local utils = require('utils')
           require('nvim-gps').setup {
-          icons = {
-            ["container-name"] = utils.wrap_rtl_text('ﮅ '),
+            icons = {
+              ["container-name"] = utils.wrap_rtl_text('ﮅ '),
+            }
           }
-        }
-        end
+        end,
     }
 
     use {
         'akinsho/nvim-bufferline.lua',
         requires = 'kyazdani42/nvim-web-devicons',
         config = [[require('config.bufferline')]],
+    }
+
+    use {
+      'stevearc/dressing.nvim',
+      config = function()
+        require('dressing').setup {
+          select = {
+            backend = 'fzf_lua',
+          },
+        }
+      end,
     }
 
     use {
