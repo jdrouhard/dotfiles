@@ -42,16 +42,21 @@ function M.locations(opts)
     opts = config.normalize_opts(opts, config.globals.lsp)
     if not opts.cwd then opts.cwd = vim.loop.cwd() end
     if not opts.prompt then
-        opts.prompt = opts.lsp_handler.label .. cfg.prompt
+        opts.prompt = 'CocLocations' .. (opts.prompt_postfix or '')
     end
     opts = core.set_fzf_line_args(opts)
 
-    local locations = vim.lsp.util.locations_to_items(vim.g.coc_jump_locations)
+    local locations = vim.lsp.util.locations_to_items(vim.g.coc_jump_locations, 'utf-8')
     local entries = {}
     for _, entry in ipairs(locations) do
+      if not opts.current_buffer_only or
+        vim.api.nvim_buf_get_name(opts.bufnr) == entry.filename then
         entry = core.make_entry_lcol(opts, entry)
         entry = core.make_entry_file(opts, entry)
-        entries[#entries+1] = entry
+        if entry then
+          entries[#entries+1] = entry
+        end
+      end
     end
 
     opts.fzf_fn = entries

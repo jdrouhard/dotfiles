@@ -1,4 +1,5 @@
 {
     "http.proxyStrictSSL": false,
-    "clangd.arguments": ["--header-insertion=never"]
+    "clangd.arguments": ["--header-insertion=never"],
+    "semanticTokens.filetypes": ["*"]
 }

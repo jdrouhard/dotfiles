@@ -170,7 +170,7 @@ local function init()
           { 'nvim-treesitter/playground', after = 'nvim-treesitter' },
           { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
         },
-        event = 'BufRead',
+        --event = 'BufRead',
         ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query' },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
@@ -229,9 +229,7 @@ local function init()
         'neoclide/coc.nvim',
         cond = not use_builtin_lsp,
         branch = 'release',
-        setup = function()
-            vim.g.coc_default_semantic_highlight_groups = true
-        end,
+        ft = { 'cpp', 'c', 'python', 'cmake', 'json' },
         config = [[require('config.coc')]]
     }
 

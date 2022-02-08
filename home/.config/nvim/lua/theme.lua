@@ -8,36 +8,45 @@ local M = {}
 M.theme = 'tokyonight'
 M.lualine_theme = 'tokyonight'
 
+local function lsp_highlights(prefix)
+  local hl_map = {
+    Class         = 'TSType',
+    Comment       = 'TSComment',
+    Enum          = 'TSType',
+    EnumMember    = 'TSConstant',
+    Function      = 'TSFunction',
+    Macro         = 'TSMacro',
+    Method        = 'TSFunction',
+    Namespace     = 'TSNamespace',
+    Parameter     = 'TSParameter',
+    Property      = 'TSProperty',
+    Type          = 'TSType',
+    TypeParameter = 'TSType',
+    Variable      = 'TSVariable',
+    Deprecated    = 'TSStrike',
+  }
+
+  for name, hl in pairs(hl_map) do
+    cmd(string.format('hi! link %s%s %s', prefix, name, hl))
+  end
+end
+
 function M.apply_highlights()
     cmd [[hi! link TSKeywordAccess Statement]]
     cmd [[hi! link TSStatement Statement]]
     cmd [[hi! link TSStorageClass StorageClass]]
     cmd [[hi! link TSStructure Keyword]]
 
-    cmd [[hi! link CocSem_variable TSVariable]]
-    cmd [[hi! link CocSem_parameter TSParameter]]
-    cmd [[hi! link CocSem_property TSProperty]]
-    cmd [[hi! link CocSem_namespace TSNamespace]]
+    lsp_highlights('CocSem')
+    lsp_highlights('Lsp')
 
-    cmd [[hi! link CocErrorHighlight LspDiagnosticsUnderlineError]]
-    cmd [[hi! link CocWarningHighlight LspDiagnosticsUnderlineWarning]]
-    cmd [[hi! link CocInfoHighlight LspDiagnosticsUnderlineInformation]]
-    cmd [[hi! link CocHintHighlight LspDiagnosticsUnderlineHint]]
-
-    cmd [[hi! link LspClass TSType]]
-    cmd [[hi! link LspComment TSComment]]
-    cmd [[hi! link LspEnum TSType]]
-    cmd [[hi! link LspEnumMember TSConstant]]
-    cmd [[hi! link LspFunction TSFunction]]
-    cmd [[hi! link LspMacro TSMacro]]
-    cmd [[hi! link LspMethod TSFunction]]
-    cmd [[hi! link LspNamespace TSNamespace]]
-    cmd [[hi! link LspParameter TSParameter]]
-    cmd [[hi! link LspProperty TSProperty]]
-    cmd [[hi! link LspType TSType]]
-    cmd [[hi! link LspTypeParameter TSType]]
-
-    cmd [[hi! LspDeprecated term=strikethrough cterm=strikethrough gui=strikethrough]]
+    cmd [[hi! link CocErrorHighlight DiagnosticUnderlineError]]
+    cmd [[hi! link CocWarningHighlight DiagnosticUnderlineWarn]]
+    cmd [[hi! link CocInfoHighlight DiagnosticUnderlineInfo]]
+    cmd [[hi! link CocHintHighlight DiagnosticUnderlineHint]]
+    cmd [[hi! link CocHighlightText LspReferenceText]]
+    cmd [[hi! link CocHighlightRead LspReferenceRead]]
+    cmd [[hi! link CocHighlightWrite LspReferenceWrite]]
 end
 
 function M.setup()

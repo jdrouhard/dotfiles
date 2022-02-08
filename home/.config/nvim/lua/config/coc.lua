@@ -6,13 +6,16 @@ local cmd = vim.cmd
 
 local opts = { silent = true, noremap = false }
 
-map('n', '<leader>jd', '<plug>(coc-definition)', opts)
 map('n', 'gD',         '<plug>(coc-declaration)', opts)
 map('n', 'gd',         '<plug>(coc-definition)', opts)
 map('n', 'gi',         '<plug>(coc-implementation)', opts)
+map('n', 'gTD',        '<plug>(coc-type-definition)', opts)
+map('n', '<leader>rn', '<plug>(coc-rename)', opts)
 map('n', 'gr',         '<plug>(coc-references)', opts)
 map('n', 'K',          "<cmd>call CocActionAsync('definitionHover')<CR>")
-map('n', '<leader>ac', '<cmd>CocAction<CR>')
+map('n', '<leader>ac', '<plug>(coc-codeaction-cursor)', opts)
+map('n', ']e',         '<plug>(coc-diagnostic-next)', opts)
+map('n', '[e',         '<plug>(coc-diagnostic-prev)', opts)
 
 map({'x', 'o'}, 'if',    '<plug>(coc-funcobj-i)', opts)
 map({'x', 'o'}, 'ic',    '<plug>(coc-classobj-i)', opts)
