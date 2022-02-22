@@ -35,6 +35,8 @@
  "const"
  "mutable"
  "constexpr"
+ "constinit"
+ "consteval"
  "thread_local"
 ] @storageclass
 

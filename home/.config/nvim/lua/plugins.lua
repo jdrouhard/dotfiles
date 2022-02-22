@@ -192,12 +192,7 @@ local function init()
         requires = 'nvim-treesitter/nvim-treesitter',
         after = 'nvim-treesitter',
         config = function()
-          local utils = require('utils')
-          require('nvim-gps').setup {
-            icons = {
-              ["container-name"] = utils.wrap_rtl_text('ﮅ '),
-            }
-          }
+          require('nvim-gps').setup()
         end,
     }
 
@@ -236,7 +231,8 @@ local function init()
     use {
         'neovim/nvim-lspconfig',
         cond = use_builtin_lsp,
-        config = [[require('lsp_config')]]
+        config = [[require('lsp_config')]],
+        ft = { 'cpp', 'c', 'python', 'lua' },
     }
 
     use {
@@ -265,7 +261,9 @@ end
 
 local plugins = setmetatable({}, {
   __index = function(_, key)
-    init()
+    if not packer then
+      init()
+    end
     return packer[key]
   end,
 })
