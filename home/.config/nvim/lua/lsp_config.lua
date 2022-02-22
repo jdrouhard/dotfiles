@@ -51,6 +51,7 @@ local function on_attach(client)
 end
 
 lsp_status.setup()
+require('semantic-tokens').setup()
 vim.fn.sign_define('LightBulbSign', { text = "", texthl = "LspDiagnosticsDefaultInformation", linehl="", numhl="" })
 
 local servers = {

@@ -18,12 +18,15 @@ local function lsp_highlights(prefix)
     Macro         = 'TSMacro',
     Method        = 'TSFunction',
     Namespace     = 'TSNamespace',
-    Parameter     = 'TSParameter',
+    Parameter     = 'TSParameterReference',
     Property      = 'TSProperty',
     Type          = 'TSType',
     TypeParameter = 'TSType',
     Variable      = 'TSVariable',
     Deprecated    = 'TSStrike',
+
+    DeclarationVariable = 'Identifier',
+    DeclarationParameter = 'TSParameter',
   }
 
   for name, hl in pairs(hl_map) do
