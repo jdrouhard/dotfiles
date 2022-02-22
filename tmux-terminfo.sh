@@ -11,7 +11,8 @@ else
         -e 's/%?%p1%t;3%/%?%p1%t;7%/' \
         -e 's/smso=[^,]*,/smso=\\E[7m,/' \
         -e 's/rmso=[^,]*,/rmso=\\E[27m,/' \
-        -e '$s/$/ sitm=\\E[3m, ritm=\\E[23m, Smulx=\\E[4:%p1%dm,/' > /tmp/tmux-256color.terminfo
+        -e '$s/$/ sitm=\\E[3m, ritm=\\E[23m, Smulx=\\E[4:%p1%dm,/' \
+        -e '$s/$/ smxx=\\E[9m, rmxx=\\E[29m,/' > /tmp/tmux-256color.terminfo
 fi
 tic -x /tmp/tmux-256color.terminfo
 rm /tmp/tmux-256color.terminfo
