@@ -47,8 +47,8 @@ local function create_ft_cache()
 end
 
 local function get_highlights(ft, type, modifiers)
-  local prefix = config.config.prefix
-  local priority = config.config.priority
+  local prefix = config.options.prefix
+  local priority = config.options.priority
   local result = {}
 
   local cache = ft_cache[ft]
@@ -71,12 +71,12 @@ end
 
 local M = {}
 
-M.reset = function()
+function M.reset()
   global_cache = create_global_cache()
   ft_cache = create_ft_cache()
 end
 
-M.highlight_token = function(ctx, token)
+function M.highlight_token(ctx, token)
   local line = token.line
 
   local function get_byte_pos(char_pos)
@@ -99,7 +99,7 @@ M.highlight_token = function(ctx, token)
   end
 end
 
-M.invalidate_highlight = function(ctx, line_start, line_end)
+function M.invalidate_highlight(ctx, line_start, line_end)
   api.nvim_buf_clear_namespace(ctx.bufnr, namespace, line_start, line_end)
 end
 

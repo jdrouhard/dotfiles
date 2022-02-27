@@ -1,6 +1,6 @@
 local M = {}
 
-M.format_hl_name = function(prefix, ...)
+function M.format_hl_name(prefix, ...)
   local result = prefix
   for i, piece in ipairs({...}) do
     result = result .. piece:gsub('^%l', string.upper)
@@ -8,7 +8,7 @@ M.format_hl_name = function(prefix, ...)
   return result
 end
 
-M.highlight_exists = function(name)
+function M.highlight_exists(name)
   if not name then return false end
 
   local ok, hl = pcall(vim.api.nvim_get_hl_by_name, name, true)
