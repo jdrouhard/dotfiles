@@ -5,6 +5,11 @@ local lspconfig = require('lspconfig')
 local lsp_status = require('lsp_status')
 local lsp_clangd_ext = require('lsp_clangd_ext')
 
+lsp_status.setup()
+require('semantic-tokens').setup()
+vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl='', numhl='' })
+
+
 local function on_attach(client)
     lsp_status.on_attach()
     --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
@@ -41,7 +46,7 @@ local function on_attach(client)
         cmd [[au CursorHold <buffer> lua vim.lsp.buf.document_highlight()]]
         cmd [[au CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
     end
-    if client.resolved_capabilities.semantic_tokens_full then
+    if fn.has('nvim-0.7') > 0 and client.resolved_capabilities.semantic_tokens_full then
         cmd [[au BufEnter,CursorHold,InsertLeave <buffer> lua require'vim.lsp.semantic_tokens'.refresh()]]
     end
     cmd [[au CursorMoved <buffer> lua require('utils').lsp_cancel_pending_requests()]]
@@ -49,10 +54,6 @@ local function on_attach(client)
     cmd [[au CursorHold,CursorHoldI <buffer> lua require('nvim-lightbulb').update_lightbulb() ]]
     cmd [[augroup END]]
 end
-
-lsp_status.setup()
-require('semantic-tokens').setup()
-vim.fn.sign_define('LightBulbSign', { text = "", texthl = "LspDiagnosticsDefaultInformation", linehl="", numhl="" })
 
 local servers = {
   clangd = {

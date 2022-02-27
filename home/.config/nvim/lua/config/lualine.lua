@@ -1,5 +1,4 @@
 local vim = vim
-local fn = vim.fn
 local b = vim.b
 local g = vim.g
 local lualine_config = require('lualine.config').get_config()
@@ -22,19 +21,19 @@ local function coc_status()
     return status:gsub("%%", "%%%1")
 end
 
-local function tag_name()
+local function bread_crumbs()
     local success, gps = pcall(require, 'nvim-gps')
     if success and gps.is_available() then
         return gps.get_location()
     end
-    return fn['Tlist_Get_Tagname_By_Line']()
+    return nil
 end
 
 
 --table.insert(sections.lualine_b, 1, { 'diff', colored = false })
 sections.lualine_b = { git_info, { 'diagnostics', sources = { 'nvim_diagnostic', 'coc' } } }
 sections.lualine_c = { { 'filename', path = 1 }, coc_status, 'g:lsp_status' }
-table.insert(sections.lualine_x, 1, tag_name)
+table.insert(sections.lualine_x, 1, bread_crumbs)
 
 require('lualine').setup{
     options = {

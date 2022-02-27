@@ -44,6 +44,11 @@ opt.inccommand    = "nosplit"
 opt.list          = true
 opt.listchars     = "tab:▸ ,trail:·"
 
+if fn.has('nvim-0.7') > 0 then
+  g.do_filetype_lua    = 1
+  g.did_load_filetypes = 0
+end
+
 -- editing
 map('i', 'jk', '<ESC>')
 map('n', 'j',  'gj')
@@ -53,15 +58,15 @@ map('',  'Y', 'y$')
 map('v', '<', '<gv')
 map('v', '>', '>gv')
 
-map('i', '<tab>',   'pumvisible() ? "<C-n>" : "<tab>"',   { silent = true, expr = true })
-map('i', '<s-tab>', 'pumvisible() ? "<C-p>" : "<s-tab>"', { silent = true, expr = true })
+map('i', '<tab>',   'pumvisible() ? "<C-n>" : "<tab>"',   { expr = true })
+map('i', '<s-tab>', 'pumvisible() ? "<C-p>" : "<s-tab>"', { expr = true })
 
 -- buffers
 g.alternateNoDefaultAlternate = true
 
 map('n', '<c-h>',      '<cmd>bprevious<CR>')
 map('n', '<c-l>',      '<cmd>bnext<CR>')
-map('',  '<c-q>',      '<cmd>bdelete!<CR>', { silent = true, nowait = true })
+map('',  '<c-q>',      '<cmd>bdelete!<CR>')
 map('',  '<leader>w',  '<c-w>')
 map('',  '<F4>',       '<cmd>A<CR>')
 map('',  '<F5>',       '<cmd>AI<CR>')
@@ -69,8 +74,8 @@ map('',  '<F5>',       '<cmd>AI<CR>')
 -- misc
 local resolved_plugins = fn.resolve(fn.stdpath('config') .. '/lua/plugins.lua')
 map('n', '<leader>m',  '<cmd>make<CR>')
-map('n', '<C-k>',      '<cmd>cp<CR>', { silent = true })
-map('n', '<C-j>',      '<cmd>cn<CR>', { silent = true })
+map('n', '<C-k>',      '<cmd>cp<CR>')
+map('n', '<C-j>',      '<cmd>cn<CR>')
 map('n', '<leader>ev', '<cmd>e $MYVIMRC<CR>')
 map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 

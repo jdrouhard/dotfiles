@@ -4,7 +4,7 @@ local autocmd = utils.autocmd
 local map = utils.map
 local cmd = vim.cmd
 
-local opts = { silent = true, noremap = false }
+local opts = { noremap = false }
 
 map('n', 'gD',         '<plug>(coc-declaration)', opts)
 map('n', 'gd',         '<plug>(coc-definition)', opts)

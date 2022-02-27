@@ -78,29 +78,11 @@ if (has('termguicolors') && (has('nvim') || v:version >= 800 || has('patch1942')
     "let g:airline_theme='nightfly'
     "colorscheme my_nightfly
 
-    "hi! link CocSem_class Type
-    ""hi! link CocSem_comment
-    ""hi! link CocSem_concept
-    "hi! link CocSem_enum Label
-    "hi! link CocSem_enumMember Constant
-    "hi! link CocSem_function Function
-    ""hi! link CocSem_interface
-    "hi! link CocSem_macro Macro
-    "hi! link CocSem_method Function
-    "hi! link CocSem_namespace Statement
-    ""hi! link CocSem_parameter
-    "hi! link CocSem_property Identifier
-    "hi! link CocSem_type Type
-    ""hi! link CocSem_typeParameter
-    ""hi! link CocSem_unknown
-    ""hi! link CocSem_variable
-
-    hi! link CocSem_variable None
-    hi! link CocSem_parameter None
-    hi! link CocErrorHighlight LspDiagnosticsUnderlineError
-    hi! link CocWarningHighlight LspDiagnosticsUnderlineWarning
-    hi! link CocInfoHighlight LspDiagnosticsUnderlineInformation
-    hi! link CocHintHighlight LspDiagnosticsUnderlineHint
+    hi! link CocSemVariable TSVariable
+    hi! link CocErrorHighlight DiagnosticUnderlineError
+    hi! link CocWarningHighlight DiagnosticUnderlineWarn
+    hi! link CocInfoHighlight DiagnosticUnderlineInfo
+    hi! link CocHintHighlight DiagnosticUnderlineHint
 
     call toggletheme#maptruecolors('<F12>')
 else

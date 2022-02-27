@@ -13,19 +13,24 @@ function M.autocmd(group, cmds, clear)
   cmd('augroup END')
 end
 
-function M.map(modes, lhs, rhs, opts)
-  opts = opts or {}
-  opts.noremap = opts.noremap == nil and true or opts.noremap
-  if type(modes) == 'string' then modes = {modes} end
-  for _, mode in ipairs(modes) do map_key(mode, lhs, rhs, opts) end
-end
-
-function M.buf_map(modes, lhs, rhs, opts)
+local function do_map(api_fn, modes, lhs, rhs, opts)
   opts = opts or {}
   opts.noremap = opts.noremap == nil and true or opts.noremap
   opts.silent = opts.silent == nil and true or opts.silent
   if type(modes) == 'string' then modes = {modes} end
-  for _, mode in ipairs(modes) do buf_map_key(0, mode, lhs, rhs, opts) end
+  for _, mode in ipairs(modes) do api_fn(mode, lhs, rhs, opts) end
+  return opts
+end
+
+function M.map(modes, lhs, rhs, opts)
+  do_map(map_key, modes, lhs, rhs, opts)
+end
+
+function M.buf_map(modes, lhs, rhs, opts)
+  local function bind(...)
+    return buf_map_key(0, ...)
+  end
+  do_map(bind, modes, lhs, rhs, opts)
 end
 
 function M.wrap_rtl_text(text)

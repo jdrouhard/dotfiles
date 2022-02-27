@@ -31,8 +31,6 @@ local function init()
     use 'bluz71/vim-moonfly-colors'
     use 'folke/tokyonight.nvim'
     use 'mhartington/oceanic-next'
-    --'joshdick/onedark.vim',
-    --'morhetz/gruvbox',
 
     use {
         'mhinz/vim-sayonara',
@@ -171,7 +169,7 @@ local function init()
           { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
         },
         --event = 'BufRead',
-        ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query' },
+        ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript' },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
     }
