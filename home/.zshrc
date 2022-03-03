@@ -20,6 +20,7 @@ export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 export LESS=-MIRXF
 export NINJA_STATUS="[0m[[31m%u[0m/[33m%r[0m/[32m%f[36m %o/s [35m%e[0m] "
+export COLORTERM=truecolor
 if hash nvim 2>/dev/null; then
     export EDITOR=nvim
 else

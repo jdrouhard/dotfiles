@@ -1,8 +1,6 @@
-local g = vim.g
 local utils = require('utils')
 local autocmd = utils.autocmd
 local map = utils.map
-local cmd = vim.cmd
 
 local opts = { noremap = false }
 

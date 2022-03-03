@@ -46,7 +46,7 @@ local function on_attach(client)
         cmd [[au CursorHold <buffer> lua vim.lsp.buf.document_highlight()]]
         cmd [[au CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
     end
-    if fn.has('nvim-0.7') > 0 and client.resolved_capabilities.semantic_tokens_full then
+    if vim.fn.has('nvim-0.7') > 0 and client.resolved_capabilities.semantic_tokens_full then
         cmd [[au BufEnter,CursorHold,InsertLeave <buffer> lua require'vim.lsp.semantic_tokens'.refresh()]]
     end
     cmd [[au CursorMoved <buffer> lua require('utils').lsp_cancel_pending_requests()]]

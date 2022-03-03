@@ -2,18 +2,18 @@ local util = require('Comment.utils')
 
 local lrepl = '[>'
 local rrepl = '<]'
-local padding = false
+local use_padding = false
 
 local post_hook = function(ctx)
+  local srow = ctx.range.srow
+  local erow = ctx.range.erow
+
   if srow == -1 then
     return
   end
 
-  local srow = ctx.range.srow
-  local erow = ctx.range.erow
-
   local lcs, rcs = util.parse_cstr({}, ctx)
-  local padding = util.get_padding(padding)
+  local padding = util.get_padding(use_padding)
   local partial_block = ctx.cmotion == util.cmotion.char or ctx.cmotion == util.cmotion.v
 
   -- we only care about placeholders when there is an "end" marker for the comment
@@ -33,7 +33,7 @@ local post_hook = function(ctx)
       if line_no == 1 and partial_block then
         scol = ctx.range.scol + lcs:len() + padding:len() + 1
       elseif line_no == 1 or ctx.ctype == 1 then
-        local i, j = line:find(util.escape(lcs) .. padding)
+        local _, j = line:find(util.escape(lcs) .. padding)
         scol = j + 1
       end
 
@@ -43,7 +43,7 @@ local post_hook = function(ctx)
           ecol = ecol + lcs:len() + padding:len()
         end
       elseif line_no == #lines or ctx.ctype == 1 then
-        local i, j = line:find(padding .. util.escape(rcs) .. '$')
+        local i, _ = line:find(padding .. util.escape(rcs) .. '$')
         ecol = i - 1
       end
 
@@ -70,5 +70,5 @@ end
 
 require('Comment').setup {
   post_hook = post_hook,
-  padding = padding
+  padding = use_padding
 }

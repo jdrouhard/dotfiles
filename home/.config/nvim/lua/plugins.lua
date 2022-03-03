@@ -147,22 +147,6 @@ local function init()
     }
 
     use {
-        'kyazdani42/nvim-web-devicons',
-        config = function()
-          local utils = require('utils')
-          require('nvim-web-devicons').setup({
-            override = {
-                ["tex"] = {
-                    icon = utils.wrap_rtl_text('ﭨ'),
-                    color = "#3D6117",
-                    name = "Tex"
-                }
-            }
-        })
-        end,
-    }
-
-    use {
         'nvim-treesitter/nvim-treesitter',
         requires = {
           { 'nvim-treesitter/playground', after = 'nvim-treesitter' },

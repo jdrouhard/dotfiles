@@ -102,7 +102,7 @@ function M.update_requests()
         active_requests[id] = nil
       elseif not request_set[type][method] then
         request_set[type][method] = true
-        ignore = false
+        local ignore = false
         for _, i in ipairs(ignore_methods) do
           if method:find(i) then
             ignore = true

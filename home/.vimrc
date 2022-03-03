@@ -31,7 +31,6 @@ Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'scrooloose/nerdcommenter'
-"Plug 'sheerun/vim-polyglot'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-eunuch'
@@ -78,11 +77,11 @@ if (has('termguicolors') && (has('nvim') || v:version >= 800 || has('patch1942')
     "let g:airline_theme='nightfly'
     "colorscheme my_nightfly
 
-    hi! link CocSemVariable TSVariable
-    hi! link CocErrorHighlight DiagnosticUnderlineError
+    hi! link CocSemVariable      None
+    hi! link CocErrorHighlight   DiagnosticUnderlineError
     hi! link CocWarningHighlight DiagnosticUnderlineWarn
-    hi! link CocInfoHighlight DiagnosticUnderlineInfo
-    hi! link CocHintHighlight DiagnosticUnderlineHint
+    hi! link CocInfoHighlight    DiagnosticUnderlineInfo
+    hi! link CocHintHighlight    DiagnosticUnderlineHint
 
     call toggletheme#maptruecolors('<F12>')
 else
@@ -116,8 +115,6 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
-
-let g:coc_default_semantic_highlight_groups=1
 
 function! GetTagname()
     silent! return Tlist_Get_Tagname_By_Line()
@@ -368,16 +365,8 @@ augroup vimrc_autocmd
     " Add support for Doxygen comment leader.
     au FileType h,hpp,cpp,c setlocal comments^=:///
 
-    " Override vim-polyglot changes to git commit formatting
-    au FileType gitcommit setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s*
-    au FileType gitcommit setlocal formatoptions+=n
-
     " sqli files are actually sql files
     au BufRead,BufNewFile *.sqli setlocal filetype=sql
-
-    " Override vim-polyglot filetype detection of spec files
-    au BufRead,BufNewFile *.spec setlocal filetype=spec
-    au BufRead,BufNewFile *.inc setlocal filetype=cpp
 
     " Resize splits when the window is resized.
     au VimResized * exe "normal! \<c-w>="
