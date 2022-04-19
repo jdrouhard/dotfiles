@@ -1,7 +1,15 @@
-local utils = require('utils')
-local map = utils.map
+local map = vim.keymap.set
 
-map('n', '<leader>s',  '<cmd>Tgrep<CR>')
+local function grep()
+    vim.ui.input({ prompt = "Grep For > " }, function(term)
+      if not term or term == '' then
+          return
+      end
+      return require('telescope.builtin').grep_string({ search = term })
+    end)
+end
+
+map('n', '<leader>s', grep)
 map('n', '<leader>ag', '<cmd>Telescope grep_string<CR>')
 map('n', '<leader>rg', '<cmd>Telescope live_grep<CR>')
 --map('n', '<leader>AG', '<cmd>Telescope grep_cWORD<CR>')
@@ -21,9 +29,10 @@ map('n', 'gr',          '<cmd>Telescope coc references<CR>')
 
 vim.g.coc_enable_locationlist = false
 
-vim.cmd[[
-    augroup telescope_coc
-        au!
-        au User CocLocationsChange nested Telescope coc locations
-    augroup END
-]]
+vim.api.nvim_create_augroup('telescope_coc', {})
+vim.api.nvim_create_autocmd('User', {
+  group = 'telescope_coc',
+  pattern = 'CocLocationsChange',
+  command = 'Telescope coc locations',
+  nested = true,
+})

@@ -36,8 +36,7 @@ local function init()
         'mhinz/vim-sayonara',
         cmd = 'Sayonara',
         setup = function()
-            local map = require('utils').map
-            map('', '<c-q>', '<cmd>Sayonara!<CR>', {silent = true, nowait = true})
+            vim.keymap.set('', '<c-q>', '<cmd>Sayonara!<CR>')
         end,
     }
 
@@ -96,8 +95,7 @@ local function init()
     use {
         'junegunn/vim-easy-align',
         config = function()
-            local map = require('utils').map
-            map({'n', 'x'}, 'ga', '<plug>(EasyAlign)', { noremap = false })
+            vim.keymap.set({'n', 'x'}, 'ga', '<plug>(EasyAlign)', { noremap = false })
         end
     }
 
@@ -107,7 +105,7 @@ local function init()
     use {
         'tpope/vim-fugitive',
         config = function()
-            local map = require('utils').map
+            local map = vim.keymap.set
             map('n', '<leader>gg', '<cmd>Git blame<CR>')
             map('n', '<leader>gd', '<cmd>Gdiff<CR>')
         end
@@ -117,7 +115,7 @@ local function init()
     use {
       'haya14busa/vim-asterisk',
       config = function()
-        local map = require('utils').map
+        local map = vim.keymap.set
         vim.g['asterisk#keeppos'] = true
         map({'n', 'x'}, '*',  '<plug>(asterisk-z*)',  { noremap = false })
         map({'n', 'x'}, '#',  '<plug>(asterisk-z#)',  { noremap = false })
@@ -206,7 +204,7 @@ local function init()
         'neoclide/coc.nvim',
         cond = not use_builtin_lsp,
         branch = 'release',
-        ft = { 'cpp', 'c', 'python', 'cmake', 'json' },
+        ft = { 'cpp', 'c', 'python', 'lua', 'cmake', 'json' },
         config = [[require('config.coc')]]
     }
 
@@ -251,15 +249,21 @@ local plugins = setmetatable({}, {
 })
 
 function plugins.bootstrap()
-  local autocmd = require('utils').autocmd
   local api = vim.api
   local cmd = vim.cmd
 
+  api.nvim_create_augroup('plugins', {})
   if fn.empty(fn.glob(install_path)) > 0 then
     api.nvim_echo({{'Installing packer.nvim', 'Type'}}, true, {})
     fn.system({'git', 'clone', packer_repo, install_path})
     api.nvim_command('packadd packer.nvim')
-    autocmd('bootstrap', [[User PackerComplete ++once ++nested luafile $MYVIMRC]])
+    api.nvim_create_autocmd('User', {
+      group = 'plugins',
+      pattern = 'PackerComplete',
+      once = true,
+      nested = true,
+      command = [[luafile $MYVIMRC]],
+    })
     plugins.sync()
   else
     require('packer_compiled')
@@ -273,7 +277,11 @@ function plugins.bootstrap()
     cmd [[command! PackerProfile           lua require('plugins').profile_output()]]
     cmd [[command! -nargs=+ -complete=customlist,v:lua.require('plugins').loader_complete PackerLoad lua require('plugins').loader(<q-args>)]]
 
-    autocmd('plugin_reload', [[BufWritePost plugins.lua source <afile> | execute "lua package.loaded['plugins'] = nil" | PackerCompile]])
+    api.nvim_create_autocmd('BufWritePost', {
+      group = 'plugins',
+      pattern = 'plugins.lua',
+      command = [[source <afile> | execute "lua package.loaded['plugins'] = nil" | PackerCompile]]
+    })
   end
 end
 

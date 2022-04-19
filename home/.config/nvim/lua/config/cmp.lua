@@ -12,7 +12,6 @@ local function check_backspace()
 end
 
 local feedkeys = vim.fn.feedkeys
-local pumvisible = vim.fn.pumvisible
 local replace_termcodes = vim.api.nvim_replace_termcodes
 local backspace_keys = replace_termcodes('<Tab>', true, true, true)
 local snippet_next_keys = replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true)

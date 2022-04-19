@@ -1,5 +1,4 @@
 local gs = require('gitsigns')
-local autocmd = require('utils').autocmd
 
 gs.setup {
   on_attach = function(bufnr)
@@ -28,6 +27,8 @@ gs.setup {
   end
 }
 
-vim.schedule_wrap(function()
-  autocmd('gitsigns_update', [[BufWinEnter * lua require('gitsigns').refresh()]])
-end)
+vim.api.nvim_create_augroup('gitsigns_update', {})
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  group = 'gitsigns_update',
+  callback = gs.refresh
+})

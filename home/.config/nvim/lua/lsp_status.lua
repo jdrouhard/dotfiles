@@ -175,23 +175,36 @@ function M.statusline()
 
   local result = {}
 
-  for name, msgs in pairs(msgs) do
-    result[#result + 1] = string.format("%s: %s", name, table.concat(msgs, ' '))
+  for name, client_msgs in pairs(msgs) do
+    result[#result + 1] = string.format("%s: %s", name, table.concat(client_msgs, ' '))
   end
 
   return table.concat(result, '; ')
 end
 
 function M.on_attach()
-  autocmd('lsp_status_attach', {
-    [[BufLeave <buffer> lua require('lsp_status').invalidate_requests()]],
+  vim.api.nvim_create_augroup('lsp_status_attach', {})
+  vim.api.nvim_create_autocmd('BufLeave', {
+    group = 'lsp_status_attach',
+    callback = function() M.invalidate_requests() end,
+    buffer = 0,
+    desc = 'lsp_status.invalidate_requests',
   })
 end
 
 function M.setup()
-  autocmd('lsp_status', {
-    [[User LspRequest lua require('lsp_status').update_requests()]],
-    [[User LspProgressUpdate lua require('lsp_status').update_progress()]],
+  vim.api.nvim_create_augroup('lsp_status', {})
+  vim.api.nvim_create_autocmd('User', {
+    group = 'lsp_status',
+    pattern = 'LspRequest',
+    callback = function() M.update_requests() end,
+    desc = 'lsp_status.update_requests',
+  })
+  vim.api.nvim_create_autocmd('User', {
+    group = 'lsp_status',
+    pattern = 'LspProgressUpdate',
+    callback = function() M.update_progress() end,
+    desc = 'lsp_status.update_progress',
   })
 end
 

@@ -1,7 +1,8 @@
-local map = require('utils').map
+local map = vim.keymap.set
 
 require('bufferline').setup {
     options = {
+        themable = false,
         numbers = 'ordinal',
         show_tab_indicators = true,
         show_buffer_close_icons = false,

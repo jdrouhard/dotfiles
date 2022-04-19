@@ -1,5 +1,4 @@
-local utils = require('utils')
-local map = utils.map
+local map = vim.keymap.set
 
 map('n', '<leader>s',  '<cmd>FzfLua grep<CR>')
 map('n', '<leader>ag', '<cmd>FzfLua grep_cword<CR>')
@@ -19,13 +18,13 @@ map('n', '<leader>gbl', '<cmd>FzfLua git_bcommits<CR>')
 
 vim.g.coc_enable_locationlist = false
 
-vim.cmd[[
-    augroup fzf_coc
-        au!
-        au User CocLocationsChange nested FzfCocLocations
-    augroup END
-]]
-
+vim.api.nvim_create_augroup('fzf_coc', {})
+vim.api.nvim_create_autocmd('User', {
+  group = 'fzf_coc',
+  pattern = 'CocLocationsChange',
+  callback = function() require('config.fzf').locations() end,
+  nested = true,
+})
 
 --local remap = { noremap = false }
 

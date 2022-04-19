@@ -2,11 +2,10 @@ pcall(require, 'impatient')
 
 local g = vim.g
 local cmd = vim.cmd
+local api = vim.api
 local fn = vim.fn
 local opt = vim.opt
-local utils = require('utils')
-local autocmd = utils.autocmd
-local map = utils.map
+local map = vim.keymap.set
 
 g.mapleader = [[ ]]
 
@@ -44,10 +43,8 @@ opt.inccommand    = "nosplit"
 opt.list          = true
 opt.listchars     = "tab:▸ ,trail:·"
 
-if fn.has('nvim-0.7') > 0 then
-  g.do_filetype_lua    = 1
-  g.did_load_filetypes = 0
-end
+g.do_filetype_lua    = 1
+g.did_load_filetypes = 0
 
 -- editing
 map('i', 'jk', '<ESC>')
@@ -79,24 +76,29 @@ map('n', '<C-j>',      '<cmd>cn<CR>')
 map('n', '<leader>ev', '<cmd>e $MYVIMRC<CR>')
 map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 
-vim.cmd[[command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | noh | norm! ``]]
-
-autocmd('filetypes', {
-    [[FileType            cmake,xml,lua setlocal tabstop=2 | setlocal shiftwidth=2]],
-    [[FileType            cpp,python    setlocal textwidth=90 | setlocal formatoptions=crqnj]],
-    [[FileType            gitcommit     setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s*]],
-    [[FileType            gitcommit     setlocal formatoptions+=n]],
-    [[BufRead,BufNewFile *.sqli         setlocal filetype=sql]],
-    [[BufRead,BufNewFile *.spec         setlocal filetype=spec]],
-    [[BufRead,BufNewFile *.inc          setlocal filetype=cpp]]
+vim.filetype.add({
+  extension = {
+    sqli = 'sql',
+    inc = 'cpp',
+  }
 })
 
-autocmd('window', {
-    [[VimResized  * exe "normal! \<c-w>="]],
-    [[BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif]]
-})
+api.nvim_create_user_command('StripTrailingWhitespace', '<line1>,<line2>s/\\s\\+$//e | noh | norm! ``', { range = '%' })
 
-autocmd('autoswap', [[SwapExists  * let v:swapchoice = 'e']])
+api.nvim_create_augroup('init', {})
+
+local autocmds = {
+  { 'FileType',    { pattern = { 'cmake', 'xml', 'lua' }, command = [[setlocal tabstop=2 | setlocal shiftwidth=2]], } },
+  { 'FileType',    { pattern = { 'cpp', 'python' }, command = [[setlocal textwidth=90 | setlocal formatoptions=crqnj]], } },
+  { 'FileType',    { pattern = 'gitcommit', command = [[setlocal formatlistpat=^\\s*[0-9*-]\\+[\\]:.)}\\t\ ]\\s* | setlocal formatoptions+=n]], } },
+  { 'VimResized',  { command = [[exec "normal! \<c-w>="]], } },
+  { 'BufReadPost', { command = [[if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif]], } },
+  { 'SwapExists',  { command = [[let v:swapchoice = 'e']], } },
+}
+
+for _, autocmd in ipairs(autocmds) do
+  api.nvim_create_autocmd(autocmd[1], vim.tbl_extend('force', { group = 'init' }, autocmd[2]))
+end
 
 local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
 if fn.filereadable(local_init) > 0 then

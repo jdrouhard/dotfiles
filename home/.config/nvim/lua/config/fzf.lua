@@ -44,7 +44,8 @@ function M.locations(opts)
     if not opts.prompt then
         opts.prompt = 'CocLocations' .. (opts.prompt_postfix or '')
     end
-    opts = core.set_fzf_line_args(opts)
+    opts = core.set_header(opts, 2)
+    opts = core.set_fzf_field_index(opts)
 
     local locations = vim.lsp.util.locations_to_items(vim.g.coc_jump_locations, 'utf-8')
     local entries = {}
@@ -63,7 +64,5 @@ function M.locations(opts)
 
     return core.fzf_files(opts)
 end
-
-vim.cmd[[command! FzfCocLocations lua require('config.fzf').locations()]]
 
 return M

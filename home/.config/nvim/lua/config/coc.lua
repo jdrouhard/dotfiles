@@ -1,7 +1,4 @@
-local utils = require('utils')
-local autocmd = utils.autocmd
-local map = utils.map
-
+local map = vim.keymap.set
 local opts = { noremap = false }
 
 map('n', 'gD',         '<plug>(coc-declaration)', opts)
@@ -21,7 +18,13 @@ map({'x', 'o'}, 'ic',    '<plug>(coc-classobj-i)', opts)
 map('x', '<leader>f', '<plug>(coc-format-selected)', opts)
 map('n', '<leader>f', '<plug>(coc-format)', opts)
 
-autocmd('coc', {
-    [[User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')]],
-    [[CursorHold * silent call CocActionAsync('highlight')]]
+vim.api.nvim_create_augroup('coc', {})
+vim.api.nvim_create_autocmd('User', {
+  group = 'coc',
+  pattern = 'CocJumpPlaceholder',
+  command = [[call CocActionAsync('showSignatureHelp')]]
+})
+vim.api.nvim_create_autocmd('CursorHold', {
+  group = 'coc',
+  command = [[silent call CocActionAsync('highlight'))]]
 })

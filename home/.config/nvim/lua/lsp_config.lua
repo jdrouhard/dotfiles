@@ -1,6 +1,4 @@
-local cmd = vim.cmd
-local utils = require('utils')
-local buf_map = utils.buf_map
+local api = vim.api
 local lspconfig = require('lspconfig')
 local lsp_status = require('lsp_status')
 local lsp_clangd_ext = require('lsp_clangd_ext')
@@ -11,6 +9,10 @@ vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn
 
 
 local function on_attach(client)
+    local function buf_map(mode, lhs, rhs)
+      vim.keymap.set(mode, lhs, rhs, { buffer = true })
+    end
+
     lsp_status.on_attach()
     --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
@@ -28,8 +30,8 @@ local function on_attach(client)
     buf_map('n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
     buf_map('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>')
     --buf_map('n', 'gA',         '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    buf_map('n', ']e',         '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
-    buf_map('n', '[e',         '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
+    buf_map('n', ']e',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    buf_map('n', '[e',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 
     if client.resolved_capabilities.document_formatting then
         buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
@@ -41,18 +43,42 @@ local function on_attach(client)
         buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
     end
 
-    cmd [[augroup lsp_aucmds]]
+    api.nvim_create_augroup('lsp_aucmds', {})
     if client.resolved_capabilities.document_highlight then
-        cmd [[au CursorHold <buffer> lua vim.lsp.buf.document_highlight()]]
-        cmd [[au CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+      api.nvim_create_autocmd('CursorHold', {
+        group = 'lsp_aucmds',
+        buffer = 0,
+        callback = vim.lsp.buf.document_highlight,
+        desc = 'lsp.buf.document_highlight',
+      })
+      api.nvim_create_autocmd('CursorMoved', {
+        group = 'lsp_aucmds',
+        buffer = 0,
+        callback = vim.lsp.buf.clear_references,
+        desc = 'lsp.buf.clear_references',
+      })
     end
-    if vim.fn.has('nvim-0.7') > 0 and client.resolved_capabilities.semantic_tokens_full then
-        cmd [[au BufEnter,CursorHold,InsertLeave <buffer> lua require'vim.lsp.semantic_tokens'.refresh()]]
+    if client.resolved_capabilities.semantic_tokens_full then
+      api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+        group = 'lsp_aucmds',
+        buffer = 0,
+        callback = function() require('vim.lsp.semantic_tokens').refresh() end,
+        desc = 'lsp.semantic_tokens.refresh',
+      })
     end
-    cmd [[au CursorMoved <buffer> lua require('utils').lsp_cancel_pending_requests()]]
+    api.nvim_create_autocmd('CursorMoved', {
+      group = 'lsp_aucmds',
+      buffer = 0,
+      callback = function() require('utils').lsp_cancel_pending_requests() end,
+      desc = 'lsp.cancel_pending_requests',
+    })
 
-    cmd [[au CursorHold,CursorHoldI <buffer> lua require('nvim-lightbulb').update_lightbulb() ]]
-    cmd [[augroup END]]
+    api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+      group = 'lsp_aucmds',
+      buffer = 0,
+      callback = function() require('nvim-lightbulb').update_lightbulb() end,
+      desc = 'nvim-lightbulb.update_lightbulb',
+    })
 end
 
 local servers = {
