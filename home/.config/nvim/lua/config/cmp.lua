@@ -1,7 +1,7 @@
 local api = vim.api
-local cmp = require 'cmp'
-local lspkind = require 'lspkind'
-local luasnip = require 'luasnip'
+local cmp = require('cmp')
+local lspkind = require('lspkind')
+local luasnip = require('luasnip')
 
 api.nvim_del_keymap('i', '<tab>')
 api.nvim_del_keymap('i', '<s-tab>')
@@ -24,16 +24,19 @@ cmp.setup {
         end,
     },
     formatting = {
-        format = lspkind.cmp_format({ with_text = true, menu = ({
+        fields = { 'kind', 'abbr', 'menu' },
+        format = lspkind.cmp_format({
+          with_text = false,
+          menu = ({
             buffer = "[Buffer]",
             nvim_lsp = "[LSP]",
             luasnip = "[LuaSnip]",
             nvim_lua = "[Lua]",
             path = "[Path]",
-        })}),
+          }),
+        }),
     },
-    mapping = {
-        ['<CR>'] = cmp.mapping.confirm(),
+    mapping = cmp.mapping.preset.insert({
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
@@ -54,12 +57,27 @@ cmp.setup {
                 fallback()
             end
         end, { 'i', 's' }),
-    },
-    sources = {
-        { name = 'buffer' },
+    }),
+    sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'nvim_lua' },
         { name = 'path' },
         { name = 'luasnip' },
-    },
+    }, {
+        { name = 'buffer' },
+    }),
 }
+
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'buffer' },
+  }),
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' },
+  }),
+})

@@ -227,7 +227,7 @@ local function init()
             { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' },
         },
         config = [[require('config.cmp')]],
-        event = 'InsertEnter *',
+        event = { 'InsertEnter *', 'CmdlineEnter' },
     }
 
     use {
