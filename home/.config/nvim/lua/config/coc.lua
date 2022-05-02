@@ -18,13 +18,13 @@ map({'x', 'o'}, 'ic',    '<plug>(coc-classobj-i)', opts)
 map('x', '<leader>f', '<plug>(coc-format-selected)', opts)
 map('n', '<leader>f', '<plug>(coc-format)', opts)
 
-vim.api.nvim_create_augroup('coc', {})
+local au_group = vim.api.nvim_create_augroup('coc', {})
 vim.api.nvim_create_autocmd('User', {
-  group = 'coc',
+  group = au_group,
   pattern = 'CocJumpPlaceholder',
   command = [[call CocActionAsync('showSignatureHelp')]]
 })
 vim.api.nvim_create_autocmd('CursorHold', {
-  group = 'coc',
+  group = au_group,
   command = [[silent call CocActionAsync('highlight'))]]
 })

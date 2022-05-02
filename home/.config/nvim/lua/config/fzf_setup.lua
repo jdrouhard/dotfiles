@@ -18,9 +18,9 @@ map('n', '<leader>gbl', '<cmd>FzfLua git_bcommits<CR>')
 
 vim.g.coc_enable_locationlist = false
 
-vim.api.nvim_create_augroup('fzf_coc', {})
+local au_group = vim.api.nvim_create_augroup('fzf_coc', {})
 vim.api.nvim_create_autocmd('User', {
-  group = 'fzf_coc',
+  group = au_group,
   pattern = 'CocLocationsChange',
   callback = function() require('config.fzf').locations() end,
   nested = true,

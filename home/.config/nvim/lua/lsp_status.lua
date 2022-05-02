@@ -5,6 +5,7 @@ local autocmd = utils.autocmd
 
 local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
 local index = 0
+local au_group = nil
 local status_timer = nil
 local progress_cache = nil
 local requests_cache = nil
@@ -183,9 +184,8 @@ function M.statusline()
 end
 
 function M.on_attach()
-  vim.api.nvim_create_augroup('lsp_status_attach', {})
   vim.api.nvim_create_autocmd('BufLeave', {
-    group = 'lsp_status_attach',
+    group = au_group,
     callback = function() M.invalidate_requests() end,
     buffer = 0,
     desc = 'lsp_status.invalidate_requests',
@@ -193,15 +193,15 @@ function M.on_attach()
 end
 
 function M.setup()
-  vim.api.nvim_create_augroup('lsp_status', {})
+  au_group = vim.api.nvim_create_augroup('lsp_status', {})
   vim.api.nvim_create_autocmd('User', {
-    group = 'lsp_status',
+    group = au_group,
     pattern = 'LspRequest',
     callback = function() M.update_requests() end,
     desc = 'lsp_status.update_requests',
   })
   vim.api.nvim_create_autocmd('User', {
-    group = 'lsp_status',
+    group = au_group,
     pattern = 'LspProgressUpdate',
     callback = function() M.update_progress() end,
     desc = 'lsp_status.update_progress',

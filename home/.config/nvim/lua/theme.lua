@@ -63,8 +63,8 @@ function M.setup()
     g.tokyonight_style = 'night'
     g.tokyonight_italic_functions = true
 
-    vim.api.nvim_create_augroup('highlights', {})
-    vim.api.nvim_create_autocmd('ColorScheme', { group = 'highlights', callback = M.apply_highlights })
+    local au_group = vim.api.nvim_create_augroup('highlights', {})
+    vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
     cmd([[silent! colorscheme ]] .. M.theme)
 end
 

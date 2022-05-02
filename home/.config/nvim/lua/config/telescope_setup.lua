@@ -29,9 +29,9 @@ map('n', 'gr',          '<cmd>Telescope coc references<CR>')
 
 vim.g.coc_enable_locationlist = false
 
-vim.api.nvim_create_augroup('telescope_coc', {})
+local au_group = vim.api.nvim_create_augroup('telescope_coc', {})
 vim.api.nvim_create_autocmd('User', {
-  group = 'telescope_coc',
+  group = au_group,
   pattern = 'CocLocationsChange',
   command = 'Telescope coc locations',
   nested = true,

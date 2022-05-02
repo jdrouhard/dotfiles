@@ -27,8 +27,8 @@ gs.setup {
   end
 }
 
-vim.api.nvim_create_augroup('gitsigns_update', {})
+local au_group = vim.api.nvim_create_augroup('gitsigns_update', {})
 vim.api.nvim_create_autocmd('BufWinEnter', {
-  group = 'gitsigns_update',
+  group = au_group,
   callback = gs.refresh
 })

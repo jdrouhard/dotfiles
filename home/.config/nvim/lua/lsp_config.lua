@@ -7,10 +7,11 @@ lsp_status.setup()
 require('semantic-tokens').setup()
 vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl='', numhl='' })
 
+local au_group = api.nvim_create_augroup('lsp_aucmds', {})
 
 local function on_attach(client)
     local function buf_map(mode, lhs, rhs)
-      vim.keymap.set(mode, lhs, rhs, { buffer = true })
+      vim.keymap.set(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
     lsp_status.on_attach()
@@ -43,16 +44,15 @@ local function on_attach(client)
         buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
     end
 
-    api.nvim_create_augroup('lsp_aucmds', {})
     if client.resolved_capabilities.document_highlight then
       api.nvim_create_autocmd('CursorHold', {
-        group = 'lsp_aucmds',
+        group = au_group,
         buffer = 0,
         callback = vim.lsp.buf.document_highlight,
         desc = 'lsp.buf.document_highlight',
       })
       api.nvim_create_autocmd('CursorMoved', {
-        group = 'lsp_aucmds',
+        group = au_group,
         buffer = 0,
         callback = vim.lsp.buf.clear_references,
         desc = 'lsp.buf.clear_references',
@@ -60,21 +60,21 @@ local function on_attach(client)
     end
     if client.resolved_capabilities.semantic_tokens_full then
       api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-        group = 'lsp_aucmds',
+        group = au_group,
         buffer = 0,
         callback = function() require('vim.lsp.semantic_tokens').refresh() end,
         desc = 'lsp.semantic_tokens.refresh',
       })
     end
     api.nvim_create_autocmd('CursorMoved', {
-      group = 'lsp_aucmds',
+      group = au_group,
       buffer = 0,
       callback = function() require('utils').lsp_cancel_pending_requests() end,
       desc = 'lsp.cancel_pending_requests',
     })
 
     api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-      group = 'lsp_aucmds',
+      group = au_group,
       buffer = 0,
       callback = function() require('nvim-lightbulb').update_lightbulb() end,
       desc = 'nvim-lightbulb.update_lightbulb',
