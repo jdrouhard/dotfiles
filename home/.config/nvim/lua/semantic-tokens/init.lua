@@ -1,3 +1,4 @@
+local api = vim.api
 local cmd = vim.cmd
 
 local config = require('semantic-tokens.config')
@@ -19,6 +20,11 @@ local function set_default_highlight_groups()
   end
 end
 
+local function reset()
+  set_default_highlight_groups()
+  highlight.reset()
+end
+
 local M = {}
 
 function M.setup(opts)
@@ -33,17 +39,14 @@ function M.setup(opts)
       on_invalidate_range = highlight.invalidate_highlight,
     })
 
-  M.reset()
+  reset()
 
-  cmd[[augroup semantic_tokens]]
-  cmd[[autocmd!]]
-  cmd[[autocmd ColorScheme * lua require('semantic-tokens').reset()]]
-  cmd[[augroup END]]
-end
-
-function M.reset()
-  set_default_highlight_groups()
-  highlight.reset()
+  local semantic_tokens_group = api.nvim_create_augroup('semantic_tokens', {})
+  api.nvim_create_autocmd('ColorScheme', {
+    group = semantic_tokens_group,
+    callback = reset,
+    desc = 'semantic-tokens: reset highlight groups and token mapping cache',
+  })
 end
 
 return M

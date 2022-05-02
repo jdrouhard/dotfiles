@@ -1,4 +1,4 @@
-local default = {
+local defaults = {
   prefix = 'Lsp',
   priority = 110,
   use_default_highlight_groups = true,
@@ -36,7 +36,7 @@ local M = {}
 M.options = {}
 
 function M.set_config(opts)
-  M.options = vim.tbl_deep_extend('force', {}, default, opts or {})
+  M.options = vim.tbl_deep_extend('force', {}, defaults, opts or {})
 end
 
 return M
