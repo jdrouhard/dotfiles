@@ -34,17 +34,17 @@ local function on_attach(client)
     buf_map('n', ']e',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
     buf_map('n', '[e',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 
-    if client.resolved_capabilities.document_formatting then
-        buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    if client.server_capabilities.documentFormattingProvider then
+        buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.format()<CR>')
     end
 
-    if client.resolved_capabilities.document_range_formatting then
+    if client.server_capabilities.documentRangeFormattingProvider then
         -- TODO: support <cmd> with a smart function to get *current* visual selection
         -- Follow neovim/neovim#13896
         buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
     end
 
-    if client.resolved_capabilities.document_highlight then
+    if client.server_capabilities.documentHighlight then
       api.nvim_create_autocmd('CursorHold', {
         group = au_group,
         buffer = 0,
@@ -58,11 +58,11 @@ local function on_attach(client)
         desc = 'lsp.buf.clear_references',
       })
     end
-    if client.resolved_capabilities.semantic_tokens_full then
+    if client.server_capabilities.semanticTokensProvider then
       api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
         group = au_group,
         buffer = 0,
-        callback = function() require('vim.lsp.semantic_tokens').refresh() end,
+        callback = function() require('vim.lsp.semantic_tokens').refresh(vim.api.nvim_get_current_buf()) end,
         desc = 'lsp.semantic_tokens.refresh',
       })
     end
@@ -86,7 +86,8 @@ local servers = {
     cmd = { 'clangd', '--header-insertion=never' },
     handlers = lsp_clangd_ext.handlers,
     init_options = {
-        clangdFileStatus = true
+        clangdFileStatus = true,
+        fallbackFlags = { '-std=c++20' },
     },
   },
   jedi_language_server = {},
