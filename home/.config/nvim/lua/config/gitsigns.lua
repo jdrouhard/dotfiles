@@ -26,9 +26,3 @@ gs.setup {
     map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
   end
 }
-
-local au_group = vim.api.nvim_create_augroup('gitsigns_update', {})
-vim.api.nvim_create_autocmd('BufWinEnter', {
-  group = au_group,
-  callback = gs.refresh
-})

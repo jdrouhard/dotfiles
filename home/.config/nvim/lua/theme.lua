@@ -1,7 +1,6 @@
 local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
-local autocmd = require('utils').autocmd
 
 local M = {}
 
@@ -66,6 +65,8 @@ function M.setup()
     local au_group = vim.api.nvim_create_augroup('highlights', {})
     vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
     cmd([[silent! colorscheme ]] .. M.theme)
+
+    --require('colorizer').setup()
 end
 
 return M

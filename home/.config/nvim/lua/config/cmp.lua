@@ -6,14 +6,13 @@ local luasnip = require('luasnip')
 api.nvim_del_keymap('i', '<tab>')
 api.nvim_del_keymap('i', '<s-tab>')
 
-local function check_backspace()
-    local col = vim.fn.col('.') - 1
-    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+local function has_words_before()
+    local line, col = unpack(api.nvim_win_get_cursor(0))
+    return col ~= 0 and api.nvim_buf_get_lines(0, line-1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
 local feedkeys = vim.fn.feedkeys
 local replace_termcodes = vim.api.nvim_replace_termcodes
-local backspace_keys = replace_termcodes('<Tab>', true, true, true)
 local snippet_next_keys = replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true)
 local snippet_prev_keys = replace_termcodes('<Plug>luasnip-jump-prev', true, true, true)
 
@@ -37,13 +36,14 @@ cmp.setup {
         }),
     },
     mapping = cmp.mapping.preset.insert({
+        ['<CR>'] = cmp.mapping.confirm(),
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
                 feedkeys(snippet_next_keys, '')
-            elseif check_backspace() then
-                feedkeys(backspace_keys, 'n')
+            elseif has_words_before() then
+                cmp.complete()
             else
                 fallback()
             end

@@ -35,7 +35,11 @@ local function on_attach(client)
     buf_map('n', '[e',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 
     if client.server_capabilities.documentFormattingProvider then
-        buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.format()<CR>')
+        if vim.fn.has('nvim-0.8') > 0 then
+          buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.format()<CR>')
+        else
+          buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting_sync()<CR>')
+        end
     end
 
     if client.server_capabilities.documentRangeFormattingProvider then
@@ -44,7 +48,7 @@ local function on_attach(client)
         buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
     end
 
-    if client.server_capabilities.documentHighlight then
+    if client.server_capabilities.documentHighlightProvider then
       api.nvim_create_autocmd('CursorHold', {
         group = au_group,
         buffer = 0,
@@ -66,7 +70,7 @@ local function on_attach(client)
         desc = 'lsp.semantic_tokens.refresh',
       })
     end
-    api.nvim_create_autocmd('CursorMoved', {
+    api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
       group = au_group,
       buffer = 0,
       callback = function() require('utils').lsp_cancel_pending_requests() end,
@@ -90,14 +94,10 @@ local servers = {
         fallbackFlags = { '-std=c++20' },
     },
   },
-  jedi_language_server = {},
+  pyright = {},
 }
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = { 'documentation', 'detail', 'additionalTextEdits', }
-}
+local capabilities = { textDocument = { completion = { completionItem = {}}}}
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 for client, config in pairs(servers) do

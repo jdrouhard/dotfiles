@@ -61,6 +61,7 @@ map('i', '<s-tab>', 'pumvisible() ? "<C-p>" : "<s-tab>"', { expr = true })
 -- buffers
 g.alternateNoDefaultAlternate = true
 
+map('n', '<c-s>',      '<cmd>w<CR>')
 map('n', '<c-h>',      '<cmd>bprevious<CR>')
 map('n', '<c-l>',      '<cmd>bnext<CR>')
 map('',  '<c-q>',      '<cmd>bdelete!<CR>')
@@ -127,6 +128,16 @@ local disabled_builtins = {
     "rrhelper",
 }
 
+local disabled_providers = {
+    "ruby",
+    "node",
+    "perl",
+}
+
 for _, plugin in pairs(disabled_builtins) do
     g["loaded_" .. plugin] = 1
+end
+
+for _, plugin in pairs(disabled_providers) do
+    g["loaded_" .. plugin .. "_provider"] = 0
 end

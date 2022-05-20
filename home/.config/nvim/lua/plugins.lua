@@ -24,8 +24,6 @@ local function init()
 
     use 'lewis6991/impatient.nvim'
 
-    use 'bfrg/vim-cpp-modern'
-
     use 'EdenEast/nightfox.nvim'
     use 'bluz71/vim-nightfly-guicolors'
     use 'bluz71/vim-moonfly-colors'
@@ -44,7 +42,6 @@ local function init()
         'junegunn/fzf',
         run = function() fn['fzf#install']() end,
         opt = true,
-        --requires = 'junegunn/fzf.vim',
     }
 
     use {
@@ -74,7 +71,7 @@ local function init()
             wants = {
                 'plenary.nvim',
                 'telescope-coc.nvim',
-                'telescope-fzf-native.nvim'
+                'telescope-fzf-native.nvim',
             },
             cmd = { 'Telescope', 'Tgrep' },
             --setup = [[require('config.telescope_setup')]],
@@ -126,8 +123,6 @@ local function init()
 
     use {
         'lewis6991/gitsigns.nvim',
-        requires = 'plenary.nvim',
-        wants = 'plenary.nvim',
         event = 'BufRead',
         config = [[require('config.gitsigns')]]
     }
@@ -139,18 +134,18 @@ local function init()
     }
 
     use {
-        'ggandor/lightspeed.nvim',
-        keys = { "s", "S", "t", "T", "f", "F" },
-        requires = 'tpope/vim-repeat'
+        'ggandor/leap.nvim',
+        requires = 'tpope/vim-repeat',
+        config = [[require('leap').set_default_keymaps()]],
     }
 
     use {
         'nvim-treesitter/nvim-treesitter',
         requires = {
           { 'nvim-treesitter/playground', after = 'nvim-treesitter' },
-          { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
+          { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' },
+          { 'nvim-gps', after = 'nvim-treesitter' },
         },
-        --event = 'BufRead',
         ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript' },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
@@ -162,14 +157,12 @@ local function init()
             'kyazdani42/nvim-web-devicons',
             'folke/tokyonight.nvim',
             'lewis6991/gitsigns.nvim',
-            'SmiteshP/nvim-gps',
         },
         config = [[require('config.lualine')]]
     }
 
     use {
         'SmiteshP/nvim-gps',
-        requires = 'nvim-treesitter/nvim-treesitter',
         after = 'nvim-treesitter',
         config = function()
           require('nvim-gps').setup()
@@ -211,8 +204,15 @@ local function init()
     use {
         'neovim/nvim-lspconfig',
         cond = use_builtin_lsp,
+        requires = 'nvim-lightbulb',
+        wants = 'nvim-lightbulb',
         config = [[require('lsp_config')]],
         ft = { 'cpp', 'c', 'python', 'lua' },
+    }
+
+    use {
+      'kosayoda/nvim-lightbulb',
+      after = 'nvim-lspconfig',
     }
 
     use {
@@ -230,11 +230,6 @@ local function init()
         event = { 'InsertEnter *', 'CmdlineEnter' },
     }
 
-    use {
-        'kosayoda/nvim-lightbulb',
-        event = 'BufRead'
-    }
-
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime', config = [[vim.g.startuptime_tries = 10]] }
 
 end
@@ -250,11 +245,11 @@ local plugins = setmetatable({}, {
 
 function plugins.bootstrap()
   local api = vim.api
-  local cmd = vim.cmd
+  local cmd = api.nvim_create_user_command
 
   api.nvim_create_augroup('plugins', {})
   if fn.empty(fn.glob(install_path)) > 0 then
-    api.nvim_echo({{'Installing packer.nvim', 'Type'}}, true, {})
+    vim.notify('Installing packer.nvim')
     fn.system({'git', 'clone', packer_repo, install_path})
     api.nvim_command('packadd packer.nvim')
     api.nvim_create_autocmd('User', {
@@ -268,14 +263,14 @@ function plugins.bootstrap()
   else
     require('packer_compiled')
 
-    cmd [[command! PackerInstall           lua require('plugins').install()]]
-    cmd [[command! PackerUpdate            lua require('plugins').update()]]
-    cmd [[command! PackerSync              lua require('plugins').sync()]]
-    cmd [[command! PackerClean             lua require('plugins').clean()]]
-    cmd [[command! -nargs=* PackerCompile  lua require('plugins').compile(<q-args>)]]
-    cmd [[command! PackerStatus            lua require('plugins').status()]]
-    cmd [[command! PackerProfile           lua require('plugins').profile_output()]]
-    cmd [[command! -nargs=+ -complete=customlist,v:lua.require('plugins').loader_complete PackerLoad lua require('plugins').loader(<q-args>)]]
+    cmd('PackerInstall', [[lua require('plugins').install(<f-args>)]],                 { nargs = '*', complete = plugins.plugin_complete })
+    cmd('PackerUpdate',  [[lua require('plugins').update(<f-args>)]],                  { nargs = '*', complete = plugins.plugin_complete })
+    cmd('PackerSync',    [[lua require('plugins').sync(<f-args>)]],                    { nargs = '*', complete = plugins.plugin_complete })
+    cmd('PackerClean',   [[lua require('plugins').clean()]],                           { })
+    cmd('PackerCompile', [[lua require('plugins').compile(<q-args>)]],                 { nargs = '*' })
+    cmd('PackerStatus',  [[lua require('plugins').status()]],                          { })
+    cmd('PackerProfile', [[lua require('plugins').profile_output()]],                  { })
+    cmd('PackerLoad',    [[lua require('plugins').loader(<f-args>, '<bang>' == '!')]], { nargs = '+', bang = true, complete = plugins.loader_complete })
 
     api.nvim_create_autocmd('BufWritePost', {
       group = 'plugins',

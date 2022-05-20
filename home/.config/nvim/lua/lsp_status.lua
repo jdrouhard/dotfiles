@@ -1,7 +1,5 @@
 local g = vim.g
 local lsp_util = require('vim.lsp.util')
-local utils = require('utils')
-local autocmd = utils.autocmd
 
 local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
 local index = 0
