@@ -1,3 +1,2 @@
 # vim:filetype=ruby
-system('bash ~/.homesick/repos/dotfiles/fonts/install.sh')
 system('~/.homesick/repos/dotfiles/tmux-terminfo.sh')
