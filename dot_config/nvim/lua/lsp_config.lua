@@ -87,7 +87,7 @@ end
 
 local servers = {
   clangd = {
-    cmd = { 'clangd', '--header-insertion=never' },
+    cmd = { '/opt/homebrew/opt/llvm/bin/clangd', '--header-insertion=never' },
     handlers = lsp_clangd_ext.handlers,
     init_options = {
         clangdFileStatus = true,

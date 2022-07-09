@@ -1,5 +1,6 @@
 {
     "http.proxyStrictSSL": false,
     "clangd.arguments": ["--header-insertion=never"],
+    "clangd.path": "/opt/homebrew/opt/llvm/bin/clangd",
     "semanticTokens.filetypes": ["*"]
 }

@@ -26,3 +26,5 @@
 [core]
 	autocrlf = false
 	quotepath = false
+[safe]
+	directory = /Users/jdrouhard/source/neovim
