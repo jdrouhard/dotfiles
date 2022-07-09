@@ -1,6 +1,0 @@
-[submodule "home/.config/base16-shell"]
-	path = home/.config/base16-shell
-	url = https://github.com/fnune/base16-shell.git
-[submodule "home/.zsh/zgen"]
-	path = home/.zsh/zgen
-	url = https://github.com/tarjoilija/zgen.git

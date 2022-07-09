@@ -11,7 +11,7 @@ export FZF_BASE=$HOME/.local/share/nvim/site/pack/packer/opt/fzf
 export PATH=~/.local/bin:/usr/local/bin${PATH:+:${PATH}}
 
 # Plugins
-source ~/.zsh/zgenrc
+source ~/.zgenrc
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 

@@ -1,2 +1,0 @@
-# vim:filetype=ruby
-system('~/.homesick/repos/dotfiles/tmux-terminfo.sh')

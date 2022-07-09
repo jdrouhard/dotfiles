@@ -1,7 +1,7 @@
 # vim:ft=zsh
 
 export DISABLE_AUTO_TITLE="true"
-source ~/.zsh/zgen/zgen.zsh
+source ~/.local/share/zgen/zgen.zsh
 
 if ! zgen saved; then
     zgen oh-my-zsh
