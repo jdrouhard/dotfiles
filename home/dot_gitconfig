@@ -1,6 +1,6 @@
 [user]
 	name = John Drouhard
-	email = john@jmdtech.org
+	email = john@drouhard.dev
 [color]
 	ui = true
 [color "decorate"]
@@ -17,12 +17,12 @@
 [merge]
 	tool = fugitive
 [mergetool "fugitive"]
-	cmd = nvim -f "$MERGED" -S "$HOME/.config/nvim/diff.vim"
+	;cmd = nvim -f "$MERGED" -S "$HOME/.config/nvim/diff.vim"
+	cmd = nvim -f -c "Gvdiffsplit!" "$MERGED"
 [difftool]
 	prompt = false
 [alias]
 	l = log --graph --all --pretty=format:'%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset' --abbrev-commit --date=relative
-	slog = log --pretty=format:\"-------------------------------------------------------------------------%n%C(yellow)%h%Creset | %C(magenta)%an%Creset | %C(cyan)%ad%Creset |%C(green)%d%Creset%n%n%s%n%b\" --name-status
 [core]
 	autocrlf = false
 	quotepath = false

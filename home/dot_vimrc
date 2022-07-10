@@ -63,37 +63,24 @@ set wrap                             " wrap overlong lines
 "-------------------------------------------------------------------------------
 
 set background=dark
-if (has('termguicolors') && (has('nvim') || v:version >= 800 || has('patch1942')) || has('gui_running'))
-    set termguicolors
-    let g:onedark_terminal_italics=1
-    let g:gruvbox_italic=1
-    let g:gruvbox_contrast_dark='soft'
-    let g:oceanic_next_terminal_italic=1
-    let g:oceanic_next_terminal_bold=1
-    "let g:airline_theme='gruvbox'
-    "colorscheme gruvbox
-    let g:airline_theme='oceanicnext'
-    colorscheme OceanicNext
-    "let g:airline_theme='nightfly'
-    "colorscheme my_nightfly
+set termguicolors
+let g:onedark_terminal_italics=1
+let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark='soft'
+let g:oceanic_next_terminal_italic=1
+let g:oceanic_next_terminal_bold=1
+"let g:airline_theme='gruvbox'
+"colorscheme gruvbox
+let g:airline_theme='oceanicnext'
+colorscheme OceanicNext
+"let g:airline_theme='nightfly'
+"colorscheme my_nightfly
 
-    hi! link CocSemVariable      None
-    hi! link CocErrorHighlight   DiagnosticUnderlineError
-    hi! link CocWarningHighlight DiagnosticUnderlineWarn
-    hi! link CocInfoHighlight    DiagnosticUnderlineInfo
-    hi! link CocHintHighlight    DiagnosticUnderlineHint
-
-    call toggletheme#maptruecolors('<F12>')
-else
-    let g:base16_termtrans=1
-    let g:base16_term_italics=1
-    let g:airline_theme='solarized'
-    colorscheme base16
-
-    call toggletheme#maptransparency('<F10>')
-    call toggletheme#mapbg('<F11>')
-    call toggletheme#map256('<F12>')
-endif
+hi! link CocSemVariable      None
+hi! link CocErrorHighlight   DiagnosticUnderlineError
+hi! link CocWarningHighlight DiagnosticUnderlineWarn
+hi! link CocInfoHighlight    DiagnosticUnderlineInfo
+hi! link CocHintHighlight    DiagnosticUnderlineHint
 
 if !has('nvim')
     set t_so=[7m                         " set escape codes for standout mode
@@ -115,12 +102,6 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
 let g:airline#extensions#tabline#buffer_nr_format='%s '
 "let g:airline#extensions#tabline#fnamemod=':t'
-
-function! GetTagname()
-    silent! return Tlist_Get_Tagname_By_Line()
-endfunction
-call airline#parts#define_function('cfunc', 'GetTagname')
-let g:airline_section_x = airline#section#create_right(['cfunc', 'filetype'])
 
 set backspace=indent,eol,start       " allow backspacing over everything in
                                      " insert mode
@@ -320,15 +301,6 @@ endif
 
 let g:fzf_layout = { 'window': {'width': 0.9, 'height': 0.6 }, 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
-
-" Configure taglist
-let Tlist_Inc_Winwidth=0
-let Tlist_Process_File_Always=1
-let Tlist_Use_Horiz_Window=0
-let Tlist_Use_Right_Window = 1
-let Tlist_WinWidth=60
-let Tlist_Exit_OnlyWindow=1
-let Tlist_Close_On_Select=0
 
 if has('nvim')
     " Configure nvim-gdb
