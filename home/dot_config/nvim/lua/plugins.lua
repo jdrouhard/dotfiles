@@ -29,6 +29,7 @@ local function init()
     use 'bluz71/vim-moonfly-colors'
     use 'folke/tokyonight.nvim'
     use 'mhartington/oceanic-next'
+    use 'rebelot/kanagawa.nvim'
 
     use {
         'mhinz/vim-sayonara',
@@ -144,11 +145,28 @@ local function init()
         requires = {
           { 'nvim-treesitter/playground', after = 'nvim-treesitter' },
           { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' },
+          { 'spellsitter.nvim', after = 'nvim-treesitter' },
           { 'nvim-gps', after = 'nvim-treesitter' },
         },
         ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript' },
         run = ':TSUpdate',
         config = [[require('config.treesitter')]]
+    }
+
+    use {
+        'SmiteshP/nvim-gps',
+        after = 'nvim-treesitter',
+        config = function()
+          require('nvim-gps').setup()
+        end,
+    }
+
+    use {
+        'lewis6991/spellsitter.nvim',
+        after = 'nvim-treesitter',
+        config = function()
+          require('spellsitter').setup()
+        end,
     }
 
     use {
@@ -159,14 +177,6 @@ local function init()
             'lewis6991/gitsigns.nvim',
         },
         config = [[require('config.lualine')]]
-    }
-
-    use {
-        'SmiteshP/nvim-gps',
-        after = 'nvim-treesitter',
-        config = function()
-          require('nvim-gps').setup()
-        end,
     }
 
     use {
