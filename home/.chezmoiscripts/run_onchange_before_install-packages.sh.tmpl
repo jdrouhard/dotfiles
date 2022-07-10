@@ -1,0 +1,31 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $brews := list
+     "cmake"
+     "llvm"
+     "ninja"
+     "ripgrep"
+     "tmux" -}}
+{{ $casks := list
+     "1password"
+     "1password-cli"
+     "alfred"
+     "discord"
+     "font-jetbrains-mono-nerd-font"
+     "iterm2"
+     "nextcloud"
+     "spotify" -}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF
+
+{{ end -}}
