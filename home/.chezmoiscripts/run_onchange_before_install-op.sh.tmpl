@@ -1,0 +1,20 @@
+{{ if (eq .osid "linux-ubuntu" "linux-fedora") -}}
+#!/bin/bash
+
+set -euo pipefail
+
+OP_VERSION=2.5.1
+ARCH={{ .chezmoi.arch }}
+FILENAME=op_linux_${ARCH}_v${OP_VERSION}.zip
+
+tempdir=$(mktemp -d)
+cleanup() {
+    rm -rf ${tempdir}
+}
+trap cleanup EXIT
+
+cd ${tempdir}
+curl -LO https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/${FILENAME}
+unzip ${FILENAME} op
+mv op ${HOME}/.local/bin
+{{ end -}}
