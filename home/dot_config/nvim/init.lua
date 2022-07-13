@@ -43,9 +43,6 @@ opt.inccommand    = "nosplit"
 opt.list          = true
 opt.listchars     = "tab:▸ ,trail:·"
 
-g.do_filetype_lua    = 1
-g.did_load_filetypes = 0
-
 -- editing
 map('i', 'jk', '<ESC>')
 map('n', 'j',  'gj')

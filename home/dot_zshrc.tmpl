@@ -8,10 +8,7 @@ stty -ixon
 stty -ixoff
 
 export FZF_BASE=$HOME/.local/share/nvim/site/pack/packer/opt/fzf
-{{- if (eq .chezmoi.os "darwin") }}
-export PATH=/opt/homebrew/bin${PATH:+:${PATH}}
-{{ end -}}
-export PATH=~/.local/bin:/usr/local/bin:/opt/homebrew/bin${PATH:+:${PATH}}
+export PATH=~/.local/bin:/usr/local/bin${PATH:+:${PATH}}
 
 # Plugins
 source ~/.zgenrc
