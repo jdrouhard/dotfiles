@@ -30,7 +30,10 @@ require('fzf-lua').setup {
     },
     files = {
         cmd = [[rg --files --hidden -g '!{.git,node_modules}/*']],
-    }
+    },
+    lsp = {
+        jump_to_single_result = true,
+    },
 }
 
 local core = require('fzf-lua.core')

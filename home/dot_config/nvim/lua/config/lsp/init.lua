@@ -17,22 +17,28 @@ local function on_attach(client)
     status.on_attach()
     --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
-    buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
-    --buf_map('n', 'gd',         '<cmd>lua require"telescope.builtin".lsp_definitions()<CR>')
-    buf_map('n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
-    buf_map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
-    --buf_map('n', 'gi',         '<cmd>lua require"telescope.builtin".lsp_implementations()<CR>')
-    buf_map('n', 'gi',         '<cmd>lua vim.lsp.buf.implementation()<CR>')
-    buf_map('n', 'gS',         '<cmd>lua vim.lsp.buf.signature_help()<CR>')
-    buf_map('n', 'gTD',        '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-    buf_map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-    --buf_map('n', 'gr',         '<cmd>lua require"telescope.builtin".lsp_references()<CR>')
-    --buf_map('n', '<leader>ac', '<cmd>lua require"telescope.builtin".lsp_code_actions()<CR>')
-    buf_map('n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
-    buf_map('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    --buf_map('n', 'gA',         '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    buf_map('n', ']e',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
-    buf_map('n', '[e',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+    buf_map('n', 'gD',         function() require('fzf-lua').lsp_declarations() end)
+    buf_map('n', 'gd',         function() require('fzf-lua').lsp_definitions() end)
+    buf_map('n', 'gi',         function() require('fzf-lua').lsp_implementations() end)
+    buf_map('n', 'gTD',        function() require('fzf-lua').lsp_typedefs() end)
+    buf_map('n', 'gr',         function() require('fzf-lua').lsp_references() end)
+    buf_map('n', '<leader>ac', function() require('fzf-lua').lsp_code_actions() end)
+    buf_map('n', 'K',          vim.lsp.buf.hover)
+    buf_map('n', 'gS',         vim.lsp.buf.signature_help)
+    buf_map('n', '<leader>rn', vim.lsp.buf.rename)
+    buf_map('n', ']e',         vim.diagnostic.goto_next)
+    buf_map('n', '[e',         vim.diagnostic.goto_prev)
+    --buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
+    --buf_map('n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
+    --buf_map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
+    --buf_map('n', 'gi',         '<cmd>lua vim.lsp.buf.implementation()<CR>')
+    --buf_map('n', 'gS',         '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+    --buf_map('n', 'gTD',        '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    --buf_map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+    --buf_map('n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
+    --buf_map('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    --buf_map('n', ']e',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    --buf_map('n', '[e',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 
     if client.server_capabilities.documentFormattingProvider then
         if vim.fn.has('nvim-0.8') > 0 then
@@ -63,12 +69,15 @@ local function on_attach(client)
       })
     end
     if client.server_capabilities.semanticTokensProvider then
-      api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-        group = au_group,
-        buffer = 0,
-        callback = function() require('vim.lsp.semantic_tokens').refresh(vim.api.nvim_get_current_buf()) end,
-        desc = 'lsp.semantic_tokens.refresh',
-      })
+      local has_semantic_tokens, semantic_tokens = pcall(require, 'vim.lsp.semantic_tokens')
+      if has_semantic_tokens then
+        api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+          group = au_group,
+          buffer = 0,
+          callback = function() semantic_tokens.refresh(0) end,
+          desc = 'lsp.semantic_tokens.refresh',
+        })
+      end
     end
     api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
       group = au_group,
