@@ -1,4 +1,3 @@
-local g = vim.g
 local lsp_util = require('vim.lsp.util')
 
 local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
@@ -20,13 +19,11 @@ local function update_timer()
     status_timer = vim.loop.new_timer()
     status_timer:start(100, 100, vim.schedule_wrap(function()
       index = (index + 1) % #spinner_frames
-      g.lsp_status = M.statusline()
     end))
   elseif status_timer ~= nil and not need_timer then
     status_timer:close()
     status_timer = nil
   end
-  g.lsp_status = M.statusline()
 end
 
 function M.invalidate_requests()
@@ -137,7 +134,7 @@ end
 
 local function get_status()
   local msgs = {}
-  for _, client in ipairs(vim.lsp.buf_get_clients()) do
+  for _, client in ipairs(vim.lsp.get_active_clients({bufnr = 0})) do
     local name = client.name
     local status = client.status
     if status then
@@ -151,7 +148,7 @@ local function get_status()
 end
 
 function M.statusline()
-  if #vim.lsp.buf_get_clients() == 0 then
+  if #vim.lsp.get_active_clients({ bufnr = 0 }) == 0 then
     return ''
   end
 
@@ -172,13 +169,15 @@ function M.statusline()
   extend(get_status())
   extend(get_progress(), true)
 
-  local result = {}
+  return msgs
 
-  for name, client_msgs in pairs(msgs) do
-    result[#result + 1] = string.format("%s: %s", name, table.concat(client_msgs, ' '))
-  end
+  --local result = {}
 
-  return table.concat(result, '; ')
+  --for name, client_msgs in pairs(msgs) do
+  --  result[#result + 1] = string.format("%s: %s", name, table.concat(client_msgs, ' '))
+  --end
+
+  --return table.concat(result, '; ')
 end
 
 function M.on_attach()

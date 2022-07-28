@@ -66,6 +66,7 @@ function M.setup()
     vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
     cmd([[silent! colorscheme ]] .. M.theme)
 
+    require('config.heirline').setup()
     --require('colorizer').setup()
 end
 

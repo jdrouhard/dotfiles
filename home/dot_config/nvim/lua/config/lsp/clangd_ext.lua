@@ -8,8 +8,7 @@ local file_status_update = function(_, message, ctx, _)
     if not client.status then
         client.status = {}
     end
-    client.status[message.uri] = message.state ~= 'idle' and message.state or nil;
-    vim.g.lsp_status = require('config.lsp.status').statusline()
+    client.status[message.uri] = message.state ~= 'idle' and message.state or nil
 end;
 
 local M = {}

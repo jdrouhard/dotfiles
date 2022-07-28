@@ -169,14 +169,22 @@ local function init()
         end,
     }
 
+    --use {
+    --    'nvim-lualine/lualine.nvim',
+    --    requires = {
+    --        'kyazdani42/nvim-web-devicons',
+    --        'folke/tokyonight.nvim',
+    --        'lewis6991/gitsigns.nvim',
+    --    },
+    --    config = [[require('config.lualine')]]
+    --}
+
     use {
-        'nvim-lualine/lualine.nvim',
+        'rebelot/heirline.nvim',
         requires = {
             'kyazdani42/nvim-web-devicons',
-            'folke/tokyonight.nvim',
             'lewis6991/gitsigns.nvim',
         },
-        config = [[require('config.lualine')]]
     }
 
     use {
