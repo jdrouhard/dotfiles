@@ -1,9 +1,9 @@
 local api = vim.api
 local lspconfig = require('lspconfig')
-local lsp_status = require('lsp_status')
-local lsp_clangd_ext = require('lsp_clangd_ext')
+local status = require('config.lsp.status')
+local clangd_ext = require('config.lsp.clangd_ext')
 
-lsp_status.setup()
+status.setup()
 require('semantic-tokens').setup()
 vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl='', numhl='' })
 
@@ -14,7 +14,7 @@ local function on_attach(client)
       vim.keymap.set(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
-    lsp_status.on_attach()
+    status.on_attach()
     --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
     buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
@@ -88,7 +88,7 @@ end
 local servers = {
   clangd = {
     cmd = { 'clangd', '--header-insertion=never' },
-    handlers = lsp_clangd_ext.handlers,
+    handlers = clangd_ext.handlers,
     init_options = {
         clangdFileStatus = true,
         fallbackFlags = { '-std=c++20' },

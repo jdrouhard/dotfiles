@@ -216,7 +216,7 @@ local function init()
         cond = use_builtin_lsp,
         requires = 'nvim-lightbulb',
         wants = 'nvim-lightbulb',
-        config = [[require('lsp_config')]],
+        config = [[require('config.lsp')]],
         ft = { 'cpp', 'c', 'python', 'lua' },
     }
 
