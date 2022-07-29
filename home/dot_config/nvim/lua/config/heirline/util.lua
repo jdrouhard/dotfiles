@@ -98,39 +98,48 @@ M.mode_colors = {
    select       = "cyan",
    block        = "cyan",
    insert       = "green",
-   replace      = "orange",
-   v_replace    = "orange",
+   replace      = "red",
+   v_replace    = "red",
    command      = "orange",
    enter        = "orange",
    more         = "red",
    confirm      = "purple",
-   shell        = "red",
+   shell        = "green",
    terminal     = "green",
    none         = "status_fg"
 }
 
 M.setup_colors = function()
   local get_highlight = require('heirline.utils').get_highlight
+  local get = function(name)
+    local highlight = get_highlight(name)
+    if highlight.reverse then
+      highlight.fg, highlight.bg = highlight.bg, highlight.fg
+    end
+    return highlight
+  end
+
   return {
-    bright_bg  = get_highlight("Folded").bg,
-    red        = get_highlight("DiagnosticError").fg,
-    dark_red   = get_highlight("DiffDelete").bg,
-    green      = get_highlight("String").fg,
-    blue       = get_highlight("Function").fg,
-    gray       = get_highlight("Comment").fg,
-    orange     = get_highlight("Constant").fg,
-    purple     = get_highlight("Statement").fg,
-    cyan       = get_highlight("Special").fg,
-    search     = get_highlight("Search").bg,
-    diag_warn  = get_highlight("DiagnosticWarn").fg,
-    diag_error = get_highlight("DiagnosticError").fg,
-    diag_hint  = get_highlight("DiagnosticHint").fg,
-    diag_info  = get_highlight("DiagnosticInfo").fg,
-    git_del    = get_highlight("GitSignsDelete").fg,
-    git_add    = get_highlight("GitSignsAdd").fg,
-    git_change = get_highlight("GitSignsChange").fg,
-    status_fg  = get_highlight("Statusline").fg,
-    status_bg  = get_highlight("Statusline").bg,
+    bright_bg  = get("Folded").bg,
+    red        = get("DiagnosticError").fg,
+    dark_red   = get("DiffDelete").bg,
+    green      = get("String").fg,
+    blue       = get("Function").fg,
+    gray       = get("Comment").fg,
+    orange     = get("Constant").fg,
+    purple     = get("Statement").fg,
+    cyan       = get("Special").fg,
+    diag_warn  = get("DiagnosticWarn").fg,
+    diag_error = get("DiagnosticError").fg,
+    diag_hint  = get("DiagnosticHint").fg,
+    diag_info  = get("DiagnosticInfo").fg,
+    git_del    = get("GitSignsDelete").fg,
+    git_add    = get("GitSignsAdd").fg,
+    git_change = get("GitSignsChange").fg,
+    status_fg  = get("Statusline").fg,
+    status_bg  = get("Statusline").bg,
+    search_fg  = get("Search").fg,
+    search_bg  = get("Search").bg,
   }
 end
 

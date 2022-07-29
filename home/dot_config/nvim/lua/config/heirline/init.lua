@@ -421,7 +421,7 @@ local SearchResults = {
         ' ', self.count.current, '/', self.count.total, ' '
       }
     end,
-    hl = { bg = "search" }
+    hl = { fg = "search_fg", bg = "search_bg" }
   },
   Space
 }
