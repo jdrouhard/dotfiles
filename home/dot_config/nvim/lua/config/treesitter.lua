@@ -5,12 +5,6 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
     --additional_vim_regex_highlighting = true,
-    custom_captures = {
-      ["statement"] = "TSStatement",
-      ["keyword.access"] = "TSKeywordAccess",
-      ["storageclass"] = "TSStorageClass",
-      ["structure"] = "TSStructure"
-    },
   },
   indent = {
     enable = true,
@@ -32,6 +26,13 @@ require('nvim-treesitter.configs').setup {
     persist_queries = false, -- whether the query persists across vim sessions
   }
 }
+
+require('nvim-treesitter.highlight').set_custom_captures({
+  ["statement"] = "TSStatement",
+  ["keyword.access"] = "TSKeywordAccess",
+  ["storageclass"] = "TSStorageClass",
+  ["structure"] = "TSStructure"
+})
 
 opt.foldmethod = "expr"
 opt.foldexpr   = "nvim_treesitter#foldexpr()"
