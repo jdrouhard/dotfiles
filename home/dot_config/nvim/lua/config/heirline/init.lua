@@ -475,7 +475,7 @@ local HelpBufferStatusline = {
   condition = function()
     return vim.bo.filetype == "help"
   end,
-  VimMode,
+  Space, FileStatus, Space,
   {
     provider = function()
       local filename = vim.api.nvim_buf_get_name(0)
