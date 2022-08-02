@@ -5,7 +5,7 @@ local cmd = vim.cmd
 local M = {}
 
 M.theme = 'tokyonight'
-M.lualine_theme = 'tokyonight'
+--M.lualine_theme = 'tokyonight'
 
 local function lsp_highlights(prefix)
   local hl_map = {
@@ -41,6 +41,10 @@ function M.apply_highlights()
 
     lsp_highlights('CocSem')
     lsp_highlights('Lsp')
+
+    if g.colors_name == 'tokyonight' then
+      cmd [[hi! TSParameterReference gui=NONE guifg=#cfc9c2 guibg=NONE]]
+    end
 
     cmd [[hi! link CocErrorHighlight DiagnosticUnderlineError]]
     cmd [[hi! link CocWarningHighlight DiagnosticUnderlineWarn]]

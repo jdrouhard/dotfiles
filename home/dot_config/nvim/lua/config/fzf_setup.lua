@@ -8,7 +8,7 @@ map('x', '<leader>ag', '<cmd>FzfLua grep_visual<CR>')
 
 map('n', '<c-p>',       '<cmd>FzfLua files<CR>')
 map('n', '<leader>l',   '<cmd>FzfLua buffers<CR>')
-map('n', '<leader>t',   '<cmd>FzfLua git_files<CR>')
+map('n', '<leader>gf',  '<cmd>FzfLua git_files<CR>')
 map('n', '<leader>h',   '<cmd>FzfLua commands<CR>')
 map('n', '<leader>?',   '<cmd>FzfLua help_tags<CR>')
 map('n', '<leader>qf',  '<cmd>FzfLua quickfix<CR>')
