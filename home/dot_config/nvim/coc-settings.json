@@ -1,5 +1,9 @@
 {
     "http.proxyStrictSSL": false,
+    "signature.triggerSignatureWait": 500,
     "clangd.arguments": ["--header-insertion=never"],
-    "semanticTokens.filetypes": ["*"]
+    "semanticTokens.filetypes": ["*"],
+    "lightbulb.signText": "",
+    "lightbulb.enableSign": true,
+    "lightbulb.enableVirtualText": false
 }

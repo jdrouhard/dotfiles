@@ -3,20 +3,20 @@
 export LANG=en_US.utf-8
 export LC_ALL="$LANG"
 
-export EDITOR=vim
+export EDITOR=nvim
 
-BASE16_THEME_DEFAULT="gruvbox-dark-soft"
+BASE16_THEME_DEFAULT="colors"
 
 #function gvim() { (/usr/bin/gvim -f "$@" &) }
 
-if hash pip 2>/dev/null && hash powerline-daemon 2>/dev/null; then
-    POWERLINE_DIR=$(pip show powerline-status | grep Location | cut -d' ' -f2);
-
-    powerline-daemon -q
+POWERLINE_DIR=$($HOME/.local/bin/find_powerline.sh)
+if [ -n "$POWERLINE_DIR" ]; then
+    #powerline-daemon -q
     POWERLINE_BASH_CONTINUATION=1
     POWERLINE_BASH_SELECT=1
-    . $POWERLINE_DIR/powerline/bindings/bash/powerline.sh
+    . $POWERLINE_DIR/bindings/bash/powerline.sh
 fi
+
 
 #alias tmux="TERM=screen-256color-bce tmux"
 #alias vim="vim --servername vim"
