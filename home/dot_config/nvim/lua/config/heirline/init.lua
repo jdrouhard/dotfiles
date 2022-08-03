@@ -433,7 +433,7 @@ local Ruler = {
   -- %c  : column number
   --provider = ' %7(%l:%3L%)  %-2c ',
   --provider = ' %7(%l:%L%)  %-2c ',
-  provider = ' %7(%l:%c%) ',
+  provider = ' %7(%l:%-2c%) ',
   hl = { bold = true }
 }
 

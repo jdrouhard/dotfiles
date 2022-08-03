@@ -1,70 +1,90 @@
 local g = vim.g
-local opt = vim.opt
+local api = vim.api
 local cmd = vim.cmd
+local opt = vim.opt
 
 local M = {}
 
 M.theme = 'tokyonight'
 --M.lualine_theme = 'tokyonight'
 
+local lsp_hl_map = {
+  Class         = { link = 'TSType' },
+  Comment       = { link = 'TSComment' },
+  Enum          = { link = 'TSType' },
+  EnumMember    = { link = 'TSConstant' },
+  Function      = { link = 'TSFunction' },
+  Macro         = { link = 'TSMacro' },
+  Method        = { link = 'TSFunction' },
+  Namespace     = { link = 'TSNamespace' },
+  Parameter     = { link = 'TSParameterReference' },
+  Property      = { link = 'TSProperty' },
+  Type          = { link = 'TSType' },
+  TypeParameter = { link = 'TSType' },
+  Variable      = { link = 'TSVariable' },
+  Deprecated    = { link = 'TSStrike' },
+
+  DeclarationVariable =  { link = 'Identifier' },
+  DeclarationParameter = { link = 'TSParameter' },
+}
+
+local hl_map = {
+  TSKeywordAccess     = { link = 'Statement' },
+  TSStatement         = { link = 'Statement' },
+  TSStorageClass      = { link = 'StorageClass' },
+  TSStructure         = { link = 'Keyword' },
+
+  CocErrorHighlight   = { link = 'DiagnosticUnderlineError' },
+  CocWarningHighlight = { link = 'DiagnosticUnderlineWarn' },
+  CocInfoHighlight    = { link = 'DiagnosticUnderlineInfo' },
+  CocHintHighlight    = { link = 'DiagnosticUnderlineHint' },
+  CocHighlightText    = { link = 'LspReferenceText' },
+  CocHighlightRead    = { link = 'LspReferenceRead' },
+  CocHighlightWrite   = { link = 'LspReferenceWrite' },
+}
+
 local function lsp_highlights(prefix)
-  local hl_map = {
-    Class         = 'TSType',
-    Comment       = 'TSComment',
-    Enum          = 'TSType',
-    EnumMember    = 'TSConstant',
-    Function      = 'TSFunction',
-    Macro         = 'TSMacro',
-    Method        = 'TSFunction',
-    Namespace     = 'TSNamespace',
-    Parameter     = 'TSParameterReference',
-    Property      = 'TSProperty',
-    Type          = 'TSType',
-    TypeParameter = 'TSType',
-    Variable      = 'TSVariable',
-    Deprecated    = 'TSStrike',
-
-    DeclarationVariable = 'Identifier',
-    DeclarationParameter = 'TSParameter',
-  }
-
-  for name, hl in pairs(hl_map) do
-    cmd(string.format('hi! link %s%s %s', prefix, name, hl))
+  local hls = {}
+  for name, hl in pairs(lsp_hl_map) do
+    hls[string.format('%s%s', prefix, name)] = hl
   end
+  return hls
 end
 
+local hl_cache = {}
+
 function M.apply_highlights()
-    cmd [[hi! link TSKeywordAccess Statement]]
-    cmd [[hi! link TSStatement Statement]]
-    cmd [[hi! link TSStorageClass StorageClass]]
-    cmd [[hi! link TSStructure Keyword]]
+  for name, hl in pairs(hl_cache) do
+    api.nvim_set_hl(0, name, hl)
+  end
 
-    lsp_highlights('CocSem')
-    lsp_highlights('Lsp')
-
-    if g.colors_name == 'tokyonight' then
-      cmd [[hi! TSParameterReference gui=NONE guifg=#cfc9c2 guibg=NONE]]
-    end
-
-    cmd [[hi! link CocErrorHighlight DiagnosticUnderlineError]]
-    cmd [[hi! link CocWarningHighlight DiagnosticUnderlineWarn]]
-    cmd [[hi! link CocInfoHighlight DiagnosticUnderlineInfo]]
-    cmd [[hi! link CocHintHighlight DiagnosticUnderlineHint]]
-    cmd [[hi! link CocHighlightText LspReferenceText]]
-    cmd [[hi! link CocHighlightRead LspReferenceRead]]
-    cmd [[hi! link CocHighlightWrite LspReferenceWrite]]
+  if g.colors_name == 'tokyonight' then
+    api.nvim_set_hl(0, 'TSParameterReference', { fg = '#cfc9c2' })
+  end
 end
 
 function M.setup()
     opt.termguicolors = true
-    g.nightfox_italic_comments = true
-    g.nightfox_italic_functions = true
 
     g.oceanic_next_terminal_italic = true
     g.oceanic_next_terminal_bold = true
 
     g.tokyonight_style = 'night'
     g.tokyonight_italic_functions = true
+
+    hl_cache = hl_map
+    hl_cache = vim.tbl_extend('error', hl_cache, lsp_highlights('CocSem'))
+    hl_cache = vim.tbl_extend('error', hl_cache, lsp_highlights('Lsp'))
+
+    require('nightfox').setup {
+      options = {
+        styles = {
+          comments = 'italic',
+          functions = 'italic',
+          keywords = 'italic'
+        }
+      }
+    }
 
     local au_group = vim.api.nvim_create_augroup('highlights', {})
     vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
