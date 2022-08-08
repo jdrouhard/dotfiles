@@ -25,12 +25,3 @@ vim.api.nvim_create_autocmd('User', {
   callback = function() require('config.fzf').locations() end,
   nested = true,
 })
-
---local remap = { noremap = false }
-
---map('i', '<C-x><C-f>', '<plug>(fzf-complete-path)', remap)
---map('i', '<C-x><C-l>', '<plug>(fzf-complete-line)', remap)
-
---map('n', '<leader><tab>', '<plug>(fzf-maps-n)', remap)
---map('x', '<leader><tab>', '<plug>(fzf-maps-x)', remap)
---map('o', '<leader><tab>', '<plug>(fzf-maps-o)', remap)

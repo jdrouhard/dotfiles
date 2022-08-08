@@ -38,16 +38,20 @@ require('fzf-lua').setup {
 
 local core = require('fzf-lua.core')
 local config = require('fzf-lua.config')
+local make_entry = require('fzf-lua.make_entry')
 
 local M = {}
 
 function M.locations(opts)
     opts = config.normalize_opts(opts, config.globals.lsp)
-    if not opts.cwd then opts.cwd = vim.loop.cwd() end
+    if not opts then return end
+    if not opts.cwd or #opts.cwd == 0 then
+        opts.cwd = vim.loop.cwd()
+    end
     if not opts.prompt then
         opts.prompt = 'CocLocations' .. (opts.prompt_postfix or '')
     end
-    opts = core.set_header(opts, 2)
+    if opts.force_uri == nil then opts.force_uri = true end
     opts = core.set_fzf_field_index(opts)
 
     local locations = vim.lsp.util.locations_to_items(vim.g.coc_jump_locations, 'utf-8')
@@ -55,17 +59,15 @@ function M.locations(opts)
     for _, entry in ipairs(locations) do
       if not opts.current_buffer_only or
         vim.api.nvim_buf_get_name(opts.bufnr) == entry.filename then
-        entry = core.make_entry_lcol(opts, entry)
-        entry = core.make_entry_file(opts, entry)
+        entry = make_entry.lcol(entry, opts)
+        entry = make_entry.file(entry, opts)
         if entry then
           entries[#entries+1] = entry
         end
       end
     end
 
-    opts.fzf_fn = entries
-
-    return core.fzf_files(opts)
+    return core.fzf_exec(entries, opts)
 end
 
 return M

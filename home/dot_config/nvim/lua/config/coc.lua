@@ -1,22 +1,35 @@
+local api = vim.api
 local map = vim.keymap.set
-local opts = { noremap = false }
 
-map('n', 'gD',         '<plug>(coc-declaration)', opts)
-map('n', 'gd',         '<plug>(coc-definition)', opts)
-map('n', 'gi',         '<plug>(coc-implementation)', opts)
-map('n', 'gTD',        '<plug>(coc-type-definition)', opts)
-map('n', '<leader>rn', '<plug>(coc-rename)', opts)
-map('n', 'gr',         '<plug>(coc-references)', opts)
+api.nvim_del_keymap('i', '<tab>')
+api.nvim_del_keymap('i', '<s-tab>')
+
+function _G.check_back_space()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
+end
+
+local opts = { expr = true, replace_keycodes = false }
+map('i', '<Tab>',      'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<Tab>" : coc#refresh()', opts)
+map('i', '<S-Tab>',    'coc#pum#visible() ? coc#pum#prev(1) : "<C-h>"', opts)
+map('i', '<CR>',       'coc#pum#visible() ? coc#pum#confirm() : "<C-g>u<CR><c-r>=coc#on_enter()<CR>"', opts)
+
+map('n', 'gD',         '<plug>(coc-declaration)')
+map('n', 'gd',         '<plug>(coc-definition)')
+map('n', 'gi',         '<plug>(coc-implementation)')
+map('n', 'gTD',        '<plug>(coc-type-definition)')
+map('n', '<leader>rn', '<plug>(coc-rename)')
+map('n', 'gr',         '<plug>(coc-references)')
 map('n', 'K',          "<cmd>call CocActionAsync('definitionHover')<CR>")
-map('n', '<leader>ac', '<plug>(coc-codeaction-cursor)', opts)
-map('n', ']e',         '<plug>(coc-diagnostic-next)', opts)
-map('n', '[e',         '<plug>(coc-diagnostic-prev)', opts)
+map('n', '<leader>ac', '<plug>(coc-codeaction-cursor)')
+map('n', ']e',         '<plug>(coc-diagnostic-next)')
+map('n', '[e',         '<plug>(coc-diagnostic-prev)')
 
-map({'x', 'o'}, 'if',    '<plug>(coc-funcobj-i)', opts)
-map({'x', 'o'}, 'ic',    '<plug>(coc-classobj-i)', opts)
+map({'x', 'o'}, 'if',    '<plug>(coc-funcobj-i)')
+map({'x', 'o'}, 'ic',    '<plug>(coc-classobj-i)')
 
-map('x', '<leader>f', '<plug>(coc-format-selected)', opts)
-map('n', '<leader>f', '<plug>(coc-format)', opts)
+map('x', '<leader>f', '<plug>(coc-format-selected)')
+map('n', '<leader>f', '<plug>(coc-format)')
 
 local au_group = vim.api.nvim_create_augroup('coc', {})
 vim.api.nvim_create_autocmd('User', {
@@ -26,5 +39,5 @@ vim.api.nvim_create_autocmd('User', {
 })
 vim.api.nvim_create_autocmd('CursorHold', {
   group = au_group,
-  command = [[silent call CocActionAsync('highlight'))]]
+  command = [[silent call CocActionAsync('highlight')]]
 })

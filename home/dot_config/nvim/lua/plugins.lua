@@ -235,6 +235,7 @@ local function init()
 
     use {
         'hrsh7th/nvim-cmp',
+        cond = use_builtin_lsp,
         requires = {
             'L3MON4D3/LuaSnip',
             'hrsh7th/cmp-nvim-lsp',
