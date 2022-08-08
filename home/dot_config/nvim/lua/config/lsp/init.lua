@@ -5,17 +5,17 @@ local clangd_ext = require('config.lsp.clangd_ext')
 
 status.setup()
 require('semantic-tokens').setup()
+require('lsp_signature').setup({ bind = true, handler_opts = { border = 'single' } })
 vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl='', numhl='' })
 
 local au_group = api.nvim_create_augroup('lsp_aucmds', {})
 
-local function on_attach(client)
+local function on_attach(client, bufnr)
     local function buf_map(mode, lhs, rhs)
       vim.keymap.set(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
     status.on_attach()
-    --require('lsp_signature').on_attach { bind = true, handler_opts = { border = 'single' } }
 
     buf_map('n', 'gD',         function() require('fzf-lua').lsp_declarations() end)
     buf_map('n', 'gd',         function() require('fzf-lua').lsp_definitions() end)
@@ -57,13 +57,13 @@ local function on_attach(client)
     if client.server_capabilities.documentHighlightProvider then
       api.nvim_create_autocmd('CursorHold', {
         group = au_group,
-        buffer = 0,
+        buffer = bufnr,
         callback = vim.lsp.buf.document_highlight,
         desc = 'lsp.buf.document_highlight',
       })
       api.nvim_create_autocmd('CursorMoved', {
         group = au_group,
-        buffer = 0,
+        buffer = bufnr,
         callback = vim.lsp.buf.clear_references,
         desc = 'lsp.buf.clear_references',
       })
@@ -73,22 +73,22 @@ local function on_attach(client)
       if has_semantic_tokens then
         api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
           group = au_group,
-          buffer = 0,
-          callback = function() semantic_tokens.refresh(0) end,
+          buffer = bufnr,
+          callback = function() semantic_tokens.refresh(bufnr) end,
           desc = 'lsp.semantic_tokens.refresh',
         })
       end
     end
     api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
       group = au_group,
-      buffer = 0,
+      buffer = bufnr,
       callback = function() require('utils').lsp_cancel_pending_requests() end,
       desc = 'lsp.cancel_pending_requests',
     })
 
     api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
       group = au_group,
-      buffer = 0,
+      buffer = bufnr,
       callback = function() require('nvim-lightbulb').update_lightbulb() end,
       desc = 'nvim-lightbulb.update_lightbulb',
     })

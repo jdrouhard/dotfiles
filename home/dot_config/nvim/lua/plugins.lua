@@ -222,14 +222,25 @@ local function init()
     use {
         'neovim/nvim-lspconfig',
         cond = use_builtin_lsp,
-        requires = 'nvim-lightbulb',
-        wants = 'nvim-lightbulb',
+        requires = {
+            'nvim-lightbulb',
+            'lsp_signature.nvim',
+        },
+        wants = {
+            'nvim-lightbulb',
+            'lsp_signature.nvim',
+        },
         config = [[require('config.lsp')]],
         ft = { 'cpp', 'c', 'python', 'lua' },
     }
 
     use {
       'kosayoda/nvim-lightbulb',
+      after = 'nvim-lspconfig',
+    }
+
+    use {
+      'ray-x/lsp_signature.nvim',
       after = 'nvim-lspconfig',
     }
 
@@ -255,9 +266,7 @@ end
 
 local plugins = setmetatable({}, {
   __index = function(_, key)
-    if not packer then
-      init()
-    end
+    init()
     return packer[key]
   end,
 })
@@ -282,14 +291,14 @@ function plugins.bootstrap()
   else
     require('packer_compiled')
 
-    cmd('PackerInstall', [[lua require('plugins').install(<f-args>)]],                 { nargs = '*', complete = plugins.plugin_complete })
-    cmd('PackerUpdate',  [[lua require('plugins').update(<f-args>)]],                  { nargs = '*', complete = plugins.plugin_complete })
-    cmd('PackerSync',    [[lua require('plugins').sync(<f-args>)]],                    { nargs = '*', complete = plugins.plugin_complete })
-    cmd('PackerClean',   [[lua require('plugins').clean()]],                           { })
-    cmd('PackerCompile', [[lua require('plugins').compile(<q-args>)]],                 { nargs = '*' })
-    cmd('PackerStatus',  [[lua require('plugins').status()]],                          { })
-    cmd('PackerProfile', [[lua require('plugins').profile_output()]],                  { })
-    cmd('PackerLoad',    [[lua require('plugins').loader(<f-args>, '<bang>' == '!')]], { nargs = '+', bang = true, complete = plugins.loader_complete })
+    cmd('PackerInstall', function(opts) require('plugins').install(unpack(opts.fargs)) end,           { nargs = '*', complete = plugins.plugin_complete })
+    cmd('PackerUpdate',  function(opts) require('plugins').update(unpack(opts.fargs)) end,            { nargs = '*', complete = plugins.plugin_complete })
+    cmd('PackerSync',    function(opts) require('plugins').sync(unpack(opts.fargs)) end,              { nargs = '*', complete = plugins.plugin_complete })
+    cmd('PackerClean',   function(opts) require('plugins').clean() end,                               { })
+    cmd('PackerCompile', function(opts) require('plugins').compile(opts.args) end,                    { nargs = '*' })
+    cmd('PackerStatus',  function(opts) require('plugins').status() end,                              { })
+    cmd('PackerProfile', function(opts) require('plugins').profile_output() end,                      { })
+    cmd('PackerLoad',    function(opts) require('plugins').loader(unpack(opts.fargs), opts.bang) end, { nargs = '+', bang = true, complete = plugins.loader_complete })
 
     api.nvim_create_autocmd('BufWritePost', {
       group = 'plugins',

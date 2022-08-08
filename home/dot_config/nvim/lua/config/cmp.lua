@@ -11,11 +11,6 @@ local function has_words_before()
     return col ~= 0 and api.nvim_buf_get_lines(0, line-1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
-local feedkeys = vim.fn.feedkeys
-local replace_termcodes = vim.api.nvim_replace_termcodes
-local snippet_next_keys = replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true)
-local snippet_prev_keys = replace_termcodes('<Plug>luasnip-jump-prev', true, true, true)
-
 cmp.setup {
     snippet = {
         expand = function(args)
@@ -41,7 +36,7 @@ cmp.setup {
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
-                feedkeys(snippet_next_keys, '')
+                luasnip.expand_or_jump()
             elseif has_words_before() then
                 cmp.complete()
             else
@@ -52,9 +47,23 @@ cmp.setup {
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
-                feedkeys(snippet_prev_keys, '')
+                luasnip.jump(-1)
             else
                 fallback()
+            end
+        end, { 'i', 's' }),
+        ['<C-j>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(1) then
+              luasnip.jump(1)
+            else
+              fallback()
+            end
+        end, { 'i', 's' }),
+        ['<C-k>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
             end
         end, { 'i', 's' }),
     }),
