@@ -390,6 +390,18 @@ local Lsp = {
   hl = { fg = "cyan", bold = true },
 }
 
+local Coc = {
+  condition = function()
+    local info = _G.packer_plugins['coc.nvim']
+    return info and info.loaded
+  end,
+  hl = { fg = "cyan", bold = true },
+  provider = function()
+    return vim.fn['coc#status']()
+  end,
+  Space(2)
+}
+
 local SearchResults = {
   condition = function(self)
     local lines = vim.api.nvim_buf_line_count(0)
@@ -456,6 +468,7 @@ local ActiveStatusline = {
   Space(4),
   GPS,
   Align,
+  Coc,
   Lsp,
   DapMessages,
   Diagnostics,

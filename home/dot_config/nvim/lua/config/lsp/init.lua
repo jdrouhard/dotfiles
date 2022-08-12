@@ -5,7 +5,14 @@ local clangd_ext = require('config.lsp.clangd_ext')
 
 status.setup()
 require('semantic-tokens').setup()
-require('lsp_signature').setup({ bind = true, handler_opts = { border = 'single' } })
+--require('lsp_signature').setup({
+--  bind = true,
+--  toggle_key = '<C-g>',
+--  handler_opts = {
+--    border = 'none'
+--  }
+--})
+
 vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl='', numhl='' })
 
 local au_group = api.nvim_create_augroup('lsp_aucmds', {})
@@ -24,10 +31,12 @@ local function on_attach(client, bufnr)
     buf_map('n', 'gr',         function() require('fzf-lua').lsp_references() end)
     buf_map('n', '<leader>ac', function() require('fzf-lua').lsp_code_actions() end)
     buf_map('n', 'K',          vim.lsp.buf.hover)
-    buf_map('n', 'gS',         vim.lsp.buf.signature_help)
     buf_map('n', '<leader>rn', vim.lsp.buf.rename)
     buf_map('n', ']e',         vim.diagnostic.goto_next)
     buf_map('n', '[e',         vim.diagnostic.goto_prev)
+
+    buf_map({'n','i','s'}, '<C-g>', vim.lsp.buf.signature_help)
+
     --buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
     --buf_map('n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
     --buf_map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
@@ -42,9 +51,9 @@ local function on_attach(client, bufnr)
 
     if client.server_capabilities.documentFormattingProvider then
         if vim.fn.has('nvim-0.8') > 0 then
-          buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.format()<CR>')
+          buf_map('n', '<leader>f', vim.lsp.buf.format)
         else
-          buf_map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting_sync()<CR>')
+          buf_map('n', '<leader>f', vim.lsp.buf.formatting_sync)
         end
     end
 
