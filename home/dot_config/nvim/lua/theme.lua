@@ -6,7 +6,6 @@ local opt = vim.opt
 local M = {}
 
 M.theme = 'tokyonight'
---M.lualine_theme = 'tokyonight'
 
 local lsp_hl_map = {
   Class         = { link = 'TSType' },
@@ -91,7 +90,7 @@ function M.setup()
     cmd([[silent! colorscheme ]] .. M.theme)
 
     require('config.heirline').setup()
-    --require('colorizer').setup()
+    require('config.bufferline')
 end
 
 return M

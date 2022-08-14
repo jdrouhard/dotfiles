@@ -93,7 +93,7 @@ local function init()
   use {
     'junegunn/vim-easy-align',
     config = function()
-      vim.keymap.set({'n', 'x'}, 'ga', '<plug>(EasyAlign)', { noremap = false })
+      vim.keymap.set({'n', 'x'}, 'ga', '<plug>(EasyAlign)', { remap = true })
     end
   }
 
@@ -115,10 +115,10 @@ local function init()
     config = function()
       local map = vim.keymap.set
       vim.g['asterisk#keeppos'] = true
-      map({'n', 'x'}, '*',  '<plug>(asterisk-z*)',  { noremap = false })
-      map({'n', 'x'}, '#',  '<plug>(asterisk-z#)',  { noremap = false })
-      map({'n', 'x'}, 'g*', '<plug>(asterisk-gz*)', { noremap = false })
-      map({'n', 'x'}, 'g#', '<plug>(asterisk-gz#)', { noremap = false })
+      map({'n', 'x'}, '*',  '<plug>(asterisk-z*)',  { remap = true })
+      map({'n', 'x'}, '#',  '<plug>(asterisk-z#)',  { remap = true })
+      map({'n', 'x'}, 'g*', '<plug>(asterisk-gz*)', { remap = true })
+      map({'n', 'x'}, 'g#', '<plug>(asterisk-gz#)', { remap = true })
     end
   }
 
@@ -156,28 +156,14 @@ local function init()
   use {
     'SmiteshP/nvim-gps',
     after = 'nvim-treesitter',
-    config = function()
-      require('nvim-gps').setup()
-    end,
+    config = [[require('nvim-gps').setup()]]
   }
 
   use {
     'lewis6991/spellsitter.nvim',
     after = 'nvim-treesitter',
-    config = function()
-      require('spellsitter').setup()
-    end,
+    config = [[require('spellsitter').setup()]]
   }
-
-  --use {
-  --  'nvim-lualine/lualine.nvim',
-  --  requires = {
-  --    'kyazdani42/nvim-web-devicons',
-  --    'folke/tokyonight.nvim',
-  --    'lewis6991/gitsigns.nvim',
-  --  },
-  --  config = [[require('config.lualine')]]
-  --}
 
   use {
     'rebelot/heirline.nvim',
@@ -190,7 +176,6 @@ local function init()
   use {
     'akinsho/nvim-bufferline.lua',
     requires = 'kyazdani42/nvim-web-devicons',
-    config = [[require('config.bufferline')]],
   }
 
   use {
@@ -260,7 +245,11 @@ local function init()
     event = { 'InsertEnter *', 'CmdlineEnter' },
   }
 
-  use { 'dstein64/vim-startuptime', cmd = 'StartupTime', config = [[vim.g.startuptime_tries = 10]] }
+  use {
+    'dstein64/vim-startuptime',
+    cmd = 'StartupTime',
+    config = [[vim.g.startuptime_tries = 10]]
+  }
 
 end
 
