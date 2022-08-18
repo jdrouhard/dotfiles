@@ -6,6 +6,9 @@ local opt = vim.opt
 local M = {}
 
 M.theme = 'tokyonight'
+--M.theme = 'nightfox'
+--M.theme = 'duskfox'
+--M.theme = 'kanagawa'
 
 local lsp_hl_map = {
   Class         = { link = 'TSType' },
@@ -87,7 +90,7 @@ function M.setup()
 
     local au_group = vim.api.nvim_create_augroup('highlights', {})
     vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
-    cmd([[silent! colorscheme ]] .. M.theme)
+    cmd([[colorscheme ]] .. M.theme)
 
     require('config.heirline').setup()
     require('config.bufferline')

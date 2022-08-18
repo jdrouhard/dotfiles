@@ -279,6 +279,7 @@ function plugins.bootstrap()
     plugins.sync()
   else
     require('packer_compiled')
+    require('theme').setup()
 
     cmd('PackerInstall', function(opts) require('plugins').install(unpack(opts.fargs)) end,           { nargs = '*', complete = plugins.plugin_complete })
     cmd('PackerUpdate',  function(opts) require('plugins').update(unpack(opts.fargs)) end,            { nargs = '*', complete = plugins.plugin_complete })

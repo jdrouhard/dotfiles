@@ -104,7 +104,6 @@ if fn.filereadable(local_init) > 0 then
 end
 
 require('plugins').bootstrap()
-require('theme').setup()
 
 local disabled_builtins = {
     "netrw",
