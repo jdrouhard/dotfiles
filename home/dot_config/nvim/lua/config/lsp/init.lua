@@ -2,6 +2,7 @@ local api = vim.api
 local lspconfig = require('lspconfig')
 local status = require('config.lsp.status')
 local clangd_ext = require('config.lsp.clangd_ext')
+local sumneko_ext = require('config.lsp.sumneko_ext')
 
 local use_float_progress = true
 status.setup(not use_float_progress)
@@ -119,6 +120,20 @@ local servers = {
     },
   },
   pyright = {},
+  sumneko_lua = {
+    cmd = { 'lua-language-server' },
+    handlers = sumneko_ext.handlers,
+    settings = {
+      Lua = {
+        diagnostics = { globals = { 'vim' } },
+        runtime = { version = 'LuaJIT' },
+        workspace = {
+          library = api.nvim_get_runtime_file('', true),
+        },
+        telemetry = { enable = false },
+      },
+    },
+  },
 }
 
 local capabilities = { textDocument = { completion = { completionItem = {}}}}

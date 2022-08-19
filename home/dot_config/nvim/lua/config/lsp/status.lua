@@ -138,9 +138,13 @@ local function get_status()
     local name = client.name
     local status = client.status
     if status then
-      local uri = vim.uri_from_bufnr(0)
-      if status[uri] then
-        msgs[name] = status[uri]
+      if type(status) == "table" then
+        local uri = vim.uri_from_bufnr(0)
+        if status[uri] then
+          msgs[name] = status[uri]
+        end
+      else
+        msgs[name] = status:gsub("%$%(loading~spin%)", spinner_frames[index + 1])
       end
     end
   end
