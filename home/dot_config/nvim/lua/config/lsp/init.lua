@@ -3,8 +3,14 @@ local lspconfig = require('lspconfig')
 local status = require('config.lsp.status')
 local clangd_ext = require('config.lsp.clangd_ext')
 
-status.setup()
+local use_float_progress = true
+status.setup(not use_float_progress)
+if use_float_progress then
+  require('config.lsp.float_progress').setup()
+end
+
 require('semantic-tokens').setup()
+
 --require('lsp_signature').setup({
 --  bind = true,
 --  toggle_key = '<C-g>',

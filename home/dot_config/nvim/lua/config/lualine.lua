@@ -41,6 +41,6 @@ require('lualine').setup{
         section_separators = '',
         component_separators = ''
     },
-    extensions = { 'quickfix', 'fugitive' },
+    extensions = { 'quickfix', 'fugitive', 'nvim-dap-ui' },
     sections = sections
 }

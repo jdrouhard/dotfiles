@@ -170,14 +170,6 @@ function M.statusline()
   extend(get_progress(), true)
 
   return msgs
-
-  --local result = {}
-
-  --for name, client_msgs in pairs(msgs) do
-  --  result[#result + 1] = string.format("%s: %s", name, table.concat(client_msgs, ' '))
-  --end
-
-  --return table.concat(result, '; ')
 end
 
 function M.on_attach()
@@ -189,7 +181,7 @@ function M.on_attach()
   })
 end
 
-function M.setup()
+function M.setup(enable_progress)
   au_group = vim.api.nvim_create_augroup('lsp_status', {})
   vim.api.nvim_create_autocmd('User', {
     group = au_group,
@@ -197,12 +189,14 @@ function M.setup()
     callback = function() M.update_requests() end,
     desc = 'lsp_status.update_requests',
   })
-  vim.api.nvim_create_autocmd('User', {
-    group = au_group,
-    pattern = 'LspProgressUpdate',
-    callback = function() M.update_progress() end,
-    desc = 'lsp_status.update_progress',
-  })
+  if enable_progress then
+    vim.api.nvim_create_autocmd('User', {
+      group = au_group,
+      pattern = 'LspProgressUpdate',
+      callback = function() M.update_progress() end,
+      desc = 'lsp_status.update_progress',
+    })
+  end
 end
 
 return M

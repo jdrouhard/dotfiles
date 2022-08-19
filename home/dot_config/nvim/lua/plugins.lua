@@ -54,6 +54,14 @@ local function init()
   }
 
   use {
+    'rcarriga/nvim-notify',
+    config = function()
+      require('config.notify')
+      vim.notify = require('notify')
+    end,
+  }
+
+  use {
     'nvim-lua/plenary.nvim',
     opt = true,
     config = function()
