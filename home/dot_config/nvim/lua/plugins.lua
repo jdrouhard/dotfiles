@@ -259,6 +259,12 @@ local function init()
     config = [[vim.g.startuptime_tries = 10]]
   }
 
+  use {
+    'mfussenegger/nvim-dap',
+    requires = 'rcarriga/nvim-dap-ui',
+    config = [[require('config.dap')]],
+  }
+
 end
 
 local plugins = setmetatable({}, {
