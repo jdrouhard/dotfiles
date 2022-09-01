@@ -45,7 +45,7 @@ local ReadWrite = {
 }
 
 local FileStatus = {
-  init = heirline.pick_child_on_condition,
+  fallthrough = false,
   ReadOnly, ReadWrite,
 }
 
@@ -193,7 +193,7 @@ local FileProperties = {
 
 local FileNameBlock = {
   {
-    init = heirline.pick_child_on_condition,
+    fallthrough = false,
     {
       condition = conditions.is_active,
       WorkDir, CurrentPath, FileName
@@ -527,9 +527,8 @@ local StatusLines = {
     self.pwd = pwd
     self.current_path = current_path -- The opened file path relevant to pwd.
     self.filename = filename
-
-    heirline.pick_child_on_condition(self)
   end,
+  fallthrough = false,
   hl = function()
     if conditions.is_active() then
       return { bg = "status_bg" }
@@ -549,8 +548,7 @@ M.setup = function()
   vim.api.nvim_create_augroup("Heirline", { clear = true })
   vim.api.nvim_create_autocmd("ColorScheme", {
     callback = function()
-      heirline_main.reset_highlights()
-      heirline_main.load_colors(util.setup_colors())
+      heirline.on_colorscheme(util.setup_colors())
     end,
     group = "Heirline",
   })
