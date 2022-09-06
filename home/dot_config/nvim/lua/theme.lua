@@ -59,10 +59,6 @@ function M.apply_highlights()
   for name, hl in pairs(hl_cache) do
     api.nvim_set_hl(0, name, hl)
   end
-
-  if g.colors_name == 'tokyonight' then
-    api.nvim_set_hl(0, 'TSParameterReference', { fg = '#cfc9c2' })
-  end
 end
 
 function M.setup()
@@ -71,12 +67,21 @@ function M.setup()
     g.oceanic_next_terminal_italic = true
     g.oceanic_next_terminal_bold = true
 
-    g.tokyonight_style = 'night'
-    g.tokyonight_italic_functions = true
-
     hl_cache = hl_map
     hl_cache = vim.tbl_extend('error', hl_cache, lsp_highlights('CocSem'))
     hl_cache = vim.tbl_extend('error', hl_cache, lsp_highlights('Lsp'))
+
+    require('tokyonight').setup {
+      style = 'night',
+      styles = {
+        functions = 'italic',
+      },
+      on_highlights = function(hl, _)
+        hl.TSParameterReference = {
+          fg = '#cfc9c2',
+        }
+      end,
+    }
 
     require('nightfox').setup {
       options = {
