@@ -1,0 +1,24 @@
+---
+Language:      Cpp
+BasedOnStyle:  Mozilla
+AccessModifierOffset: -4
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveBitFields: true
+AlignEscapedNewlines: Left
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortCaseLabelsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+BreakBeforeBraces: Stroustrup
+BreakStringLiterals: false
+ColumnLimit:     160
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+FixNamespaceComments: true
+IndentWidth:     4
+PenaltyReturnTypeOnItsOwnLine: 500
+PointerAlignment: Middle
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Both
