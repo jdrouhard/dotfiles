@@ -22,6 +22,9 @@ local au_group = vim.api.nvim_create_augroup('fzf_coc', {})
 vim.api.nvim_create_autocmd('User', {
   group = au_group,
   pattern = 'CocLocationsChange',
-  callback = function() require('config.fzf').locations() end,
+  callback = function()
+    local items = vim.lsp.util.locations_to_items(vim.g.coc_jump_locations, 'utf-8')
+    require('config.fzf').locations({ prompt = 'CocLocations', items=items })
+  end,
   nested = true,
 })

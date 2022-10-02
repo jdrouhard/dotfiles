@@ -153,7 +153,6 @@ local function init()
     requires = {
       { 'nvim-treesitter/playground', after = 'nvim-treesitter' },
       { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' },
-      { 'spellsitter.nvim', after = 'nvim-treesitter' },
       { 'nvim-gps', after = 'nvim-treesitter' },
     },
     ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript' },
@@ -165,12 +164,6 @@ local function init()
     'SmiteshP/nvim-gps',
     after = 'nvim-treesitter',
     config = [[require('nvim-gps').setup()]]
-  }
-
-  use {
-    'lewis6991/spellsitter.nvim',
-    after = 'nvim-treesitter',
-    config = [[require('spellsitter').setup()]]
   }
 
   use {
@@ -195,13 +188,6 @@ local function init()
         },
       }
     end,
-  }
-
-  use {
-    'antoinemadec/FixCursorHold.nvim',
-    setup = function()
-      vim.g.cursorhold_updatetime = 100
-    end
   }
 
   use {

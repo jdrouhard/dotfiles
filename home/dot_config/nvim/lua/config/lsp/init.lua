@@ -3,6 +3,7 @@ local lspconfig = require('lspconfig')
 local status = require('config.lsp.status')
 local clangd_ext = require('config.lsp.clangd_ext')
 local sumneko_ext = require('config.lsp.sumneko_ext')
+local fzf_config = require('config.fzf')
 
 local use_float_progress = true
 status.setup(not use_float_progress)
@@ -31,30 +32,26 @@ local function on_attach(client, bufnr)
 
     status.on_attach()
 
-    buf_map('n', 'gD',         function() require('fzf-lua').lsp_declarations() end)
-    buf_map('n', 'gd',         function() require('fzf-lua').lsp_definitions() end)
-    buf_map('n', 'gi',         function() require('fzf-lua').lsp_implementations() end)
-    buf_map('n', 'gTD',        function() require('fzf-lua').lsp_typedefs() end)
-    buf_map('n', 'gr',         function() require('fzf-lua').lsp_references() end)
-    buf_map('n', '<leader>ac', function() require('fzf-lua').lsp_code_actions() end)
+    local location_opts = {
+      on_list = function(result)
+        fzf_config.locations({ prompt = result.title, items = result.items })
+      end
+    }
+
+    buf_map('n', 'gD',         function() vim.lsp.buf.declaration(location_opts) end)
+    buf_map('n', 'gd',         function() vim.lsp.buf.definition(location_opts) end)
+    buf_map('n', 'gi',         function() vim.lsp.buf.implementation(location_opts) end)
+    buf_map('n', 'gTD',        function() vim.lsp.buf.type_definition(location_opts) end)
+    buf_map('n', 'gr',         function() vim.lsp.buf.references(nil, location_opts) end)
+    buf_map('n', 'gws',        function() vim.lsp.buf.workspace_symbol(vim.fn.expand('<cword>'), location_opts) end)
+
     buf_map('n', 'K',          vim.lsp.buf.hover)
+    buf_map('n', '<leader>ac', vim.lsp.buf.code_action)
     buf_map('n', '<leader>rn', vim.lsp.buf.rename)
     buf_map('n', ']e',         vim.diagnostic.goto_next)
     buf_map('n', '[e',         vim.diagnostic.goto_prev)
 
     buf_map({'n','i','s'}, '<C-g>', vim.lsp.buf.signature_help)
-
-    --buf_map('n', 'gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
-    --buf_map('n', 'gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
-    --buf_map('n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>')
-    --buf_map('n', 'gi',         '<cmd>lua vim.lsp.buf.implementation()<CR>')
-    --buf_map('n', 'gS',         '<cmd>lua vim.lsp.buf.signature_help()<CR>')
-    --buf_map('n', 'gTD',        '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-    --buf_map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-    --buf_map('n', 'gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
-    --buf_map('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    --buf_map('n', ']e',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
-    --buf_map('n', '[e',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 
     if client.server_capabilities.documentFormattingProvider then
         if vim.fn.has('nvim-0.8') > 0 then

@@ -1,47 +1,49 @@
 pcall(require, 'impatient')
 
-local g = vim.g
+local g   = vim.g
+local o   = vim.o
 local cmd = vim.cmd
 local api = vim.api
-local fn = vim.fn
+local fn  = vim.fn
 local opt = vim.opt
 local map = vim.keymap.set
 
 g.mapleader = [[ ]]
 
-opt.ttimeoutlen   = 0
-opt.updatetime    = 1000
-opt.undofile      = true
-opt.wildignore    = "*.o,*.obj,*.dwo"
-opt.path          = vim.env.PWD .. '/**'
-opt.shortmess     :append("c")
+o.ttimeoutlen   = 0
+o.updatetime    = 100
+o.undofile      = true
+o.path          = vim.env.PWD .. '/**'
 
-opt.showmode      = false
-opt.ruler         = false
-opt.hidden        = true
-opt.foldenable    = false
-opt.number        = true
-opt.numberwidth   = 5
-opt.signcolumn    = "yes"
-opt.cmdheight     = 2
---opt.cul           = true
-opt.lazyredraw    = true
-opt.smartcase     = true
-opt.visualbell    = true
-opt.ignorecase    = true
+o.showmode      = false
+o.ruler         = false
+o.hidden        = true
+o.foldenable    = false
+o.number        = true
+o.numberwidth   = 5
+o.signcolumn    = "yes"
+--o.cmdheight     = 2
+--o.cul           = true
+o.lazyredraw    = true
+o.smartcase     = true
+o.visualbell    = true
+o.ignorecase    = true
 
-opt.expandtab     = true
-opt.shiftround    = true
-opt.shiftwidth    = 4
-opt.matchtime     = 3
-opt.scrolloff     = 3
-opt.linebreak     = true
-opt.breakindent   = true
-opt.showbreak     = "↪"
-opt.showmatch     = true
-opt.inccommand    = "nosplit"
-opt.list          = true
-opt.listchars     = "tab:▸ ,trail:·"
+o.expandtab     = true
+o.shiftround    = true
+o.shiftwidth    = 4
+o.matchtime     = 3
+o.scrolloff     = 3
+o.linebreak     = true
+o.breakindent   = true
+o.showbreak     = "↪"
+o.showmatch     = true
+o.inccommand    = "nosplit"
+o.list          = true
+
+opt.shortmess   :append("c")
+opt.wildignore  = { "*.o", "*.obj" ,"*.dwo" }
+opt.listchars   = { tab = '▸ ', trail = '·' }
 
 -- editing
 map('i', 'jk', '<ESC>')
