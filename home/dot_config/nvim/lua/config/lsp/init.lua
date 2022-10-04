@@ -32,18 +32,20 @@ local function on_attach(client, bufnr)
 
     status.on_attach()
 
-    local location_opts = {
-      on_list = function(result)
-        fzf_config.locations({ prompt = result.title, items = result.items })
-      end
-    }
+    local fzf_list = function(jump_single)
+      return {
+        on_list = function(result)
+          fzf_config.locations({ prompt = result.title, items = result.items, jump_to_single_result = jump_single })
+        end
+      }
+    end
 
-    buf_map('n', 'gD',         function() vim.lsp.buf.declaration(location_opts) end)
-    buf_map('n', 'gd',         function() vim.lsp.buf.definition(location_opts) end)
-    buf_map('n', 'gi',         function() vim.lsp.buf.implementation(location_opts) end)
-    buf_map('n', 'gTD',        function() vim.lsp.buf.type_definition(location_opts) end)
-    buf_map('n', 'gr',         function() vim.lsp.buf.references(nil, location_opts) end)
-    buf_map('n', 'gws',        function() vim.lsp.buf.workspace_symbol(vim.fn.expand('<cword>'), location_opts) end)
+    buf_map('n', 'gD',         function() vim.lsp.buf.declaration(fzf_list()) end)
+    buf_map('n', 'gd',         function() vim.lsp.buf.definition(fzf_list()) end)
+    buf_map('n', 'gi',         function() vim.lsp.buf.implementation(fzf_list()) end)
+    buf_map('n', 'gTD',        function() vim.lsp.buf.type_definition(fzf_list()) end)
+    buf_map('n', 'gr',         function() vim.lsp.buf.references(nil, fzf_list(false)) end)
+    buf_map('n', 'gws',        function() vim.lsp.buf.workspace_symbol(vim.fn.expand('<cword>'), fzf_list(false)) end)
 
     buf_map('n', 'K',          vim.lsp.buf.hover)
     buf_map('n', '<leader>ac', vim.lsp.buf.code_action)
@@ -54,17 +56,11 @@ local function on_attach(client, bufnr)
     buf_map({'n','i','s'}, '<C-g>', vim.lsp.buf.signature_help)
 
     if client.server_capabilities.documentFormattingProvider then
-        if vim.fn.has('nvim-0.8') > 0 then
-          buf_map('n', '<leader>f', vim.lsp.buf.format)
-        else
-          buf_map('n', '<leader>f', vim.lsp.buf.formatting_sync)
-        end
+        buf_map('n', '<leader>f', vim.lsp.buf.format)
     end
 
     if client.server_capabilities.documentRangeFormattingProvider then
-        -- TODO: support <cmd> with a smart function to get *current* visual selection
-        -- Follow neovim/neovim#13896
-        buf_map('x', '<leader>f', ':lua vim.lsp.buf.range_formatting()<CR>')
+        buf_map('x', '<leader>f', vim.lsp.buf.format)
     end
 
     if client.server_capabilities.documentHighlightProvider then
