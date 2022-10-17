@@ -90,7 +90,6 @@ function M.highlight_token(ctx, token)
 
   for _, group in ipairs(groups) do
     api.nvim_buf_set_extmark(ctx.bufnr, namespace, line, start_col, {
-      end_row = line,
       end_col = end_col,
       hl_group = group.name,
       priority = group.priority,

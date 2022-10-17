@@ -53,6 +53,8 @@ local function init()
     config = [[require('config.fzf')]],
   }
 
+  use 'ibhagwan/smartyank.nvim'
+
   use {
     'rcarriga/nvim-notify',
     config = function()
