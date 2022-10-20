@@ -98,8 +98,6 @@ function M.setup()
 
   require('config.heirline').setup()
   require('config.bufferline')
-  require('ts-fix')
-
 end
 
 return M

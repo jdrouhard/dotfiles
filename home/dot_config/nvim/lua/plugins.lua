@@ -205,10 +205,12 @@ local function init()
     cond = use_builtin_lsp,
     requires = {
       'nvim-lightbulb',
+      'fzf-lua',
       'lsp_signature.nvim',
     },
     wants = {
       'nvim-lightbulb',
+      'fzf-lua',
       'lsp_signature.nvim',
     },
     config = [[require('config.lsp')]],
