@@ -37,10 +37,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
-if has('nvim')
-    Plug 'sakhnik/nvim-gdb', { 'do': ':UpdateRemotePlugins' }
-endif
-
 call plug#end()
 
 "-------------------------------------------------------------------------------
@@ -301,14 +297,6 @@ endif
 
 let g:fzf_layout = { 'window': {'width': 0.9, 'height': 0.6 }, 'down': '~15%' }
 let g:fzf_commits_log_options = '--graph --color=always --all --pretty=tformat:"%C(auto)%h%d %s %C(green)(%ar)%Creset %C(blue)<%an>%Creset"'
-
-if has('nvim')
-    " Configure nvim-gdb
-    let g:nvimgdb_config_override = {
-        \ 'key_frameup':    '<c-k>',
-        \ 'key_framedown':  '<c-j>',
-        \ }
-endif
 
 "-------------------------------------------------------------------------------
 " Configure autocommmands
