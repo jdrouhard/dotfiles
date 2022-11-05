@@ -3,7 +3,7 @@ local heirline   = require("heirline.utils")
 local devicons   = require('nvim-web-devicons')
 local status     = require('config.lsp.status')
 local util       = require('config.heirline.util')
-local os_sep     = package.config:sub(1,1)
+local os_sep     = package.config:sub(1, 1)
 local icons      = util.icons
 local mode       = util.mode
 
@@ -112,26 +112,34 @@ local FileType = {
 local WorkDir = {
   condition = function(self) return self.pwd end,
   hl = { fg = "gray" },
-  heirline.make_flexible_component(priority.WorkDir, {
+  flexible = priority.WorkDir,
+  {
     provider = function(self) return self.pwd end,
-  },{
+  },
+  {
     provider = function(self)
       return vim.fn.pathshorten(self.pwd)
     end,
-  }, null)
+  },
+  {
+    provider = ''
+  },
 }
 
 local CurrentPath = {
   condition = function(self) return self.current_path end,
-  heirline.make_flexible_component(priority.CurrentPath, {
+  flexible = priority.CurrentPath,
+  {
     provider = function(self) return self.current_path end,
-  },{
+  },
+  {
     provider = function(self)
       return vim.fn.pathshorten(self.current_path, 2)
     end,
-  },{
+  },
+  {
     provider = ''
-  }),
+  },
   hl = { fg = "blue" }
 }
 
@@ -149,7 +157,7 @@ local GPS = {
   provider = function(self)
     local location = self.nvim_gps.get_location()
     if location ~= '' then
-        return '> ' .. location .. ' '
+      return '> ' .. location .. ' '
     end
   end,
   hl = { fg = "gray" },
@@ -175,7 +183,7 @@ local FileProperties = {
       fileformat = 'CRLF'
     elseif fileformat == 'mac' then
       fileformat = 'CR'
-    else  -- unix'
+    else -- unix'
       -- fileformat = 'LF'
       fileformat = nil
     end
@@ -187,7 +195,7 @@ local FileProperties = {
   provider = function(self)
     local sep
     if self.fileformat and self.encoding then sep = ' ' end
-    return table.concat{ ' ', self.fileformat or '', sep or '', self.encoding or '', ' ' }
+    return table.concat { ' ', self.fileformat or '', sep or '', self.encoding or '', ' ' }
   end,
 }
 
@@ -197,7 +205,7 @@ local FileNameBlock = {
     {
       condition = conditions.is_active,
       WorkDir, CurrentPath, FileName
-    },{
+    }, {
       FileName,
       hl = { fg = "gray", bold = true, force = true }
     },
@@ -228,7 +236,7 @@ local DapMessages = {
 local Diagnostics = {
   condition = conditions.has_diagnostics,
   init = function(self)
-    local get_icon = function(name)
+    local get_icon  = function(name)
       local sign = vim.fn.sign_getdefined(name)
       if not vim.tbl_isempty(sign) then
         return sign[1].text
@@ -249,7 +257,7 @@ local Diagnostics = {
     provider = function(self)
       -- 0 is just another output, we can decide to print it or not!
       if self.errors > 0 then
-        return table.concat{ self.error_icon, self.errors, ' ' }
+        return table.concat { self.error_icon, self.errors, ' ' }
       end
     end,
     hl = { fg = "diag_error" }
@@ -257,7 +265,7 @@ local Diagnostics = {
   {
     provider = function(self)
       if self.warnings > 0 then
-        return table.concat{ self.warn_icon, self.warnings, ' ' }
+        return table.concat { self.warn_icon, self.warnings, ' ' }
       end
     end,
     hl = { fg = "diag_warn" }
@@ -265,7 +273,7 @@ local Diagnostics = {
   {
     provider = function(self)
       if self.info > 0 then
-        return table.concat{ self.info_icon, self.info, ' ' }
+        return table.concat { self.info_icon, self.info, ' ' }
       end
     end,
     hl = { fg = "diag_info" }
@@ -273,7 +281,7 @@ local Diagnostics = {
   {
     provider = function(self)
       if self.hints > 0 then
-        return table.concat{ self.hint_icon, self.hints, ' ' }
+        return table.concat { self.hint_icon, self.hints, ' ' }
       end
     end,
     hl = { fg = "diag_hint" }
@@ -288,7 +296,7 @@ local GitBranch = {
   end,
   hl = { fg = "purple" },
   provider = function(self)
-    return table.concat{ " ", self.git_status.head, ' ' }
+    return table.concat { " ", self.git_status.head, ' ' }
   end,
 }
 
@@ -296,40 +304,41 @@ local GitChanges = {
   condition = function(self)
     if conditions.is_git_repo() then
       self.git_status = vim.b.gitsigns_status_dict
-      local has_changes = self.git_status.added   ~= 0 or
-      self.git_status.removed ~= 0 or
-      self.git_status.changed ~= 0
+      local has_changes = self.git_status.added ~= 0 or
+          self.git_status.removed ~= 0 or
+          self.git_status.changed ~= 0
       return has_changes
     end
   end,
   {
     provider = function(self)
       local count = self.git_status.added or 0
-      return count > 0 and table.concat{'+', count, ' '}
+      return count > 0 and table.concat { '+', count, ' ' }
     end,
     hl = { fg = "git_add" }
   },
   {
     provider = function(self)
       local count = self.git_status.changed or 0
-      return count > 0 and table.concat{'~', count, ' '}
+      return count > 0 and table.concat { '~', count, ' ' }
     end,
     hl = { fg = "git_change" }
   },
   {
     provider = function(self)
       local count = self.git_status.removed or 0
-      return count > 0 and table.concat{'-', count, ' '}
+      return count > 0 and table.concat { '-', count, ' ' }
     end,
     hl = { fg = "git_del" }
   },
   Space
 }
 
-local Git = heirline.make_flexible_component(priority.Git,
+local Git = {
+  flexible = priority.Git,
   { GitBranch, GitChanges },
   { GitBranch }
-)
+}
 
 local LspIndicator = {
   provider = icons.circle_small .. ' ',
@@ -386,8 +395,11 @@ local Lsp = {
     end
     self.lsp_names = names
   end,
-  heirline.make_flexible_component(priority.Lsp, LspServerMessages, LspServer, LspIndicator),
   hl = { fg = "cyan", bold = true },
+  flexible = priority.Lsp,
+  LspServerMessages,
+  LspServer,
+  LspIndicator,
 }
 
 local Coc = {

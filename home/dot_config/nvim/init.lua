@@ -21,7 +21,7 @@ o.hidden        = true
 o.foldenable    = false
 o.number        = true
 o.numberwidth   = 5
-o.signcolumn    = "yes"
+o.signcolumn    = 'yes'
 --o.cmdheight     = 2
 --o.cul           = true
 o.lazyredraw    = true
@@ -36,13 +36,14 @@ o.matchtime     = 3
 o.scrolloff     = 3
 o.linebreak     = true
 o.breakindent   = true
-o.showbreak     = "↪"
+o.showbreak     = '↪'
 o.showmatch     = true
-o.inccommand    = "nosplit"
+o.inccommand    = 'nosplit'
 o.list          = true
 
-opt.shortmess   :append("c")
-opt.wildignore  = { "*.o", "*.obj" ,"*.dwo" }
+opt.shortmess   :append('c')
+opt.diffopt     :append('linematch:60')
+opt.wildignore  = { '*.o', '*.obj' ,'*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
 
 -- editing
