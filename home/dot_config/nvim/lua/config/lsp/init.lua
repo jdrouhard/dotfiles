@@ -127,6 +127,9 @@ local servers = {
       },
     },
   },
+  rust_analyzer = {
+    cmd = { 'rustup', 'run', 'stable', 'rust-analyzer' },
+  },
 }
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()

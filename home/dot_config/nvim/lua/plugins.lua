@@ -157,7 +157,7 @@ local function init()
       { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' },
       { 'nvim-gps', after = 'nvim-treesitter' },
     },
-    ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript' },
+    ft = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript', 'rust' },
     run = ':TSUpdate',
     config = [[require('config.treesitter')]]
   }
@@ -196,7 +196,7 @@ local function init()
     'neoclide/coc.nvim',
     cond = not use_builtin_lsp,
     branch = 'release',
-    ft = { 'cpp', 'c', 'python', 'lua', 'cmake', 'json' },
+    ft = { 'cpp', 'c', 'python', 'lua', 'cmake', 'json', 'rust' },
     config = [[require('config.coc')]]
   }
 
@@ -214,7 +214,7 @@ local function init()
       'lsp_signature.nvim',
     },
     config = [[require('config.lsp')]],
-    ft = { 'cpp', 'c', 'python', 'lua' },
+    ft = { 'cpp', 'c', 'python', 'lua', 'rust' },
   }
 
   use {
