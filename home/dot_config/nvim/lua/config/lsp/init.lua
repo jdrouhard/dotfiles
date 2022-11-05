@@ -21,86 +21,86 @@ require('semantic-tokens').setup()
 --  }
 --})
 
-vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl='', numhl='' })
+vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
 local au_group = api.nvim_create_augroup('lsp_aucmds', {})
 
 local function on_attach(client, bufnr)
-    local function buf_map(mode, lhs, rhs)
-      vim.keymap.set(mode, lhs, rhs, { buffer = true, silent = true })
-    end
+  local function buf_map(mode, lhs, rhs)
+    vim.keymap.set(mode, lhs, rhs, { buffer = true, silent = true })
+  end
 
-    status.on_attach()
+  status.on_attach()
 
-    local fzf_list = function(jump_single)
-      return {
-        on_list = function(result)
-          fzf_config.locations({ prompt = result.title, items = result.items, jump_to_single_result = jump_single })
-        end
-      }
-    end
-
-    buf_map('n', 'gD',         function() vim.lsp.buf.declaration(fzf_list()) end)
-    buf_map('n', 'gd',         function() vim.lsp.buf.definition(fzf_list()) end)
-    buf_map('n', 'gi',         function() vim.lsp.buf.implementation(fzf_list()) end)
-    buf_map('n', 'gTD',        function() vim.lsp.buf.type_definition(fzf_list()) end)
-    buf_map('n', 'gr',         function() vim.lsp.buf.references(nil, fzf_list(false)) end)
-    buf_map('n', 'gws',        function() vim.lsp.buf.workspace_symbol(vim.fn.expand('<cword>'), fzf_list(false)) end)
-
-    buf_map('n', 'K',          vim.lsp.buf.hover)
-    buf_map('n', '<leader>ac', vim.lsp.buf.code_action)
-    buf_map('n', '<leader>rn', vim.lsp.buf.rename)
-    buf_map('n', ']e',         vim.diagnostic.goto_next)
-    buf_map('n', '[e',         vim.diagnostic.goto_prev)
-
-    buf_map({'n','i','s'}, '<C-g>', vim.lsp.buf.signature_help)
-
-    if client.server_capabilities.documentFormattingProvider then
-        buf_map('n', '<leader>f', vim.lsp.buf.format)
-    end
-
-    if client.server_capabilities.documentRangeFormattingProvider then
-        buf_map('x', '<leader>f', vim.lsp.buf.format)
-    end
-
-    if client.server_capabilities.documentHighlightProvider then
-      api.nvim_create_autocmd('CursorHold', {
-        group = au_group,
-        buffer = bufnr,
-        callback = vim.lsp.buf.document_highlight,
-        desc = 'lsp.buf.document_highlight',
-      })
-      api.nvim_create_autocmd('CursorMoved', {
-        group = au_group,
-        buffer = bufnr,
-        callback = vim.lsp.buf.clear_references,
-        desc = 'lsp.buf.clear_references',
-      })
-    end
-    if client.server_capabilities.semanticTokensProvider then
-      local has_semantic_tokens, semantic_tokens = pcall(require, 'vim.lsp.semantic_tokens')
-      if has_semantic_tokens then
-        api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-          group = au_group,
-          buffer = bufnr,
-          callback = function() semantic_tokens.refresh(bufnr) end,
-          desc = 'lsp.semantic_tokens.refresh',
-        })
+  local fzf_list = function(jump_single)
+    return {
+      on_list = function(result)
+        fzf_config.locations({ prompt = result.title, items = result.items, jump_to_single_result = jump_single })
       end
-    end
-    api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
-      group = au_group,
-      buffer = bufnr,
-      callback = function() require('utils').lsp_cancel_pending_requests() end,
-      desc = 'lsp.cancel_pending_requests',
-    })
+    }
+  end
 
-    api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+  buf_map('n', 'gD', function() vim.lsp.buf.declaration(fzf_list()) end)
+  buf_map('n', 'gd', function() vim.lsp.buf.definition(fzf_list()) end)
+  buf_map('n', 'gi', function() vim.lsp.buf.implementation(fzf_list()) end)
+  buf_map('n', 'gTD', function() vim.lsp.buf.type_definition(fzf_list()) end)
+  buf_map('n', 'gr', function() vim.lsp.buf.references(nil, fzf_list(false)) end)
+  buf_map('n', 'gws', function() vim.lsp.buf.workspace_symbol(vim.fn.expand('<cword>'), fzf_list(false)) end)
+
+  buf_map('n', 'K', vim.lsp.buf.hover)
+  buf_map('n', '<leader>ac', vim.lsp.buf.code_action)
+  buf_map('n', '<leader>rn', vim.lsp.buf.rename)
+  buf_map('n', ']e', vim.diagnostic.goto_next)
+  buf_map('n', '[e', vim.diagnostic.goto_prev)
+
+  buf_map({ 'n', 'i', 's' }, '<C-g>', vim.lsp.buf.signature_help)
+
+  if client.server_capabilities.documentFormattingProvider then
+    buf_map('n', '<leader>f', vim.lsp.buf.format)
+  end
+
+  if client.server_capabilities.documentRangeFormattingProvider then
+    buf_map('x', '<leader>f', vim.lsp.buf.format)
+  end
+
+  if client.server_capabilities.documentHighlightProvider then
+    api.nvim_create_autocmd('CursorHold', {
       group = au_group,
       buffer = bufnr,
-      callback = function() require('nvim-lightbulb').update_lightbulb() end,
-      desc = 'nvim-lightbulb.update_lightbulb',
+      callback = vim.lsp.buf.document_highlight,
+      desc = 'lsp.buf.document_highlight',
     })
+    api.nvim_create_autocmd('CursorMoved', {
+      group = au_group,
+      buffer = bufnr,
+      callback = vim.lsp.buf.clear_references,
+      desc = 'lsp.buf.clear_references',
+    })
+  end
+  if client.server_capabilities.semanticTokensProvider then
+    local has_semantic_tokens, semantic_tokens = pcall(require, 'vim.lsp.semantic_tokens')
+    if has_semantic_tokens then
+      api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+        group = au_group,
+        buffer = bufnr,
+        callback = function() semantic_tokens.refresh(bufnr) end,
+        desc = 'lsp.semantic_tokens.refresh',
+      })
+    end
+  end
+  api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
+    group = au_group,
+    buffer = bufnr,
+    callback = function() require('utils').lsp_cancel_pending_requests() end,
+    desc = 'lsp.cancel_pending_requests',
+  })
+
+  api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+    group = au_group,
+    buffer = bufnr,
+    callback = function() require('nvim-lightbulb').update_lightbulb() end,
+    desc = 'nvim-lightbulb.update_lightbulb',
+  })
 end
 
 local servers = {
