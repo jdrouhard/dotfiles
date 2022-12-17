@@ -32,6 +32,11 @@ local function init()
   use 'rebelot/kanagawa.nvim'
 
   use {
+    'ojroques/nvim-osc52',
+    config = [[require('config.osc52')]]
+  }
+
+  use {
     'mhinz/vim-sayonara',
     cmd = 'Sayonara',
     setup = function()
