@@ -1,3 +1,5 @@
+; extends
+
 (operator_cast) [ "operator" ] @function
 
 (auto) @type

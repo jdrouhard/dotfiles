@@ -53,8 +53,6 @@ local function init()
     config = [[require('config.fzf')]],
   }
 
-  use 'ibhagwan/smartyank.nvim'
-
   use {
     'rcarriga/nvim-notify',
     config = function()
@@ -108,7 +106,18 @@ local function init()
   }
 
   use 'justinmk/vim-dirvish'
-  use { 'tpope/vim-dispatch', cmd = { 'Dispatch', 'Make', 'Focus', 'Start' } }
+  use { 'tpope/vim-dispatch',
+    requires = {
+      'radenling/vim-dispatch-neovim',
+      after = 'vim-dispatch',
+      config = function()
+        local handlers = vim.g.dispatch_handlers
+        table.insert(handlers, 1, 'neovim')
+        vim.g.dispatch_handlers = handlers
+      end,
+    },
+    cmd = { 'Dispatch', 'Make', 'Focus', 'Start' }
+  }
   use { 'tpope/vim-eunuch', cmd = { 'Delete', 'Unlink', 'Move', 'Rename', 'Mkdir' } }
   use {
     'tpope/vim-fugitive',

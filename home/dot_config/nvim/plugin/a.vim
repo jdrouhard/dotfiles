@@ -601,7 +601,7 @@ function! NextAlternate(bang)
             if (<SID>EqualFilePaths(fnamemodify(nextAlternate, ":p"), fnamemodify(currentFile, ":p")))
                 continue
             endif
-            if (filereadable(nextAlternate))
+            if (filereadable(expand(nextAlternate)))
                 " on cygwin filereadable("foo.H") returns true if "foo.h" exists
                if (has("unix") && $WINDIR != "" && fnamemodify(nextAlternate, ":p") ==? fnamemodify(currentFile, ":p"))
                   continue
@@ -672,12 +672,12 @@ function! <SID>BufferOrFileExists(fileName)
       endif
 
       if (!result)
-         let result  = bufexists(bufName) || bufexists(a:fileName) || filereadable(a:fileName)
+         let result  = bufexists(bufName) || bufexists(a:fileName) || filereadable(expand(a:fileName))
       endif
    endif
 
    if (!result)
-      let result = filereadable(a:fileName)
+      let result = filereadable(expand(a:fileName))
    endif
    return result
 endfunction

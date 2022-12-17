@@ -11,8 +11,6 @@ if use_float_progress then
   require('config.lsp.float_progress').setup()
 end
 
-require('semantic-tokens').setup()
-
 --require('lsp_signature').setup({
 --  bind = true,
 --  toggle_key = '<C-g>',
@@ -55,6 +53,8 @@ local function on_attach(client, bufnr)
 
   buf_map({ 'n', 'i', 's' }, '<C-g>', vim.lsp.buf.signature_help)
 
+  buf_map('n', '<leader>tt', require('utils').toggle_tokens)
+
   if client.server_capabilities.documentFormattingProvider then
     buf_map('n', '<leader>f', vim.lsp.buf.format)
   end
@@ -76,17 +76,6 @@ local function on_attach(client, bufnr)
       callback = vim.lsp.buf.clear_references,
       desc = 'lsp.buf.clear_references',
     })
-  end
-  if client.server_capabilities.semanticTokensProvider then
-    local has_semantic_tokens, semantic_tokens = pcall(require, 'vim.lsp.semantic_tokens')
-    if has_semantic_tokens then
-      api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-        group = au_group,
-        buffer = bufnr,
-        callback = function() semantic_tokens.refresh(bufnr) end,
-        desc = 'lsp.semantic_tokens.refresh',
-      })
-    end
   end
   api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
     group = au_group,
