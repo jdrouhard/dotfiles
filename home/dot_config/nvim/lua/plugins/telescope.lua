@@ -2,6 +2,7 @@ local M = {
   'nvim-telescope/telescope.nvim',
   cmd = 'Telescope',
   dependencies = {
+    'rcarriga/nvim-notify',
     'nvim-lua/plenary.nvim',
     'fannheyward/telescope-coc.nvim',
     {
@@ -35,7 +36,10 @@ function M.config()
         override_generic_sorter = true,
         override_file_sorter = true,
         case_mode = 'smart_case',
-      }
+      },
+      coc = {
+        prefer_locations = true
+      },
     },
     pickers = {
       grep_string = {
@@ -75,25 +79,15 @@ function M.init()
 
   map('n', '<c-p>', function() require('telescope.builtin').find_files() end)
   map('n', '<leader>l', function() require('telescope.builtin').buffers() end)
-  map('n', '<leader>t', function() require('telescope.builtin').git_files() end)
   map('n', '<leader>h', function() require('telescope.builtin').commands() end)
   map('n', '<leader>?', function() require('telescope.builtin').help_tags() end)
   map('n', '<leader>gs', function() require('telescope.builtin').git_status() end)
   map('n', '<leader>gl', function() require('telescope.builtin').git_commits() end)
   map('n', '<leader>gbl', function() require('telescope.builtin').git_bcommits() end)
+  map('n', '<leader>gf', function() require('telescope.builtin').git_files() end)
   map('n', '<leader>qf', function() require('telescope.builtin').quickfix() end)
 
   map('n', 'gr', '<cmd>Telescope coc references<CR>')
-
-  vim.g.coc_enable_locationlist = false
-
-  local au_group = vim.api.nvim_create_augroup('telescope_coc', {})
-  vim.api.nvim_create_autocmd('User', {
-    group = au_group,
-    pattern = 'CocLocationsChange',
-    command = 'Telescope coc locations',
-    nested = true,
-  })
 end
 
 return M

@@ -1,6 +1,5 @@
 local M = {
   'hrsh7th/nvim-cmp',
-  event = { 'InsertEnter', 'CmdlineEnter' },
   dependencies = {
     'L3MON4D3/LuaSnip',
     'onsails/lspkind-nvim',
@@ -14,14 +13,15 @@ local M = {
   },
 }
 
+if require('globals').native_lsp then
+  M.event = { 'InsertEnter', 'CmdlineEnter' }
+end
+
 function M.config()
   local api = vim.api
   local cmp = require('cmp')
   local lspkind = require('lspkind')
   local luasnip = require('luasnip')
-
-  api.nvim_del_keymap('i', '<tab>')
-  api.nvim_del_keymap('i', '<s-tab>')
 
   local function has_words_before()
     local line, col = unpack(api.nvim_win_get_cursor(0))

@@ -1,23 +1,14 @@
 local M = {
   'neoclide/coc.nvim',
   branch = 'release',
-  --ft = { 'cpp', 'c', 'python', 'lua', 'cmake', 'json', 'rust' },
 }
 
 if not require('globals').native_lsp then
-  M.ft = { 'cpp', 'c', 'python', 'lua', 'cmake', 'json', 'rust' }
+  M.event = 'BufReadPost'
 end
 
 function M.config()
-  if require('globals').native_lsp then
-    return
-  end
-
-  local api = vim.api
   local map = vim.keymap.set
-
-  api.nvim_del_keymap('i', '<tab>')
-  api.nvim_del_keymap('i', '<s-tab>')
 
   function _G.check_back_space()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -34,11 +25,14 @@ function M.config()
   map('n', 'gi', '<plug>(coc-implementation)')
   map('n', 'gTD', '<plug>(coc-type-definition)')
   map('n', '<leader>rn', '<plug>(coc-rename)')
-  map('n', 'gr', '<plug>(coc-references)')
   map('n', 'K', "<cmd>call CocActionAsync('definitionHover')<CR>")
   map('n', '<leader>ac', '<plug>(coc-codeaction-cursor)')
   map('n', ']e', '<plug>(coc-diagnostic-next)')
   map('n', '[e', '<plug>(coc-diagnostic-prev)')
+
+  if not require('globals').telescope then
+    map('n', 'gr', '<plug>(coc-references)')
+  end
 
   map({ 'x', 'o' }, 'if', '<plug>(coc-funcobj-i)')
   map({ 'x', 'o' }, 'ic', '<plug>(coc-classobj-i)')
