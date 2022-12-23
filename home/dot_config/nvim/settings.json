@@ -1,8 +1,0 @@
-{
-    "pyls.plugins.jedi_completion.include_params": true,
-    "initializationOptions": {
-        "highlight": {
-            "lsRanges": true
-        }
-    }
-}

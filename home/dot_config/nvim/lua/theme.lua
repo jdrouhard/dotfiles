@@ -5,11 +5,6 @@ local opt = vim.opt
 
 local M = {}
 
-M.theme = 'tokyonight'
---M.theme = 'nightfox'
---M.theme = 'duskfox'
---M.theme = 'kanagawa'
-
 local hl_map = {
   ['@keyword.access'] = { link = 'Statement' },
   ['@statement']      = { link = 'Statement' },
@@ -71,22 +66,22 @@ function M.setup()
     end,
   }
 
-  require('nightfox').setup {
-    options = {
-      styles = {
-        comments = 'italic',
-        functions = 'italic',
-        keywords = 'italic'
-      }
-    }
-  }
+  --require('nightfox').setup {
+  --  options = {
+  --    styles = {
+  --      comments = 'italic',
+  --      functions = 'italic',
+  --      keywords = 'italic'
+  --    }
+  --  }
+  --}
 
   local au_group = vim.api.nvim_create_augroup('highlights', {})
   vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
-  cmd([[colorscheme ]] .. M.theme)
+  cmd([[colorscheme ]] .. require('globals').theme)
 
-  require('config.heirline').setup()
-  require('config.bufferline')
+  require('bufferline')
+  require('heirline')
 end
 
 return M

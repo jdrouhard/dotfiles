@@ -1,6 +1,6 @@
 local notify = require('notify')
-local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
-local client_notifications =  {}
+local spinner_frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+local client_notifications = {}
 
 local function get_notification_data(client_id, token)
   if not client_notifications[client_id] then
@@ -17,7 +17,7 @@ local M = {}
 local function update_spinner(client_id, token)
   local data = get_notification_data(client_id, token)
   if data.spinner then
-    data.spinner  = (data.spinner + 1) % #spinner_frames
+    data.spinner      = (data.spinner + 1) % #spinner_frames
     data.notification = notify(nil, nil, {
       hide_from_history = true,
       icon = spinner_frames[data.spinner + 1],

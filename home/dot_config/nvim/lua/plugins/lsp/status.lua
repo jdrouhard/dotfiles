@@ -1,6 +1,6 @@
 local lsp_util = require('vim.lsp.util')
 
-local spinner_frames = {'⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'}
+local spinner_frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
 local index = 0
 local au_group = nil
 local status_timer = nil
@@ -9,7 +9,7 @@ local requests_cache = nil
 local active_requests = {}
 local debouncing_requests = {}
 
-local ignore_methods = {'documentHighlight', 'semanticTokens', 'codeAction'}
+local ignore_methods = { 'documentHighlight', 'semanticTokens', 'codeAction' }
 
 local M = {}
 
@@ -27,8 +27,8 @@ local function update_timer()
 end
 
 function M.invalidate_requests()
-    requests_cache = nil
-    update_timer()
+  requests_cache = nil
+  update_timer()
 end
 
 function M.update_progress()
@@ -107,7 +107,8 @@ function M.update_requests()
         end
 
         if not ignore then
-          result[#result + 1] = string.format("%s %s", type == 'pending' and 'requesting' or 'cancelling', string.sub(method, string.find(method, '/')+1))
+          result[#result + 1] = string.format("%s %s", type == 'pending' and 'requesting' or 'cancelling',
+            string.sub(method, string.find(method, '/') + 1))
         end
       end
     end
@@ -134,7 +135,7 @@ end
 
 local function get_status()
   local msgs = {}
-  for _, client in ipairs(vim.lsp.get_active_clients({bufnr = 0})) do
+  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
     local name = client.name
     local status = client.status
     if status then
@@ -169,6 +170,7 @@ function M.statusline()
       client_msgs[#client_msgs + 1] = contents
     end
   end
+
   extend(get_requests(), true)
   extend(get_status())
   extend(get_progress(), true)
