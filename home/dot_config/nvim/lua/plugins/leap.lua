@@ -1,6 +1,6 @@
 local M = {
   'ggandor/leap.nvim',
-  event = 'VeryLazy',
+  keys = { 's', 'S', 'f', 'F', 't', 'T', 'M', },
   dependencies = {
     'tpope/vim-repeat',
     'ggandor/flit.nvim',

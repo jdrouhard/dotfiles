@@ -6,12 +6,12 @@ local M = {
   'mhartington/oceanic-next',
   'rebelot/kanagawa.nvim',
 
+  'kosayoda/nvim-lightbulb',
+  'folke/neodev.nvim',
+
   {
     'mhinz/vim-sayonara',
-    cmd = 'Sayonara',
-    init = function()
-      vim.keymap.set('', '<c-q>', '<cmd>Sayonara!<CR>')
-    end,
+    keys = { { '<c-q>', '<cmd>Sayonara!<cr>', mode = '' } },
   },
 
   {
@@ -28,10 +28,7 @@ local M = {
 
   {
     'junegunn/vim-easy-align',
-    event = 'VeryLazy',
-    config = function()
-      vim.keymap.set({ 'n', 'x' }, 'ga', '<plug>(EasyAlign)', { remap = true })
-    end
+    keys = { { 'ga', '<plug>(EasyAlign)', mode = { 'n', 'x' }, remap = true } },
   },
 
   {
@@ -46,12 +43,11 @@ local M = {
 
   {
     'tpope/vim-fugitive',
-    event = 'VeryLazy',
-    config = function()
-      local map = vim.keymap.set
-      map('n', '<leader>gg', '<cmd>Git blame<CR>')
-      map('n', '<leader>gd', '<cmd>Gdiff<CR>')
-    end
+    cmd = 'Git',
+    keys = {
+      { '<leader>gg', '<cmd>Git blame<cr>' },
+      { '<leader>gd', '<cmd>Gdiff<cr>' },
+    },
   },
 
   {
@@ -61,7 +57,6 @@ local M = {
       vim.g.startuptime_tries = 10
     end
   },
-
 }
 
 return M

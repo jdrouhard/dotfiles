@@ -1,11 +1,9 @@
 local M = {
   'neoclide/coc.nvim',
   branch = 'release',
+  event = 'BufReadPost',
+  cond = function() return not require('globals').native_lsp end,
 }
-
-if not require('globals').native_lsp then
-  M.event = 'BufReadPost'
-end
 
 function M.config()
   local map = vim.keymap.set

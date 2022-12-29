@@ -550,6 +550,13 @@ function M.config()
     Space(2)
   }
 
+  local NoiceShowMode = {
+    provider = require('noice').api.status.mode.get,
+    cond = require('noice').api.status.mode.has,
+    hl = { fg = 'orange' },
+    Space
+  }
+
   local SearchResults = {
     condition = function(self)
       local lines = vim.api.nvim_buf_line_count(0)
@@ -611,6 +618,7 @@ function M.config()
   }
   local ActiveStatusline = {
     VimMode,
+    NoiceShowMode,
     SearchResults,
     FileNameBlock,
     Space(4),

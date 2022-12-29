@@ -1,15 +1,15 @@
 local M = {
   'haya14busa/vim-asterisk',
-  keys = { '*', '#', 'g*', 'g#' },
+  keys = {
+    { '*', '<plug>(asterisk-z*)', mode = {'n', 'x' }, remap = true },
+    { '#', '<plug>(asterisk-z#)', mode = {'n', 'x' }, remap = true },
+    { 'g*', '<plug>(asterisk-gz*)', mode = {'n', 'x' }, remap = true },
+    { 'g#', '<plug>(asterisk-gz#)', mode = {'n', 'x' }, remap = true },
+  },
 }
 
 function M.config()
-  local map = vim.keymap.set
   vim.g['asterisk#keeppos'] = true
-  map({ 'n', 'x' }, '*', '<plug>(asterisk-z*)', { remap = true })
-  map({ 'n', 'x' }, '#', '<plug>(asterisk-z#)', { remap = true })
-  map({ 'n', 'x' }, 'g*', '<plug>(asterisk-gz*)', { remap = true })
-  map({ 'n', 'x' }, 'g#', '<plug>(asterisk-gz#)', { remap = true })
 end
 
 return M

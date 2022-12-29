@@ -1,6 +1,18 @@
-local opt = vim.opt
-
-local filetypes = { 'cpp', 'c', 'python', 'bash', 'cmake', 'lua', 'query', 'json', 'javascript', 'rust'  }
+local filetypes = {
+  'bash',
+  'c',
+  'cmake',
+  'cpp',
+  'javascript',
+  'json',
+  'lua',
+  'markdown',
+  'markdown_inline',
+  'python',
+  'query',
+  'regex',
+  'rust',
+}
 
 local M = {
   'nvim-treesitter/nvim-treesitter',
@@ -40,8 +52,9 @@ function M.config()
     }
   }
 
-  opt.foldmethod = "expr"
-  opt.foldexpr   = "nvim_treesitter#foldexpr()"
+  local o = vim.o
+  o.foldmethod = "expr"
+  o.foldexpr   = "nvim_treesitter#foldexpr()"
 
   require('nvim-gps').setup()
 end

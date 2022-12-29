@@ -73,10 +73,10 @@ function M.config()
 
   end
 
-  require('Comment').setup {
+  require('Comment').setup({
     post_hook = post_hook,
     padding = use_padding
-  }
+  })
 end
 
 return M

@@ -15,10 +15,12 @@ local M = {
 function M.config()
   local actions = require('telescope.actions')
   local mappings = {
-    ["<c-k>"] = actions.move_selection_previous,
-    ["<c-j>"] = actions.move_selection_next,
-    ["<c-b>"] = actions.preview_scrolling_up,
-    ["<c-f>"] = actions.preview_scrolling_down,
+    ['<c-k>'] = actions.move_selection_previous,
+    ['<c-j>'] = actions.move_selection_next,
+    ['<c-b>'] = actions.preview_scrolling_up,
+    ['<c-f>'] = actions.preview_scrolling_down,
+    ['<Tab>'] = actions.toggle_selection + actions.move_selection_better,
+    ['<S-Tab>'] = actions.toggle_selection + actions.move_selection_worse,
   }
 
   require('telescope').setup {
@@ -65,12 +67,10 @@ function M.init()
 
   local map = vim.keymap.set
   local function grep()
-    vim.ui.input({ prompt = "Grep For > " }, function(term)
-      if not term or term == '' then
-        return
-      end
-      return require('telescope.builtin').grep_string({ search = term })
-    end)
+    local ok, res = pcall(vim.fn.input, 'Grep For> ')
+    if ok and res ~= '' then
+      return require('telescope.builtin').grep_string({ search = res })
+    end
   end
 
   map('n', '<leader>s', grep)

@@ -1,11 +1,14 @@
 local M = {
   'akinsho/nvim-bufferline.lua',
+  keys = {
+    { '<leader>b', '<cmd>BufferLinePick<cr>' },
+    { '<c-h>', '<cmd>BufferLineCyclePrev<cr>' },
+    { '<c-l>', '<cmd>BufferLineCycleNext<cr>' },
+  },
   dependencies = 'kyazdani42/nvim-web-devicons',
 }
 
 function M.config()
-  local map = vim.keymap.set
-
   require('bufferline').setup {
     options = {
       themable = false,
@@ -18,10 +21,6 @@ function M.config()
       diagnostics = 'nvim_lsp',
     },
   }
-
-  map('n', '<leader>b', '<cmd>BufferLinePick<cr>')
-  map('n', '<c-h>', '<cmd>BufferLineCyclePrev<cr>')
-  map('n', '<c-l>', '<cmd>BufferLineCycleNext<cr>')
 end
 
 return M

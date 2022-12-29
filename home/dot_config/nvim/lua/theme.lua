@@ -1,7 +1,7 @@
 local g = vim.g
+local o = vim.o
 local api = vim.api
 local cmd = vim.cmd
-local opt = vim.opt
 
 local M = {}
 
@@ -49,7 +49,7 @@ function M.apply_highlights()
 end
 
 function M.setup()
-  opt.termguicolors = true
+  o.termguicolors = true
 
   g.oceanic_next_terminal_italic = true
   g.oceanic_next_terminal_bold = true

@@ -19,7 +19,6 @@ o.numberwidth   = 5
 o.signcolumn    = 'yes'
 --o.cmdheight     = 2
 --o.cul           = true
-o.lazyredraw    = true
 o.smartcase     = true
 o.visualbell    = true
 o.ignorecase    = true

@@ -4,26 +4,22 @@ local lsp = vim.lsp
 
 local M = {
   'neovim/nvim-lspconfig',
-  dependencies = {
-    'hrsh7th/cmp-nvim-lsp',
-    'kosayoda/nvim-lightbulb',
-    'folke/neodev.nvim',
-  }
+  event = 'BufReadPost',
+  cond = require('globals').native_lsp,
+  dependencies = { 'hrsh7th/cmp-nvim-lsp' },
 }
 
-if require('globals').native_lsp then
-  --M.ft = { 'cpp', 'c', 'python', 'lua', 'rust' }
-  M.event = { 'BufReadPost' }
-end
-
 function M.config()
-  local lspconfig = require('lspconfig')
+  require('neodev').setup({
+    snippet = true,
+  })
+
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local sumneko_ext = require('plugins.lsp.sumneko_ext')
   local fzf_config = require('plugins.fzf-lua')
 
-  local use_float_progress = true
+  local use_float_progress = false
   status.setup(not use_float_progress)
   if use_float_progress then
     require('plugins.lsp.float_progress').setup()
@@ -31,15 +27,12 @@ function M.config()
 
   fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
-  require("neodev").setup({
-    snippet = true,
-  })
-
   local au_group = api.nvim_create_augroup('lsp_aucmds', {})
 
   local function on_attach(client, bufnr)
     local function buf_map(mode, lhs, rhs)
-      vim.keymap.set(mode, lhs, rhs, { buffer = true, silent = true })
+      local map = vim.keymap.set
+      map(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
     status.on_attach()
@@ -151,7 +144,7 @@ function M.config()
       config.capabilities or {},
       capabilities
     )
-    lspconfig[client].setup(config)
+    require('lspconfig')[client].setup(config)
   end
 
 end

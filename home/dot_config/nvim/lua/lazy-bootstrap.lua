@@ -16,6 +16,10 @@ if not vim.loop.fs_stat(install_path) then
 end
 vim.opt.runtimepath:prepend(install_path)
 
+local ViewConfig = require('lazy.view.config')
+ViewConfig.keys.profile_filter = '<M-f>'
+ViewConfig.keys.profile_sort = '<M-s>'
+
 require('lazy').setup('plugins', {
   defaults = { lazy = true },
   install = { colorscheme = { 'tokyonight', 'habamax' } },

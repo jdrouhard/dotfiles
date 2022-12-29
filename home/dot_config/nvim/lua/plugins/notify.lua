@@ -85,8 +85,6 @@ function M.config()
   require('notify').setup({
     stages = stages,
   })
-
-  vim.notify = require('notify')
 end
 
 return M

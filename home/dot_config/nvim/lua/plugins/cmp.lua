@@ -1,5 +1,7 @@
 local M = {
   'hrsh7th/nvim-cmp',
+  event = { 'InsertEnter', 'CmdlineEnter' },
+  cond = require('globals').native_lsp,
   dependencies = {
     'L3MON4D3/LuaSnip',
     'onsails/lspkind-nvim',
@@ -12,10 +14,6 @@ local M = {
     'saadparwaiz1/cmp_luasnip',
   },
 }
-
-if require('globals').native_lsp then
-  M.event = { 'InsertEnter', 'CmdlineEnter' }
-end
 
 function M.config()
   local api = vim.api
