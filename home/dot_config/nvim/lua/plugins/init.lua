@@ -43,7 +43,7 @@ local M = {
 
   {
     'tpope/vim-fugitive',
-    cmd = 'Git',
+    lazy = false,
     keys = {
       { '<leader>gg', '<cmd>Git blame<cr>' },
       { '<leader>gd', '<cmd>Gdiff<cr>' },

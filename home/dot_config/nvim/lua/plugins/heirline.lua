@@ -705,7 +705,7 @@ function M.config()
     group = 'Heirline',
   })
 
-  heirline.setup(StatusLines)
+  heirline.setup({ statusline = StatusLines })
 end
 
 return M

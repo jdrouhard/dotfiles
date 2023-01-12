@@ -1,6 +1,6 @@
 local M = {
   'folke/noice.nvim',
-  lazy = false,
+  event = 'VeryLazy',
   dependencies = {
     'MunifTanjim/nui.nvim',
   },

@@ -55,26 +55,13 @@ function M.setup()
   g.oceanic_next_terminal_bold = true
 
   require('tokyonight').setup {
-    style = 'night',
-    styles = {
-      functions = 'italic',
-    },
+    style = 'moon',
     on_highlights = function(hl, _)
       hl['@parameter.reference'] = {
         fg = '#cfc9c2',
       }
     end,
   }
-
-  --require('nightfox').setup {
-  --  options = {
-  --    styles = {
-  --      comments = 'italic',
-  --      functions = 'italic',
-  --      keywords = 'italic'
-  --    }
-  --  }
-  --}
 
   local au_group = vim.api.nvim_create_augroup('highlights', {})
   vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })

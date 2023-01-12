@@ -12,6 +12,7 @@ local filetypes = {
   'query',
   'regex',
   'rust',
+  'vim',
 }
 
 local M = {
