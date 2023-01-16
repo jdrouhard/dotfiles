@@ -17,6 +17,7 @@ function M.config()
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local sumneko_ext = require('plugins.lsp.sumneko_ext')
+  local semantic_tokens = require('plugins.lsp.semantic_tokens')
   local fzf_config = require('plugins.fzf-lua')
 
   local use_float_progress = false
@@ -25,22 +26,26 @@ function M.config()
     require('plugins.lsp.float_progress').setup()
   end
 
-  fn.sign_define('LightBulbSign', { text = '', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
+  semantic_tokens.setup(require('theme').transform_token)
+
+  fn.sign_define('LightBulbSign',
+    { text = '', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
   local au_group = api.nvim_create_augroup('lsp_aucmds', {})
 
   local function on_attach(client, bufnr)
+    status.on_attach()
+
     local function buf_map(mode, lhs, rhs)
       local map = vim.keymap.set
       map(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
-    status.on_attach()
-
     local fzf_list = function(jump_single)
       return {
         on_list = function(result)
-          fzf_config.locations({ prompt = result.title, items = result.items, jump_to_single_result = jump_single })
+          fzf_config.locations({ prompt = result.title, items = result.items,
+            jump_to_single_result = jump_single })
         end
       }
     end
@@ -59,7 +64,8 @@ function M.config()
       buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list()) end)
       buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list()) end)
       buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list(false)) end)
-      buf_map('n', 'gws', function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list(false)) end)
+      buf_map('n', 'gws',
+        function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list(false)) end)
     end
 
     buf_map('n', 'K', lsp.buf.hover)

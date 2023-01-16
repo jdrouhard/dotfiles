@@ -48,6 +48,41 @@ function M.apply_highlights()
   end
 end
 
+function M.transform_token(token)
+  local name = '@' .. token.type
+  local priority = vim.highlight.priorities.semantic_tokens
+
+  local is_declaration = vim.tbl_contains(token.modifiers, 'declaration')
+  if token.type == 'parameter' and not is_declaration then
+    name = name .. '.reference'
+  elseif token.type == 'variable' and is_declaration then
+    name = name .. '.declaration'
+  end
+
+  local hl_groups = {}
+  hl_groups[#hl_groups + 1] = {
+    name = name,
+    priority = priority,
+  }
+
+  for _, modifier in ipairs(token.modifiers) do
+    local mod_name = '@' .. modifier
+    local mod_priority = priority - 1
+
+    if modifier == 'constructorOrDestructor' then
+      mod_name = '@constructor'
+      mod_priority = priority + 1
+    end
+
+    hl_groups[#hl_groups + 1] = {
+      name = mod_name,
+      priority = mod_priority,
+    }
+  end
+
+  return hl_groups
+end
+
 function M.setup()
   o.termguicolors = true
 
@@ -56,10 +91,13 @@ function M.setup()
 
   require('tokyonight').setup {
     style = 'moon',
-    on_highlights = function(hl, _)
+    on_highlights = function(hl, c)
       hl['@parameter.reference'] = {
-        fg = '#cfc9c2',
+        fg = require('tokyonight.util').lighten(c.yellow, 0.25)
       }
+      --hl['@variable.declaration'] = {
+      --  fg = c.magenta,
+      --}
     end,
   }
 

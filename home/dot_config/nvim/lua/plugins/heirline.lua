@@ -103,38 +103,39 @@ function M.config()
 
   local function setup_colors()
     local get_highlight = heirline_util.get_highlight
-    local get = function(name)
-      local highlight = get_highlight(name)
+    local fallback = get_highlight('Normal').fg or '#FF0000'
+    local get = function(name, key)
+      local valid, highlight = pcall(get_highlight, name)
+      if not valid then
+        highlight = {}
+      end
       if highlight.reverse then
         highlight.fg, highlight.bg = highlight.bg, highlight.fg
       end
-      if not highlight then
-        highlight = {}
-      end
-      return highlight
+      return highlight[key] or fallback
     end
 
     return {
-      bright_bg  = get('Folded').bg,
-      red        = get('DiagnosticError').fg,
-      dark_red   = get('DiffDelete').bg,
-      green      = get('String').fg,
-      blue       = get('Function').fg,
-      gray       = get('Comment').fg,
-      orange     = get('Constant').fg,
-      purple     = get('Statement').fg,
-      cyan       = get('Special').fg,
-      diag_warn  = get('DiagnosticWarn').fg,
-      diag_error = get('DiagnosticError').fg,
-      diag_hint  = get('DiagnosticHint').fg,
-      diag_info  = get('DiagnosticInfo').fg,
-      git_del    = get('GitSignsDelete').fg,
-      git_add    = get('GitSignsAdd').fg,
-      git_change = get('GitSignsChange').fg,
-      status_fg  = get('StatusLine').fg,
-      status_bg  = get('StatusLine').bg,
-      search_fg  = get('Search').fg,
-      search_bg  = get('Search').bg,
+      bright_bg  = get('Folded', 'bg'),
+      red        = get('DiagnosticError', 'fg'),
+      dark_red   = get('DiffDelete', 'bg'),
+      green      = get('String', 'fg'),
+      blue       = get('Function', 'fg'),
+      gray       = get('Comment', 'fg'),
+      orange     = get('Constant', 'fg'),
+      purple     = get('Statement', 'fg'),
+      cyan       = get('Special', 'fg'),
+      diag_warn  = get('DiagnosticWarn', 'fg'),
+      diag_error = get('DiagnosticError', 'fg'),
+      diag_hint  = get('DiagnosticHint', 'fg'),
+      diag_info  = get('DiagnosticInfo', 'fg'),
+      git_del    = get('GitSignsDelete', 'fg'),
+      git_add    = get('GitSignsAdd', 'fg'),
+      git_change = get('GitSignsChange', 'fg'),
+      status_fg  = get('StatusLine', 'fg'),
+      status_bg  = get('StatusLine', 'bg'),
+      search_fg  = get('Search', 'fg'),
+      search_bg  = get('Search', 'bg'),
     }
   end
 

@@ -1,6 +1,5 @@
 local api = vim.api
 local tokens = vim.lsp.semantic_tokens
-local ns = api.nvim_create_namespace('personal_utils')
 
 local M = {}
 
@@ -9,7 +8,8 @@ function M.lsp_cancel_pending_requests(bufnr)
     bufnr = (bufnr == nil or bufnr == 0) and api.nvim_get_current_buf() or bufnr
     for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
       for id, request in pairs(client.requests or {}) do
-        if request.type == 'pending' and request.bufnr == bufnr and not request.method:match('semanticTokens') then
+        if request.type == 'pending' and request.bufnr == bufnr and
+            not request.method:match('semanticTokens') then
           client.cancel_request(id)
         end
       end
@@ -30,6 +30,7 @@ function M.toggle_tokens(bufnr)
 end
 
 function M.show_highlights_at_pos(bufnr, row, col, filter)
+  local ns = api.nvim_create_namespace('personal_utils')
   local items = vim.inspect_pos(bufnr, row, col, filter)
   local lines = { '' }
   local marks = {}
