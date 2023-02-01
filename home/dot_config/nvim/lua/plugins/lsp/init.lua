@@ -100,6 +100,11 @@ function M.config()
         desc = 'lsp.buf.clear_references',
       })
     end
+
+    if client.server_capabilities.documentSymbolProvider then
+      require('nvim-navic').attach(client, bufnr)
+    end
+
     api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
       group = au_group,
       buffer = bufnr,

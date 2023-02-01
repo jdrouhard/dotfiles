@@ -9,7 +9,8 @@ function M.lsp_cancel_pending_requests(bufnr)
     for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
       for id, request in pairs(client.requests or {}) do
         if request.type == 'pending' and request.bufnr == bufnr and
-            not request.method:match('semanticTokens') then
+            not request.method:match('semanticTokens') and
+            not request.method:match('documentSymbol') then
           client.cancel_request(id)
         end
       end

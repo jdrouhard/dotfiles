@@ -8,6 +8,7 @@ local M = {
 
   'kosayoda/nvim-lightbulb',
   'folke/neodev.nvim',
+  'SmiteshP/nvim-navic',
 
   {
     'mhinz/vim-sayonara',

@@ -9,7 +9,7 @@ local requests_cache = nil
 local active_requests = {}
 local debouncing_requests = {}
 
-local ignore_methods = { 'documentHighlight', 'semanticTokens', 'codeAction' }
+local ignore_methods = { 'documentHighlight', 'semanticTokens', 'codeAction', 'documentSymbol' }
 
 local M = {}
 
