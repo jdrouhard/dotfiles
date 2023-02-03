@@ -30,7 +30,7 @@ function M.config()
   dap.listeners.before.event_terminated['dapui_config'] = dapui.close
   dap.listeners.after.event_exited['dapui_config'] = dapui.close
 
-  dapui.setup()
+  vim.schedule(dapui.setup)
 
   dap.configurations.cpp = {
     {
