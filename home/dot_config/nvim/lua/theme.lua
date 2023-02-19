@@ -101,9 +101,9 @@ function M.setup()
     end,
   }
 
-  local au_group = vim.api.nvim_create_augroup('highlights', {})
-  vim.api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
-  cmd([[colorscheme ]] .. require('globals').theme)
+  local au_group = api.nvim_create_augroup('highlights', {})
+  api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
+  cmd.colorscheme(require('globals').theme)
 
   require('bufferline')
   require('heirline')

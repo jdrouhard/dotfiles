@@ -16,7 +16,7 @@ function M.config()
 
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
-  local sumneko_ext = require('plugins.lsp.sumneko_ext')
+  local lua_ls_ext = require('plugins.lsp.lua_ls_ext')
   local semantic_tokens = require('plugins.lsp.semantic_tokens')
   local fzf_config = require('plugins.fzf-lua')
 
@@ -130,9 +130,9 @@ function M.config()
       },
     },
     pyright = {},
-    sumneko_lua = {
+    lua_ls = {
       cmd = { 'lua-language-server' },
-      handlers = sumneko_ext.handlers,
+      handlers = lua_ls_ext.handlers,
       settings = {
         Lua = {
           diagnostics = { globals = { 'vim' } },
