@@ -81,13 +81,13 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
   if #items.semantic_tokens > 0 then
     append('Semantic Tokens', 'Title')
     nl()
-    for _, token in ipairs(items.semantic_tokens) do
-      local client = vim.lsp.get_client_by_id(token.client_id)
-      client = client and (' (' .. client.name .. ')') or ''
-      item(token.hl_groups.type, 'type' .. client)
-      for _, modifier in ipairs(token.hl_groups.modifiers) do
-        item(modifier, 'modifier' .. client)
-      end
+    local sorted_marks = vim.fn.sort(items.semantic_tokens, function(left, right)
+      local left_first = left.opts.priority < right.opts.priority
+        or left.opts.priority == right.opts.priority and left.opts.hl_group < right.opts.hl_group
+      return left_first and -1 or 1
+    end)
+    for _, extmark in ipairs(sorted_marks) do
+      item(extmark.opts, 'priority: ' .. extmark.opts.priority)
     end
     nl()
   end

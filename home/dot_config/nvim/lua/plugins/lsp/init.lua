@@ -17,7 +17,6 @@ function M.config()
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local lua_ls_ext = require('plugins.lsp.lua_ls_ext')
-  local semantic_tokens = require('plugins.lsp.semantic_tokens')
   local fzf_config = require('plugins.fzf-lua')
 
   local use_float_progress = false
@@ -26,15 +25,13 @@ function M.config()
     require('plugins.lsp.float_progress').setup()
   end
 
-  semantic_tokens.setup(require('theme').transform_token)
-
   fn.sign_define('LightBulbSign',
     { text = '', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
-  local au_group = api.nvim_create_augroup('lsp_aucmds', {})
-
   local function on_attach(client, bufnr)
     status.on_attach()
+
+    local au_group = api.nvim_create_augroup('lsp_aucmds:' .. bufnr, {})
 
     local function buf_map(mode, lhs, rhs)
       local map = vim.keymap.set
@@ -117,6 +114,26 @@ function M.config()
       buffer = bufnr,
       callback = function() require('nvim-lightbulb').update_lightbulb() end,
       desc = 'nvim-lightbulb.update_lightbulb',
+    })
+
+    api.nvim_create_autocmd('LspTokenUpdate', {
+      group = au_group,
+      buffer = bufnr,
+      callback = function(args)
+        local token = args.data.token
+        if token.type == 'parameter' and not token.modifiers.declaration then
+          local name = '@parameter.reference'
+          lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, name)
+        end
+
+        for modifier, _ in pairs(token.modifiers) do
+          if modifier == 'constructorOrDestructor' then
+            local mod_name = '@constructor'
+            lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, mod_name)
+          end
+        end
+      end,
+      desc = 'lsp.custom_semantic_token_highlights'
     })
   end
 

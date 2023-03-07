@@ -12,6 +12,25 @@ local hl_map = {
   ['@deprecated']     = { link = '@text.strike' },
   ['@text.strike']    = { strikethrough = true },
 
+  -- Native LSP groups
+  ['@lsp.type.comment']   = { link = '@comment' },
+  ['@lsp.type.event']     = { link = 'Identifier' },
+  ['@lsp.type.function']  = { link = '@function' },
+  ['@lsp.type.keyword']   = { link = '@keyword' },
+  ['@lsp.type.macro']     = { link = '@macro' },
+  ['@lsp.type.method']    = { link = '@method' },
+  ['@lsp.type.modifier']  = { link = 'Identifier' },
+  ['@lsp.type.namespace'] = { link = '@namespace' },
+  ['@lsp.type.operator']  = { link = '@operator' },
+  ['@lsp.type.parameter'] = { link = '@parameter' },
+  ['@lsp.type.property']  = { link = '@property' },
+  ['@lsp.type.regexp']    = { link = 'SpecialChar' },
+  ['@lsp.type.string']    = { link = '@string' },
+  ['@lsp.type.number']    = { link = '@number' },
+  ['@lsp.type.type']      = { link = '@type' },
+  ['@lsp.type.variable']  = { link = '@variable' },
+  ['@lsp.mod.deprecated'] = { link = '@deprecated' },
+
   -- Coc specific groups
   -- Misc
   CocErrorHighlight   = { link = 'DiagnosticUnderlineError' },
@@ -46,41 +65,6 @@ function M.apply_highlights()
   for name, hl in pairs(hl_map) do
     api.nvim_set_hl(0, name, hl)
   end
-end
-
-function M.transform_token(token)
-  local name = '@' .. token.type
-  local priority = vim.highlight.priorities.semantic_tokens
-
-  local is_declaration = vim.tbl_contains(token.modifiers, 'declaration')
-  if token.type == 'parameter' and not is_declaration then
-    name = name .. '.reference'
-  elseif token.type == 'variable' and is_declaration then
-    name = name .. '.declaration'
-  end
-
-  local hl_groups = {}
-  hl_groups[#hl_groups + 1] = {
-    name = name,
-    priority = priority,
-  }
-
-  for _, modifier in ipairs(token.modifiers) do
-    local mod_name = '@' .. modifier
-    local mod_priority = priority - 1
-
-    if modifier == 'constructorOrDestructor' then
-      mod_name = '@constructor'
-      mod_priority = priority + 1
-    end
-
-    hl_groups[#hl_groups + 1] = {
-      name = mod_name,
-      priority = mod_priority,
-    }
-  end
-
-  return hl_groups
 end
 
 function M.setup()
