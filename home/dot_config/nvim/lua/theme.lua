@@ -29,7 +29,10 @@ local hl_map = {
   ['@lsp.type.number']    = { link = '@number' },
   ['@lsp.type.type']      = { link = '@type' },
   ['@lsp.type.variable']  = { link = '@variable' },
-  ['@lsp.mod.deprecated'] = { link = '@deprecated' },
+  ['@lsp.mod.deprecated'] = { link = '@text.strike' },
+
+  --- clangd
+  ['@lsp.mod.constructorOrDestructor'] = { link = '@constructor' },
 
   -- Coc specific groups
   -- Misc
@@ -76,12 +79,9 @@ function M.setup()
   require('tokyonight').setup {
     style = 'moon',
     on_highlights = function(hl, c)
-      hl['@parameter.reference'] = {
+      hl['@lsp.typemod.parameter.reference'] = {
         fg = require('tokyonight.util').lighten(c.yellow, 0.25)
       }
-      --hl['@variable.declaration'] = {
-      --  fg = c.magenta,
-      --}
     end,
   }
 

@@ -19,10 +19,12 @@ local function update_timer()
     status_timer = vim.loop.new_timer()
     status_timer:start(100, 100, vim.schedule_wrap(function()
       index = (index + 1) % #spinner_frames
+      vim.api.nvim_command('redrawstatus!')
     end))
   elseif status_timer ~= nil and not need_timer then
     status_timer:close()
     status_timer = nil
+    vim.api.nvim_command('redrawstatus!')
   end
 end
 

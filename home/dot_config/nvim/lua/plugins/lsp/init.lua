@@ -122,15 +122,8 @@ function M.config()
       callback = function(args)
         local token = args.data.token
         if token.type == 'parameter' and not token.modifiers.declaration then
-          local name = '@parameter.reference'
+          local name = '@lsp.typemod.parameter.reference.' .. vim.bo[args.buf].filetype
           lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, name)
-        end
-
-        for modifier, _ in pairs(token.modifiers) do
-          if modifier == 'constructorOrDestructor' then
-            local mod_name = '@constructor'
-            lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, mod_name)
-          end
         end
       end,
       desc = 'lsp.custom_semantic_token_highlights'
