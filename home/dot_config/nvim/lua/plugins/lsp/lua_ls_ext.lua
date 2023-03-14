@@ -5,7 +5,7 @@ local report_status = function(_, message, ctx, _)
     vim.notify("LSP[id=" .. client_id .. "] client shutdown after sending the message", vim.log.levels.ERROR)
   end
   client.status = message.text
-  vim.api.nvim_command('redrawstatus!')
+  vim.cmd.redrawstatus({ bang = true })
 end;
 
 local M = {}

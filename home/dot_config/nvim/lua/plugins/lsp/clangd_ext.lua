@@ -8,7 +8,7 @@ local file_status_update = function(_, message, ctx, _)
     client.status = {}
   end
   client.status[message.uri] = message.state ~= 'idle' and message.state or nil
-  vim.api.nvim_command('redrawstatus!')
+  vim.cmd.redrawstatus({ bang = true })
 end;
 
 local M = {}
