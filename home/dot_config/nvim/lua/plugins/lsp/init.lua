@@ -41,8 +41,11 @@ function M.config()
     local fzf_list = function(jump_single)
       return {
         on_list = function(result)
-          fzf_config.locations({ prompt = result.title, items = result.items,
-            jump_to_single_result = jump_single })
+          fzf_config.locations({
+            prompt = result.title,
+            items = result.items,
+            jump_to_single_result = jump_single
+          })
         end
       }
     end
@@ -115,20 +118,30 @@ function M.config()
       callback = function() require('nvim-lightbulb').update_lightbulb() end,
       desc = 'nvim-lightbulb.update_lightbulb',
     })
-
-    api.nvim_create_autocmd('LspTokenUpdate', {
-      group = au_group,
-      buffer = bufnr,
-      callback = function(args)
-        local token = args.data.token
-        if token.type == 'parameter' and not token.modifiers.declaration then
-          local name = '@lsp.typemod.parameter.reference.' .. vim.bo[args.buf].filetype
-          lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, name)
-        end
-      end,
-      desc = 'lsp.custom_semantic_token_highlights'
-    })
   end
+
+  local au_group = api.nvim_create_augroup('lsp_aucmds', {})
+
+  api.nvim_create_autocmd('LspAttach', {
+    group = au_group,
+    callback = function(ev)
+      local bufnr = ev.buf
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      on_attach(client, bufnr)
+    end
+  })
+
+  api.nvim_create_autocmd('LspTokenUpdate', {
+    group = au_group,
+    callback = function(ev)
+      local token = ev.data.token
+      if token.type == 'parameter' and not token.modifiers.declaration then
+        local name = '@lsp.typemod.parameter.reference.' .. vim.bo[ev.buf].filetype
+        lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, name)
+      end
+    end,
+    desc = 'lsp.custom_semantic_token_highlights'
+  })
 
   local servers = {
     clangd = {
@@ -159,7 +172,6 @@ function M.config()
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
   for client, config in pairs(servers) do
-    config.on_attach = on_attach
     config.capabilities = vim.tbl_deep_extend(
       'keep',
       config.capabilities or {},
@@ -167,7 +179,6 @@ function M.config()
     )
     require('lspconfig')[client].setup(config)
   end
-
 end
 
 return M

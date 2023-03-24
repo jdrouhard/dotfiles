@@ -13,6 +13,7 @@ local filetypes = {
   'regex',
   'rust',
   'vim',
+  'yaml',
 }
 
 local M = {
@@ -39,10 +40,10 @@ function M.config()
       select = {
         enable = true,
         keymaps = {
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
+          ['af'] = '@function.outer',
+          ['if'] = '@function.inner',
+          ['ac'] = '@class.outer',
+          ['ic'] = '@class.inner',
         },
       },
     },
@@ -54,8 +55,8 @@ function M.config()
   }
 
   local o = vim.o
-  o.foldmethod = "expr"
-  o.foldexpr   = "nvim_treesitter#foldexpr()"
+  o.foldmethod = 'expr'
+  o.foldexpr   = 'nvim_treesitter#foldexpr()'
 
   require('nvim-gps').setup()
 end

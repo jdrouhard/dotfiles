@@ -60,7 +60,8 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
     append(data.hl_group, data.hl_group)
     append(' ')
     if data.hl_group ~= data.hl_group_link then
-      append('links to ', 'MoreMsg')
+      append('links to', 'MoreMsg')
+      append(' ')
       append(data.hl_group_link, data.hl_group_link)
       append(' ')
     end

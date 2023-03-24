@@ -1,7 +1,7 @@
 local M = {
   'rebelot/heirline.nvim',
   dependencies = {
-    'kyazdani42/nvim-web-devicons',
+    'nvim-tree/nvim-web-devicons',
   }
 }
 
@@ -662,7 +662,7 @@ function M.config()
     SearchResults,
     FileNameBlock,
     Space,
-    GPS,
+    --GPS,
     Align,
     Coc,
     Lsp,

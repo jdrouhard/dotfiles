@@ -40,35 +40,13 @@ opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
 
-local disabled_builtins = {
-  "netrw",
-  "netrwPlugin",
-  "netrwSettings",
-  "netrwFileHandlers",
-  "gzip",
-  "zip",
-  "zipPlugin",
-  "tar",
-  "tarPlugin",
-  "getscript",
-  "getscriptPlugin",
-  "vimball",
-  "vimballPlugin",
-  "2html_plugin",
-  "logipat",
-  "rrhelper",
-}
 
 local disabled_providers = {
-  "ruby",
-  "node",
-  "perl",
+  'ruby',
+  'node',
+  'perl',
 }
 
-for _, plugin in pairs(disabled_builtins) do
-  g["loaded_" .. plugin] = 1
-end
-
 for _, plugin in pairs(disabled_providers) do
-  g["loaded_" .. plugin .. "_provider"] = 0
+  g['loaded_' .. plugin .. '_provider'] = 0
 end

@@ -5,7 +5,7 @@ local M = {
     { '<c-h>', '<cmd>BufferLineCyclePrev<cr>' },
     { '<c-l>', '<cmd>BufferLineCycleNext<cr>' },
   },
-  dependencies = 'kyazdani42/nvim-web-devicons',
+  dependencies = 'nvim-tree/nvim-web-devicons',
 }
 
 function M.config()

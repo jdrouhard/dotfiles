@@ -16,13 +16,6 @@ local M = {
   },
 
   {
-    'nvim-lua/plenary.nvim',
-    config = function()
-      require('plenary.filetype').add_file('overrides')
-    end
-  },
-
-  {
     'junegunn/fzf',
     build = function() vim.fn['fzf#install']() end,
   },

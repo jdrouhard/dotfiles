@@ -25,7 +25,6 @@ require('lazy').setup('plugins', {
   install = { colorscheme = { 'tokyonight', 'habamax' } },
   checker = { enabled = true },
   performance = {
-    cache = { disable_events = {}, },
     rtp = {
       disabled_plugins = {
         'gzip',

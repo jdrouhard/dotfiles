@@ -76,15 +76,6 @@ function M.setup()
   g.oceanic_next_terminal_italic = true
   g.oceanic_next_terminal_bold = true
 
-  require('tokyonight').setup {
-    style = 'moon',
-    on_highlights = function(hl, c)
-      hl['@lsp.typemod.parameter.reference'] = {
-        fg = require('tokyonight.util').lighten(c.yellow, 0.25)
-      }
-    end,
-  }
-
   local au_group = api.nvim_create_augroup('highlights', {})
   api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
   cmd.colorscheme(require('globals').theme)
