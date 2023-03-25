@@ -19,7 +19,7 @@ ROOT_HOST="%F{red}%m%f"
 
 GIT_DIRTY="%F{red}⬡%f"
 GIT_CLEAN="%F{green}⬢%f"
-GIT_REBASE="\uE0A0"
+GIT_REBASE=""
 GIT_UNPULLED="⇣"
 GIT_UNPUSHED="⇡"
 

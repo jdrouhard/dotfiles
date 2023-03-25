@@ -17,7 +17,7 @@ map('',  '<F4>',       '<cmd>A<CR>')
 -- misc
 local resolved_plugins = fn.resolve(fn.stdpath('config') .. '/lua/plugins/init.lua')
 map('',  '<F2>',       require('utils').show_highlights_at_pos)
-map('n', '<leader>m',  '<cmd>:Make<CR>')
+map('n', '<leader>m',  '<cmd>Make<CR>')
 map('n', '<C-k>',      '<cmd>cp<CR>')
 map('n', '<C-j>',      '<cmd>cn<CR>')
 map('n', '<leader>ev', '<cmd>e $MYVIMRC<CR>')

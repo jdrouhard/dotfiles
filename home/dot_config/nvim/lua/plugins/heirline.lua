@@ -270,6 +270,11 @@ function M.config()
       end,
     },
     {
+      provider = function(self)
+        return vim.fn.pathshorten(self.current_path)
+      end,
+    },
+    {
       provider = ''
     },
     hl = { fg = 'blue' }
