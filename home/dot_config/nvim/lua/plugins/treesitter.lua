@@ -1,64 +1,62 @@
-local filetypes = {
-  'bash',
-  'c',
-  'cmake',
-  'cpp',
-  'javascript',
-  'json',
-  'lua',
-  'markdown',
-  'markdown_inline',
-  'python',
-  'query',
-  'regex',
-  'rust',
-  'vim',
-  'yaml',
-}
-
 local M = {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {
-    'nvim-treesitter/playground',
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'SmiteshP/nvim-gps',
   },
-  ft = filetypes,
+  event = { 'BufReadPost', 'BufNewFile' },
   build = ':TSUpdate',
 }
 
-function M.config()
-  require('nvim-treesitter.configs').setup {
-    ensure_installed = filetypes,
-    highlight = {
-      enable = true,
+M.opts = {
+  ensure_installed = {
+    'bash',
+    'c',
+    'cmake',
+    'cpp',
+    'javascript',
+    'json',
+    'lua',
+    'markdown',
+    'markdown_inline',
+    'python',
+    'query',
+    'regex',
+    'rust',
+    'vim',
+    'yaml',
+  },
+  highlight = { enable = true, },
+  indent = { enable = true, },
+  context_commentstring = { enable = true, enable_autocmd = true },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = '<C-space>',
+      node_incremental = '<C-space>',
+      scope_incremental = '<nop>',
+      node_decremental = '<bs>',
     },
-    indent = {
+  },
+  textobjects = {
+    select = {
       enable = true,
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        keymaps = {
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-        },
+      keymaps = {
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+        ['ac'] = '@class.outer',
+        ['ic'] = '@class.inner',
       },
     },
-    playground = {
-      enable = false,
-      updatetime = 25, -- debounced time for highlighting nodes in the playground from source code
-      persist_queries = false, -- whether the query persists across vim sessions
-    }
-  }
+  },
+}
 
-  local o = vim.o
-  o.foldmethod = 'expr'
-  o.foldexpr   = 'nvim_treesitter#foldexpr()'
-
-  require('nvim-gps').setup()
+function M.config(_, opts)
+  require('nvim-treesitter.configs').setup(opts)
+  vim.o.foldmethod     = 'expr'
+  vim.o.foldexpr       = 'v:lua.vim.treesitter.foldexpr()'
+  vim.o.foldlevel      = 99
+  vim.o.foldlevelstart = 99
+  vim.o.foldenable     = true
 end
 
 return M

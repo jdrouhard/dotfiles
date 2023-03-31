@@ -46,41 +46,45 @@ function M.locations(opts)
   return core.fzf_exec(entries, opts)
 end
 
-function M.config()
-  require('fzf-lua').setup {
-    fzf_layout = 'default',
-    winopts = {
-      --height = 0.6,
-      width = 0.9,
-      hl_border = 'FloatBorder',
+M.opts = {
+  fzf_layout = 'default',
+  winopts = {
+    --height = 0.6,
+    width = 0.9,
+    hl_border = 'FloatBorder',
+  },
+  keymap = {
+    fzf = {
+      ['f2'] = 'toggle-preview',
+      ['alt-a'] = 'select-all',
+      ['alt-d'] = 'deselect-all',
+      ['up'] = 'preview-up',
+      ['down'] = 'preview-down',
+      ['ctrl-b'] = 'preview-page-up',
+      ['ctrl-f'] = 'preview-page-down'
     },
-    keymap = {
-      fzf = {
-        ['f2'] = 'toggle-preview',
-        ['alt-a'] = 'select-all',
-        ['alt-d'] = 'deselect-all',
-        ['up'] = 'preview-up',
-        ['down'] = 'preview-down',
-        ['ctrl-b'] = 'preview-page-up',
-        ['ctrl-f'] = 'preview-page-down'
-      },
-      builtin = {
-        ['<f2>'] = 'toggle-preview',
-        ['<f4>'] = 'toggle-fullscreen',
-        ['<c-b>'] = 'preview-page-up',
-        ['<c-f>'] = 'preview-page-down',
-      }
-    },
-    grep = {
-      rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
-      --rg_opts = "--hidden --column --line-number --no-heading " ..
-      --"--color=always --smart-case -g '!{.git,node_modules}/*'",
-      no_esc = true,
-    },
-    lsp = {
-      jump_to_single_result = true,
-    },
-  }
+    builtin = {
+      ['<f2>'] = 'toggle-preview',
+      ['<f4>'] = 'toggle-fullscreen',
+      ['<c-b>'] = 'preview-page-up',
+      ['<c-f>'] = 'preview-page-down',
+    }
+  },
+  grep = {
+    rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
+    no_esc = true,
+  },
+  lsp = {
+    jump_to_single_result = true,
+  },
+}
+
+function M.config(_, opts)
+  -- workaround a bug where window-local options set by treesitter spec's
+  -- config() function are not persisted if it's loaded via fzf-lua's builtin
+  -- previewer code. TODO: figure out why this happens.
+  require('nvim-treesitter')
+  require('fzf-lua').setup(opts)
 end
 
 function M.init()

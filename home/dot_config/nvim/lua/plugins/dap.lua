@@ -9,7 +9,7 @@ function M.config()
   local dapui = require('dapui')
   local map = vim.keymap.set
 
-  map('n', '<S-F5>', dap.continue)
+  map('n', '<F5>', dap.continue)
   map('n', '<F9>', dap.toggle_breakpoint)
   map('n', '<F10>', dap.step_over)
   map('n', '<F11>', dap.step_into)

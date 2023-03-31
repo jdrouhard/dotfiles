@@ -286,59 +286,39 @@ function M.config()
   }
 
   local GPS = {
-    fallthrough = false,
-    {
-      condition = function()
-        if package.loaded['nvim-navic'] then
-          return require('nvim-navic').is_available()
-        end
-        return false
-      end,
-      init = function(self)
-        local data = require('nvim-navic').get_data() or {}
-        local children = {}
-        -- create a child for each level
-        for _, d in ipairs(data) do
-          table.insert(children, {
-            {
-              provider = ' > ',
-              hl = 'NavicSeparator',
-            },
-            {
-              provider = d.icon,
-              hl = 'NavicIcons' .. d.type,
-            },
-            {
-              provider = d.name:gsub('%%', '%%%%'):gsub('%s*->%s*', ''),
-              hl = 'NavicText',
-            },
-          })
-        end
-        -- instantiate the new child, overwriting the previous one
-        self.child = self:new(children, 1)
-      end,
-      provider = function(self)
-        return self.child:eval()
-      end,
-      update = 'CursorMoved',
-    },
-    {
-      condition = function()
-        if package.loaded['nvim-gps'] then
-          return require('nvim-gps').is_available()
-        end
-        return false
-      end,
-      provider = function()
-        --return require('nvim-gps').get_location()
-        local location = require('nvim-gps').get_location()
-        if location ~= '' then
-          return '> ' .. location .. ' '
-        end
-      end,
-      update = 'CursorMoved',
-      hl = { fg = 'gray' },
-    },
+    condition = function()
+      if package.loaded['nvim-navic'] then
+        return require('nvim-navic').is_available()
+      end
+      return false
+    end,
+    init = function(self)
+      local data = require('nvim-navic').get_data() or {}
+      local children = {}
+      -- create a child for each level
+      for _, d in ipairs(data) do
+        table.insert(children, {
+          {
+            provider = ' > ',
+            hl = 'NavicSeparator',
+          },
+          {
+            provider = d.icon,
+            hl = 'NavicIcons' .. d.type,
+          },
+          {
+            provider = d.name:gsub('%%', '%%%%'):gsub('%s*->%s*', ''),
+            hl = 'NavicText',
+          },
+        })
+      end
+      -- instantiate the new child, overwriting the previous one
+      self.child = self:new(children, 1)
+    end,
+    provider = function(self)
+      return self.child:eval()
+    end,
+    update = 'CursorMoved',
   }
 
   local FileProperties = {

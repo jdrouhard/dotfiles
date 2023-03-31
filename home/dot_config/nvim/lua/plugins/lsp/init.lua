@@ -11,7 +11,8 @@ local M = {
 
 function M.config()
   require('neodev').setup({
-    snippet = true,
+    lspconfig = true,
+    pathStrict = true,
   })
 
   local status = require('plugins.lsp.status')
@@ -149,7 +150,10 @@ function M.config()
       handlers = clangd_ext.handlers,
       init_options = {
         clangdFileStatus = true,
-        fallbackFlags = { '-std=c++20' },
+        fallbackFlags = {
+          '-std=c++20',
+          '-fsized-deallocation',
+        },
       },
     },
     pyright = {},

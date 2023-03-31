@@ -1,7 +1,6 @@
 local M = {
   'utilyre/barbecue.nvim',
   lazy = false,
-  branch = 'fix/E36',
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
