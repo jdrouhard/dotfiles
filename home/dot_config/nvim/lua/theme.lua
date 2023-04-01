@@ -80,7 +80,6 @@ function M.setup()
   api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
   cmd.colorscheme(require('globals').theme)
 
-  require('bufferline')
   require('heirline')
 end
 

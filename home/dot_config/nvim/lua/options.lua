@@ -10,6 +10,7 @@ o.updatetime    = 100
 o.undofile      = true
 o.path          = vim.env.PWD .. '/**'
 
+o.showtabline   = 2
 o.showmode      = false
 o.ruler         = false
 o.hidden        = true
@@ -35,7 +36,7 @@ o.showmatch     = true
 o.inccommand    = 'nosplit'
 o.list          = true
 
-opt.shortmess   :append('c')
+opt.shortmess   :append('cI')
 opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }

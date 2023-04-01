@@ -20,7 +20,11 @@ M.opts = {
       ['@lsp.typemod.parameter.reference'] = {
         fg = require('catppuccin.utils.colors').lighten(colors.maroon, 0.75),
         style = { 'italic' },
-      }
+      },
+      ['AlphaHeader'] = { fg = colors.blue, },
+      ['AlphaButtons'] = { fg = colors.sky, },
+      ['AlphaShortcut'] = { fg = colors.peach, },
+      ['AlphaFooter'] = { fg = colors.sapphire, },
     }
   end
 }

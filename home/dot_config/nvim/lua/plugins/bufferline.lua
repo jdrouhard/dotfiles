@@ -1,5 +1,6 @@
 local M = {
   'akinsho/nvim-bufferline.lua',
+  event = 'VeryLazy',
   keys = {
     { '<leader>b', '<cmd>BufferLinePick<cr>' },
     { '<c-h>', '<cmd>BufferLineCyclePrev<cr>' },
