@@ -550,7 +550,7 @@ function M.config()
     condition = conditions.lsp_attached,
     init = function(self)
       local names = {}
-      for _, server in pairs(vim.lsp.buf_get_clients(0)) do
+      for _, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
         table.insert(names, server.name)
       end
       self.lsp_names = names
@@ -573,13 +573,6 @@ function M.config()
       return vim.fn['coc#status']()
     end,
     Space(2)
-  }
-
-  local NoiceShowMode = {
-    provider = require('noice').api.status.mode.get,
-    cond = require('noice').api.status.mode.has,
-    hl = { fg = 'orange' },
-    Space
   }
 
   local SearchResults = {
@@ -643,7 +636,6 @@ function M.config()
   }
   local ActiveStatusline = {
     VimMode,
-    NoiceShowMode,
     SearchResults,
     FileNameBlock,
     Space,
