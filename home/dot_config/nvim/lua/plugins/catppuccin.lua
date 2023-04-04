@@ -15,8 +15,8 @@ M.opts = {
   custom_highlights = function(colors)
     return {
       ['@method'] = { link = '@function' },
+      ['@property.cpp'] = { link = '@property' },
       ['@lsp.type.method'] = { link = '@method' },
-      ['@lsp.type.property.cpp'] = { link = '@property.cpp' },
       ['@lsp.typemod.parameter.reference'] = {
         fg = require('catppuccin.utils.colors').lighten(colors.maroon, 0.75),
         style = { 'italic' },

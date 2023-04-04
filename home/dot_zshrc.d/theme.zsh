@@ -33,4 +33,3 @@ if [ ! -f "$HOME/.theme" ]; then
 else
     source $HOME/.theme
 fi
-

@@ -95,11 +95,25 @@ function M.config(_, dashboard)
       local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
       dashboard.section.footer.val = '⚡ Startup time: ' .. ms .. 'ms'
       pcall(vim.cmd.AlphaRedraw)
+    end,
+  })
 
-      if vim.fn.argc(-1) == 0 then
-        -- alpha adds something to the jumplist?
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<c-o>', true, false, true), 'n', false)
-      end
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'AlphaReady',
+    callback = function(ev)
+      -- See https://github.com/justinmk/vim-dirvish/issues/221
+      vim.keymap.set('n', '-', ':bwipe <bar> Dirvish<cr>', { silent = true, buffer = ev.buf })
+
+      vim.api.nvim_buf_create_user_command(ev.buf, 'G', 'bwipe <bar> Git', { force = true })
+
+      -- vim.api.nvim_win_set_cursor() adds a mark to the jumplist
+      -- when moving from 1,0 to the first button when alpha is first
+      -- enabled.
+      -- Going back one doesn't move the cursor back because of the CursorMoved
+      -- event in alpha that simply leaves it on the first button. This might
+      -- be a neovim bug
+      -- TODO: investigate. might be a neovim bug.
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<c-o>', true, false, true), 'n', false)
     end,
   })
 end
