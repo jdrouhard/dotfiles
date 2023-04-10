@@ -2,7 +2,7 @@ pcall(vim.loader.enable)
 
 require('options')
 require('lazy-bootstrap')
-require('theme').setup()
+require('theme')
 
 vim.api.nvim_create_autocmd('User', {
   pattern = 'VeryLazy',

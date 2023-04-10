@@ -1,9 +1,9 @@
 local M = {
   'EdenEast/nightfox.nvim',
-  'bluz71/vim-nightfly-guicolors',
+  'Mofiqul/dracula.nvim',
   'bluz71/vim-moonfly-colors',
+  'bluz71/vim-nightfly-guicolors',
   'folke/tokyonight.nvim',
-  'mhartington/oceanic-next',
   'rebelot/kanagawa.nvim',
 
   'kosayoda/nvim-lightbulb',

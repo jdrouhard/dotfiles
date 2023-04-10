@@ -1,10 +1,3 @@
-local g = vim.g
-local o = vim.o
-local api = vim.api
-local cmd = vim.cmd
-
-local M = {}
-
 local hl_map = {
   ['@keyword.access'] = { link = 'Statement' },
   ['@statement']      = { link = 'Statement' },
@@ -64,23 +57,17 @@ local hl_map = {
   CocSemDeclarationParameter = { link = '@parameter' },
 }
 
-function M.apply_highlights()
+local api = vim.api
+local cmd = vim.cmd
+
+local function apply_highlights()
   for name, hl in pairs(hl_map) do
     api.nvim_set_hl(0, name, hl)
   end
 end
 
-function M.setup()
-  o.termguicolors = true
+local au_group = api.nvim_create_augroup('highlights', {})
+api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = apply_highlights })
+cmd.colorscheme(require('globals').theme)
 
-  g.oceanic_next_terminal_italic = true
-  g.oceanic_next_terminal_bold = true
-
-  local au_group = api.nvim_create_augroup('highlights', {})
-  api.nvim_create_autocmd('ColorScheme', { group = au_group, callback = M.apply_highlights })
-  cmd.colorscheme(require('globals').theme)
-
-  require('heirline')
-end
-
-return M
+require('heirline')
