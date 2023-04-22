@@ -46,6 +46,7 @@ local disabled_providers = {
   'ruby',
   'node',
   'perl',
+  'python3',
 }
 
 for _, plugin in pairs(disabled_providers) do

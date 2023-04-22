@@ -72,7 +72,6 @@ function M.opts()
     dashboard.button('n', ' ' .. ' New file', '<cmd>ene <BAR> startinsert <CR>'),
     dashboard.button('r', ' ' .. ' Recent files', '<cmd>FzfLua oldfiles <CR>'),
     dashboard.button('g', ' ' .. ' Find text', '<cmd>FzfLua live_grep <CR>'),
-    dashboard.button('c', ' ' .. ' Config', '<cmd>e $MYVIMRC <CR>'),
     dashboard.button('l', '󰒲 ' .. ' Lazy', '<cmd>Lazy<CR>'),
     dashboard.button('q', ' ' .. ' Quit', '<cmd>qa<CR>'),
   }
