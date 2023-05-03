@@ -27,7 +27,7 @@ function M.config()
   end
 
   fn.sign_define('LightBulbSign',
-    { text = '', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
+    { text = '󰌶', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
   local function on_attach(client, bufnr)
     status.on_attach()
