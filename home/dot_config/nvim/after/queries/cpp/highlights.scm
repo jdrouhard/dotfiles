@@ -2,20 +2,6 @@
 
 (operator_cast) [ "operator" ] @function
 
-(auto) @type
-
-[
- "class"
- "struct"
- "union"
- "template"
- "typename"
-] @structure
-
-[
- "using"
-] @statement
-
 [
  "private"
  "protected"
@@ -41,8 +27,3 @@
  "consteval"
  "thread_local"
 ] @storageclass
-
-[
- "static_assert"
- "sizeof"
-] @keyword.operator

@@ -585,24 +585,23 @@ function M.config()
 
       if query:find('@') then return end
 
-      local search_count = vim.fn.searchcount({ recompute = 1, maxcount = -1 })
+      local ok, search_count = pcall(vim.fn.searchcount, { recompute = 1, maxcount = -1 })
+      if not ok then
+        return
+      end
+
       local active = false
       if vim.v.hlsearch and vim.v.hlsearch == 1 and search_count.total > 0 then
         active = true
       end
       if not active then return end
 
-      query = query:gsub([[^\V]], '')
-      query = query:gsub([[\<]], ''):gsub([[\>]], '')
-
-      self.query = query
       self.count = search_count
       return true
     end,
     {
       provider = function(self)
         return table.concat {
-          -- ' ', self.query, ' ', self.count.current, '/', self.count.total, ' '
           ' ', self.count.current, '/', self.count.total, ' '
         }
       end,

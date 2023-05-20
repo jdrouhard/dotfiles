@@ -35,6 +35,7 @@ o.showbreak     = '↪'
 o.showmatch     = true
 o.inccommand    = 'nosplit'
 o.list          = true
+o.smoothscroll  = true
 
 opt.shortmess   :append('cI')
 opt.diffopt     :append('linematch:60')

@@ -1,3 +1,5 @@
+local api = vim.api
+
 local M = {
   'utilyre/barbecue.nvim',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -17,14 +19,23 @@ function M.config(_, opts)
   vim.o.laststatus = 3
   vim.o.winbar = '%#barbecue_basename#%t%X'
 
-  vim.api.nvim_create_autocmd({
+  local group = api.nvim_create_augroup('barbecue.updater', {})
+
+  api.nvim_create_autocmd('BufEnter', {
+    group = group,
+    callback = function()
+      vim.b.navic_lazy_update_context = true
+    end,
+  })
+
+  api.nvim_create_autocmd({
     'WinResized',
     'BufWinEnter',
     'CursorHold',
     'InsertLeave',
     'BufModifiedSet',
   }, {
-    group = vim.api.nvim_create_augroup('barbecue.updater', {}),
+    group = group,
     callback = function()
       require('barbecue.ui').update()
     end,

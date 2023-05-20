@@ -3,7 +3,26 @@ local tokens = vim.lsp.semantic_tokens
 
 local M = {}
 
+local lsp_cancel_debounce = nil
+
+local function start_debounce()
+  if lsp_cancel_debounce then
+    if not lsp_cancel_debounce:is_closing() then
+      lsp_cancel_debounce:stop()
+      lsp_cancel_debounce:close()
+    end
+  end
+  lsp_cancel_debounce = vim.defer_fn(function()
+    lsp_cancel_debounce = nil
+  end, 200)
+end
+
 function M.lsp_cancel_pending_requests(bufnr)
+  if lsp_cancel_debounce then
+    start_debounce()
+    return
+  end
+
   vim.schedule(function()
     bufnr = (bufnr == nil or bufnr == 0) and api.nvim_get_current_buf() or bufnr
     for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
@@ -16,6 +35,8 @@ function M.lsp_cancel_pending_requests(bufnr)
       end
     end
   end)
+
+  start_debounce()
 end
 
 function M.toggle_tokens(bufnr)
@@ -84,7 +105,7 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
     nl()
     local sorted_marks = vim.fn.sort(items.semantic_tokens, function(left, right)
       local left_first = left.opts.priority < right.opts.priority
-        or left.opts.priority == right.opts.priority and left.opts.hl_group < right.opts.hl_group
+          or left.opts.priority == right.opts.priority and left.opts.hl_group < right.opts.hl_group
       return left_first and -1 or 1
     end)
     for _, extmark in ipairs(sorted_marks) do

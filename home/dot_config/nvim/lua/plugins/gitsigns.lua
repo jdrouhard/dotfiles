@@ -4,6 +4,7 @@ local M = {
 }
 
 M.opts = {
+  numhl = true,
   on_attach = function(bufnr)
     local gs = package.loaded.gitsigns
 

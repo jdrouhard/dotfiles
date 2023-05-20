@@ -64,7 +64,7 @@ end
 function M.update_requests()
   requests_cache = {}
   local bufnr = vim.api.nvim_get_current_buf()
-  for _, client in ipairs(vim.lsp.buf_get_clients()) do
+  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
     local name = client.name
     local result = {}
     local ids = {}

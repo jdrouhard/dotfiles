@@ -12,6 +12,9 @@ M.opts = {
       enable_ui = true,
     },
   },
+  barbecue = {
+    alt_background = true,
+  },
   custom_highlights = function(colors)
     return {
       ['@method'] = { link = '@function' },

@@ -32,6 +32,9 @@ function M.config()
         luasnip.lsp_expand(args.body)
       end,
     },
+    experimental = {
+      ghost_text = true,
+    },
     formatting = {
       fields = { 'kind', 'abbr', 'menu' },
       format = lspkind.cmp_format({

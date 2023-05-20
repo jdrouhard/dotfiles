@@ -4,7 +4,7 @@ local fn = vim.fn
 
 api.nvim_create_user_command('StripTrailingWhitespace', '<line1>,<line2>s/\\s\\+$//e | noh | norm! ``', { range = '%' })
 
-api.nvim_create_augroup('init', {})
+local init = api.nvim_create_augroup('init', {})
 
 local autocmds = {
   { 'FileType',    { pattern = { 'cmake', 'xml', 'lua' }, command = [[setlocal tabstop=2 | setlocal shiftwidth=2]], } },
@@ -16,7 +16,7 @@ local autocmds = {
 }
 
 for _, autocmd in ipairs(autocmds) do
-  api.nvim_create_autocmd(autocmd[1], vim.tbl_extend('force', { group = 'init' }, autocmd[2]))
+  api.nvim_create_autocmd(autocmd[1], vim.tbl_extend('force', { group = init }, autocmd[2]))
 end
 
 local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
