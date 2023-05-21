@@ -536,11 +536,10 @@ function M.config()
         end
 
         if #msgs == 1 then
-          msgs = msgs[1]
+          return msgs[1]
         else
-          msgs = table.concat(vim.tbl_flatten({ '[', msgs, ']' }), ' ')
+          return table.concat(vim.tbl_flatten({ '[', msgs, ']' }), ' ')
         end
-        return msgs
       end,
     },
     Space(2),

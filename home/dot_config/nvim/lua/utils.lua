@@ -1,55 +1,6 @@
 local api = vim.api
-local tokens = vim.lsp.semantic_tokens
 
 local M = {}
-
-local lsp_cancel_debounce = nil
-
-local function start_debounce()
-  if lsp_cancel_debounce then
-    if not lsp_cancel_debounce:is_closing() then
-      lsp_cancel_debounce:stop()
-      lsp_cancel_debounce:close()
-    end
-  end
-  lsp_cancel_debounce = vim.defer_fn(function()
-    lsp_cancel_debounce = nil
-  end, 200)
-end
-
-function M.lsp_cancel_pending_requests(bufnr)
-  if lsp_cancel_debounce then
-    start_debounce()
-    return
-  end
-
-  vim.schedule(function()
-    bufnr = (bufnr == nil or bufnr == 0) and api.nvim_get_current_buf() or bufnr
-    for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-      for id, request in pairs(client.requests or {}) do
-        if request.type == 'pending' and request.bufnr == bufnr and
-            not request.method:match('semanticTokens') and
-            not request.method:match('documentSymbol') then
-          client.cancel_request(id)
-        end
-      end
-    end
-  end)
-
-  start_debounce()
-end
-
-function M.toggle_tokens(bufnr)
-  bufnr = bufnr or api.nvim_get_current_buf()
-  local highlighter = tokens.__STHighlighter.active[bufnr]
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    if not highlighter then
-      tokens.start(bufnr, client.id)
-    else
-      tokens.stop(bufnr, client.id)
-    end
-  end
-end
 
 function M.show_highlights_at_pos(bufnr, row, col, filter)
   local ns = api.nvim_create_namespace('personal_utils')

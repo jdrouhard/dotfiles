@@ -15,6 +15,7 @@ function M.config()
     pathStrict = true,
   })
 
+  local util = require('plugins.lsp.util')
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local lua_ls_ext = require('plugins.lsp.lua_ls_ext')
@@ -30,8 +31,6 @@ function M.config()
     { text = '󰌶', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
   local function on_attach(client, bufnr)
-    status.on_attach()
-
     local au_group = api.nvim_create_augroup('lsp_aucmds:' .. bufnr, {})
 
     local function buf_map(mode, lhs, rhs)
@@ -77,7 +76,7 @@ function M.config()
 
     buf_map({ 'n', 'i', 's' }, '<C-g>', lsp.buf.signature_help)
 
-    buf_map('n', '<leader>tt', require('utils').toggle_tokens)
+    buf_map('n', '<leader>tt', util.toggle_tokens)
 
     if client.server_capabilities.documentFormattingProvider then
       buf_map('n', '<leader>f', lsp.buf.format)
@@ -106,14 +105,7 @@ function M.config()
       require('nvim-navic').attach(client, bufnr)
     end
 
-    api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
-      group = au_group,
-      buffer = bufnr,
-      callback = function() require('utils').lsp_cancel_pending_requests() end,
-      desc = 'lsp.cancel_pending_requests',
-    })
-
-    api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+    api.nvim_create_autocmd('CursorHold', {
       group = au_group,
       buffer = bufnr,
       callback = function() require('nvim-lightbulb').update_lightbulb() end,
@@ -142,6 +134,18 @@ function M.config()
       end
     end,
     desc = 'lsp.custom_semantic_token_highlights'
+  })
+
+  api.nvim_create_autocmd('LspRequest', {
+    group = au_group,
+    callback = function(ev) util.track_request(ev) end,
+    desc = 'lsp.track_request',
+  })
+
+  api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
+    group = au_group,
+    callback = function(ev) util.cancel_pending_requests(ev.buf) end,
+    desc = 'lsp.cancel_pending_requests',
   })
 
   local servers = {
