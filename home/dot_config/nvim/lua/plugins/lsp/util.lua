@@ -29,20 +29,18 @@ function M.track_request(request_event)
 end
 
 function M.cancel_pending_requests(bufnr)
-  vim.schedule(function()
-    local requests = M.pending_requests
-    if not rawget(requests, bufnr) then
-      return
-    end
-    for client_id, reqs in pairs(requests[bufnr]) do
-      local client = vim.lsp.get_client_by_id(client_id)
-      if client then
-        for id, _ in pairs(reqs) do
-          client.cancel_request(id)
-        end
+  local requests = M.pending_requests
+  if not rawget(requests, bufnr) then
+    return
+  end
+  for client_id, reqs in pairs(requests[bufnr]) do
+    local client = vim.lsp.get_client_by_id(client_id)
+    if client then
+      for id, _ in pairs(reqs) do
+        client.cancel_request(id)
       end
     end
-  end)
+  end
 end
 
 function M.toggle_tokens(bufnr)

@@ -3,7 +3,7 @@ local M = {
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
   },
-  event = { 'BufReadPost', 'BufNewFile' },
+  event = 'VeryLazy',
   build = ':TSUpdate',
 }
 
