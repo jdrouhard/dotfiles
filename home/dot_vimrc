@@ -58,6 +58,15 @@ set wrap                             " wrap overlong lines
 " UI settings
 "-------------------------------------------------------------------------------
 
+augroup color_overrides
+    autocmd!
+    au ColorScheme * hi! link CocSemVariable      None
+                 \ | hi! link CocErrorHighlight   DiagnosticUnderlineError
+                 \ | hi! link CocWarningHighlight DiagnosticUnderlineWarn
+                 \ | hi! link CocInfoHighlight    DiagnosticUnderlineInfo
+                 \ | hi! link CocHintHighlight    DiagnosticUnderlineHint
+augroup END
+
 set background=dark
 set termguicolors
 let g:onedark_terminal_italics=1
@@ -70,23 +79,14 @@ let g:oceanic_next_terminal_bold=1
 let g:airline_theme='oceanicnext'
 colorscheme OceanicNext
 "let g:airline_theme='nightfly'
-"colorscheme my_nightfly
+"colorscheme nightfly
 
-hi! link CocSemVariable      None
-hi! link CocErrorHighlight   DiagnosticUnderlineError
-hi! link CocWarningHighlight DiagnosticUnderlineWarn
-hi! link CocInfoHighlight    DiagnosticUnderlineInfo
-hi! link CocHintHighlight    DiagnosticUnderlineHint
-
-if !has('nvim')
-    set t_so=[7m                         " set escape codes for standout mode
-    set t_se=[27m                        " set escape codes for standout mode
-    set t_ZH=[3m                         " set escape codes for italics mode
-    set t_ZR=[23m                        " set escape codes for italics mode
-    if has('termguicolors')
-        let &t_8f = '[38;2;%lu;%lu;%lum' " true color fix
-        let &t_8b = '[48;2;%lu;%lu;%lum' " true color fix
-    endif
+set t_se=[27m                        " set escape codes for standout mode
+set t_ZH=[3m                         " set escape codes for italics mode
+set t_ZR=[23m                        " set escape codes for italics mode
+if has('termguicolors')
+    let &t_8f = '[38;2;%lu;%lu;%lum' " true color fix
+    let &t_8b = '[48;2;%lu;%lu;%lum' " true color fix
 endif
 
 set noshowmode   " Hide the default mode text (e.g. -- INSERT -- below the status line)
@@ -148,12 +148,8 @@ endif
 
 set autoread                            " automatically reload a file when it has
                                         " been changed
-if has('nvim')
-    set inccommand=nosplit              " Don't show partial results in preview window
-else
-    let &undodir=s:data_dir.'/undo'     " persistent undo directory
-    let &dir=s:data_dir.'/swap'         " set the swap directory
-endif
+let &undodir=s:data_dir.'/undo'         " persistent undo directory
+let &dir=s:data_dir.'/swap'             " set the swap directory
 
 set undofile                            " enable persistent undo
 "set clipboard=unnamedplus              " use the system clipboard by default
@@ -291,7 +287,7 @@ inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 let g:alternateNoDefaultAlternate = 1
 
 " Configure fzf
-if has('nvim') || has('gui_running')
+if has('gui_running')
     let $FZF_DEFAULT_OPTS .= ' --inline-info --bind up:preview-up,down:preview-down,pgup:preview-page-up,pgdn:preview-page-down'
 endif
 
@@ -351,28 +347,11 @@ augroup END
 "-------------------------------------------------------------------------------
 " Misc settings
 "-------------------------------------------------------------------------------
-if has("nvim")
-    function! AS_HandleSwapfile(filename, swapname)
-        " if swapfile is older than file itself, just get rid of it
-        if getftime(a:swapname) < getftime(a:filename)
-            call delete(a:swapname)
-            let v:swapchoice = 'e'
-        endif
-    endfunction
-
-    augroup AutoSwap
-        autocmd!
-        autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
-                \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
-        autocmd SwapExists * call AS_HandleSwapfile(expand('<afile>:p'), v:swapname)
-    augroup END
-else
-    " Always start editing a file in case a swap file exists.
-    augroup AutoSwap
-        autocmd!
-        autocmd SwapExists * let v:swapchoice = 'e'
-    augroup END
-endif
+" Always start editing a file in case a swap file exists.
+augroup AutoSwap
+    autocmd!
+    autocmd SwapExists * let v:swapchoice = 'e'
+augroup END
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
