@@ -11,9 +11,15 @@ M.opts = {
       enabled = true,
       enable_ui = true,
     },
-  },
-  barbecue = {
-    alt_background = true,
+    native_lsp = {
+      enabled = true,
+      underlines = {
+        errors = { "undercurl" },
+        hints = { "undercurl" },
+        warnings = { "undercurl" },
+        information = { "undercurl" },
+      },
+    },
   },
   custom_highlights = function(colors)
     return {
