@@ -1,11 +1,11 @@
 local api = vim.api
-local lsp_util = require('vim.lsp.util')
 
 local status_timer = vim.loop.new_timer()
 local spinner_frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
 local index = 0
-local progress_cache = nil
+local progress_cache = {}
 local requests_cache = {}
+local progress_state = {}
 local request_state = vim.defaulttable()
 
 local ignore_methods = {
@@ -18,7 +18,7 @@ local ignore_methods = {
 local M = {}
 
 local function update_timer()
-  local need_timer = not (vim.tbl_isempty(progress_cache or {}) and vim.tbl_isempty(requests_cache))
+  local need_timer = not vim.tbl_isempty(progress_cache) or not vim.tbl_isempty(requests_cache)
 
   if need_timer then
     status_timer:start(100, 100, vim.schedule_wrap(function()
@@ -32,42 +32,88 @@ local function update_timer()
   vim.cmd.redrawstatus({ bang = true })
 end
 
-local function invalidate_requests(bufnr)
-  requests_cache[bufnr] = nil
+local function invalidate_progress()
+  progress_cache = {}
   update_timer()
 end
 
-local function update_progress()
-  local lsp_messages = lsp_util.get_progress_messages()
-  local msgs = {}
-  for _, msg in ipairs(lsp_messages) do
-    local name = msg.name
-    if msg.progress then
-      local contents = { msg.title }
-      if msg.message then
-        contents[#contents + 1] = msg.message
-      end
+local function invalidate_requests(bufnr)
+  requests_cache[bufnr] = {}
+  update_timer()
+end
 
-      if msg.percentage and msg.percentage > 0 then
-        contents[#contents + 1] = '(' .. math.ceil(msg.percentage) .. '%%)'
-      end
+local function update_progress(progress_event)
+  local data = progress_event.data
+  local client_id = data.client_id
+  local progress = data.result
+  local value = progress.value
+  local token = progress.token
 
-      if msg.done then
-        vim.defer_fn(update_progress, 500)
-      end
+  local state = progress_state[client_id]
+  if not state then
+    state = {}
+    progress_state[client_id] = state
+  end
 
-      msgs[name] = table.concat(contents, ' ')
-    else
-      msgs[name] = msg.content
+  if type(value) == 'table' and value.kind then
+    local group = state[token]
+    if not group then
+      group = {}
+      state[token] = group
+    end
+    group.title = value.title or group.title
+    group.message = value.message or group.message
+    if value.percentage then
+      group.percentage = math.max(group.percentage or 0, value.percentage)
+    end
+    if value.kind == 'end' then
+      vim.defer_fn(function()
+        state[token] = nil
+        invalidate_progress()
+      end, 500)
+    end
+  elseif type(value) == 'string' then
+    state.contents = value
+  end
+
+  invalidate_progress()
+end
+
+local function rebuild_progress_cache()
+  progress_cache = {}
+
+  for client_id, client_state in pairs(progress_state) do
+    local client = vim.lsp.get_client_by_id(client_id)
+    local name = client.name
+
+    local result = {}
+    for _, group in pairs(client_state) do
+      if type(group) == 'string' then
+        result[#result + 1] = group
+      else
+        local contents = { group.title }
+        if group.message then
+          contents[#contents + 1] = group.message
+        end
+
+        if group.percentage and group.percentage > 0 then
+          contents[#contents + 1] = '(' .. math.ceil(group.percentage) .. '%%)'
+        end
+
+        result[#result + 1] = table.concat(contents, ' ')
+      end
+    end
+    if not vim.tbl_isempty(result) then
+      progress_cache[name] = table.concat(result, ', ')
     end
   end
-  progress_cache = msgs
+
   update_timer()
 end
 
-local function update_request(update)
-  local data = update.data
-  local bufnr = update.buf
+local function update_request(request_event)
+  local data = request_event.data
+  local bufnr = request_event.buf
   local client_id = data.client_id
   local id = data.request_id
   local request = data.request
@@ -127,9 +173,9 @@ local function rebuild_requests_cache(bufnr)
         result[#result + 1] = string.format("%s %s", type == 'pending' and 'requesting' or 'canceling',
           string.sub(method, string.find(method, '/') + 1))
       end
-      if not vim.tbl_isempty(result) then
-        cache[name] = string.format('[%s]', table.concat(result, ', '))
-      end
+    end
+    if not vim.tbl_isempty(result) then
+      cache[name] = string.format('[%s]', table.concat(result, ', '))
     end
   end
 
@@ -138,17 +184,17 @@ end
 
 
 local function get_progress()
-  if not progress_cache then
-    update_progress()
+  if vim.tbl_isempty(progress_cache) then
+    rebuild_progress_cache()
   end
-  return progress_cache or {}
+  return progress_cache
 end
 
 local function get_requests(bufnr)
   if not requests_cache[bufnr] then
     rebuild_requests_cache(bufnr)
   end
-  return requests_cache[bufnr] or {}
+  return requests_cache[bufnr]
 end
 
 local function get_status(bufnr)
@@ -206,14 +252,14 @@ function M.setup(enable_progress)
     callback = function(ev)
       local bufnr = ev.buf
       local client_id = ev.data.client_id
+
+      progress_state[client_id] = nil
       request_state[bufnr][client_id] = nil
-      if vim.tbl_isempty(request_state[bufnr][client_id]) then
-        request_state[bufnr][client_id] = nil
-      end
       if vim.tbl_isempty(request_state[bufnr]) then
         request_state[bufnr] = nil
       end
 
+      invalidate_progress()
       invalidate_requests(bufnr)
     end,
     desc = 'lsp_status.detach',
@@ -226,10 +272,9 @@ function M.setup(enable_progress)
   })
 
   if enable_progress then
-    api.nvim_create_autocmd('User', {
+    api.nvim_create_autocmd('LspProgress', {
       group = au_group,
-      pattern = 'LspProgressUpdate',
-      callback = function() update_progress() end,
+      callback = function(ev) update_progress(ev) end,
       desc = 'lsp_status.update_progress',
     })
   end

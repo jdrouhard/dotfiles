@@ -11,6 +11,7 @@ local M = {
 
 function M.config()
   require('bufferline').setup {
+    highlights = require('globals').theme == 'catppuccin' and require('catppuccin.groups.integrations.bufferline').get(),
     options = {
       themable = false,
       numbers = 'ordinal',
