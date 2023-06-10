@@ -62,11 +62,16 @@ local function update_progress(progress_event)
       state[token] = group
     end
     group.title = value.title or group.title
-    group.message = value.message or group.message
-    if value.percentage then
-      group.percentage = math.max(group.percentage or 0, value.percentage)
-    end
-    if value.kind == 'end' then
+    if value.kind ~= 'end' then
+      group.message = value.message or group.message
+      if value.percentage then
+        group.percentage = math.max(group.percentage or 0, value.percentage)
+      end
+    else -- value.kind == 'end'
+      group.message = nil
+      if group.percentage then
+        group.percentage = 100
+      end
       vim.defer_fn(function()
         state[token] = nil
         invalidate_progress()
@@ -135,7 +140,7 @@ local function update_request(request_event)
         vim.schedule_wrap(invalidate_requests)(bufnr)
       end)
     end
-  else
+  else -- request.type == 'complete'
     local timer = rawget(state.debouncing, id)
     if timer then
       state.debouncing[id] = nil
