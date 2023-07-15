@@ -5,6 +5,11 @@ local M = {
   event = { 'BufReadPost', 'BufNewFile' },
   dependencies = {
     'nvim-tree/nvim-web-devicons',
+
+    {
+      'SmiteshP/nvim-navic',
+      opts = { lazy_update_context = true, },
+    },
   },
 }
 

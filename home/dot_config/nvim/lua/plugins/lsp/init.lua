@@ -6,15 +6,30 @@ local M = {
   'neovim/nvim-lspconfig',
   event = 'BufReadPost',
   cond = require('globals').native_lsp,
-  dependencies = { 'hrsh7th/cmp-nvim-lsp' },
+  dependencies = {
+    'hrsh7th/cmp-nvim-lsp',
+
+    {
+      'folke/neodev.nvim',
+      opts = {
+        lspconfig = true,
+        pathStrict = true,
+      },
+    },
+
+    {
+      'kosayoda/nvim-lightbulb',
+      opts = {
+        sign = {
+          text = '󰌶',
+          hl = 'DiagnosticSignWarn',
+        },
+      }
+    },
+  },
 }
 
 function M.config()
-  require('neodev').setup({
-    lspconfig = true,
-    pathStrict = true,
-  })
-
   local util = require('plugins.lsp.util')
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
@@ -26,9 +41,6 @@ function M.config()
   if use_float_progress then
     require('plugins.lsp.float_progress').setup()
   end
-
-  fn.sign_define('LightBulbSign',
-    { text = '󰌶', texthl = 'DiagnosticSignWarn', linehl = '', numhl = '' })
 
   local function on_attach(client, bufnr)
     local au_group = api.nvim_create_augroup('lsp_aucmds:' .. bufnr, {})

@@ -6,13 +6,6 @@ local M = {
   'folke/tokyonight.nvim',
   'rebelot/kanagawa.nvim',
 
-  'kosayoda/nvim-lightbulb',
-  'folke/neodev.nvim',
-
-  {
-    'SmiteshP/nvim-navic',
-    opts = { lazy_update_context = true, },
-  },
 
   {
     'mhinz/vim-sayonara',
