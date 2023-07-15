@@ -21,13 +21,6 @@ function M.config(_, opts)
 
   local group = api.nvim_create_augroup('barbecue.updater', {})
 
-  api.nvim_create_autocmd('BufEnter', {
-    group = group,
-    callback = function()
-      vim.b.navic_lazy_update_context = true
-    end,
-  })
-
   api.nvim_create_autocmd({
     'WinResized',
     'BufWinEnter',

@@ -1,6 +1,6 @@
 local api = vim.api
 
-local status_timer = vim.uv.new_timer()
+local status_timer = vim.loop.new_timer()
 local spinner_frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
 local index = 0
 local progress_cache = {}
@@ -75,7 +75,7 @@ local function update_progress(progress_event)
       vim.defer_fn(function()
         state[token] = nil
         invalidate_progress()
-      end, 500)
+      end, 3000)
     end
   elseif type(value) == 'string' then
     state.contents = value
@@ -132,7 +132,7 @@ local function update_request(request_event)
       end
     end
     if not rawget(state.active, id) and not rawget(state.debouncing, id) then
-      local timer = vim.uv.new_timer()
+      local timer = vim.loop.new_timer()
       state.debouncing[id] = timer
       timer:start(100, 0, function()
         state.active[id] = request

@@ -15,7 +15,7 @@ function M.locations(opts)
   opts = config.normalize_opts(opts, config.globals.lsp)
   if not opts then return end
   if not opts.cwd or #opts.cwd == 0 then
-    opts.cwd = vim.uv.cwd()
+    opts.cwd = vim.loop.cwd()
   end
   if not opts.prompt then
     opts.prompt = 'Locations'
