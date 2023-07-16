@@ -49,9 +49,7 @@ end
 M.opts = {
   fzf_layout = 'default',
   winopts = {
-    --height = 0.6,
     width = 0.9,
-    hl_border = 'FloatBorder',
   },
   keymap = {
     fzf = {

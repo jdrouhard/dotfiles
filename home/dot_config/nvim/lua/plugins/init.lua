@@ -1,12 +1,4 @@
 local M = {
-  'EdenEast/nightfox.nvim',
-  'Mofiqul/dracula.nvim',
-  'bluz71/vim-moonfly-colors',
-  'bluz71/vim-nightfly-guicolors',
-  'folke/tokyonight.nvim',
-  'rebelot/kanagawa.nvim',
-
-
   {
     'mhinz/vim-sayonara',
     keys = { { '<c-q>', '<cmd>Sayonara!<cr>', mode = '' } },

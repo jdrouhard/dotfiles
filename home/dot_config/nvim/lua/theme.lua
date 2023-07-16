@@ -6,22 +6,6 @@ local hl_map = {
   ['@text.strike']    = { strikethrough = true },
 
   -- Native LSP groups
-  ['@lsp.type.comment']   = { link = '@comment' },
-  ['@lsp.type.event']     = { link = 'Identifier' },
-  ['@lsp.type.function']  = { link = '@function' },
-  ['@lsp.type.keyword']   = { link = '@keyword' },
-  ['@lsp.type.macro']     = { link = '@macro' },
-  ['@lsp.type.method']    = { link = '@method' },
-  ['@lsp.type.modifier']  = { link = 'Identifier' },
-  ['@lsp.type.namespace'] = { link = '@namespace' },
-  ['@lsp.type.operator']  = { link = '@operator' },
-  ['@lsp.type.parameter'] = { link = '@parameter' },
-  ['@lsp.type.property']  = { link = '@property' },
-  ['@lsp.type.regexp']    = { link = 'SpecialChar' },
-  ['@lsp.type.string']    = { link = '@string' },
-  ['@lsp.type.number']    = { link = '@number' },
-  ['@lsp.type.type']      = { link = '@type' },
-  ['@lsp.type.variable']  = { link = '@variable' },
   ['@lsp.mod.deprecated'] = { link = '@text.strike' },
 
   --- clangd
@@ -55,6 +39,9 @@ local hl_map = {
 
   CocSemDeclarationVariable = { link = 'Identifier' },
   CocSemDeclarationParameter = { link = '@parameter' },
+
+  -- Miscellaneous
+  FzfLuaBorder = { link = 'FloatBorder' },
 }
 
 local api = vim.api
@@ -62,6 +49,7 @@ local cmd = vim.cmd
 
 local function apply_highlights()
   for name, hl in pairs(hl_map) do
+    hl.default = true
     api.nvim_set_hl(0, name, hl)
   end
 end
