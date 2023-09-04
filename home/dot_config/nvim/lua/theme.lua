@@ -1,44 +1,30 @@
 local hl_map = {
-  ['@keyword.access'] = { link = 'Statement' },
-  ['@statement']      = { link = 'Statement' },
-  ['@structure']      = { link = '@keyword' },
-  ['@deprecated']     = { link = '@text.strike' },
-  ['@text.strike']    = { strikethrough = true },
+  ['@keyword.access']   = { link = 'Statement' },
+  ['@statement']        = { link = 'Statement' },
+  ['@structure']        = { link = '@keyword' },
+  ['@deprecated']       = { link = '@text.strike' },
+  ['@text.strike']      = { strikethrough = true },
+  ['@lsp.type.comment'] = {},
 
   -- Native LSP groups
   ['@lsp.mod.deprecated'] = { link = '@text.strike' },
 
   --- clangd
   ['@lsp.mod.constructorOrDestructor'] = { link = '@constructor' },
+  ['@lsp.type.comment.c']              = { link = '@comment' },
+  ['@lsp.type.comment.cpp']            = { link = '@comment' },
 
   -- Coc specific groups
   -- Misc
-  CocErrorHighlight   = { link = 'DiagnosticUnderlineError' },
-  CocWarningHighlight = { link = 'DiagnosticUnderlineWarn' },
-  CocInfoHighlight    = { link = 'DiagnosticUnderlineInfo' },
-  CocHintHighlight    = { link = 'DiagnosticUnderlineHint' },
   CocHighlightText    = { link = 'LspReferenceText' },
   CocHighlightRead    = { link = 'LspReferenceRead' },
   CocHighlightWrite   = { link = 'LspReferenceWrite' },
 
   -- LSP
   CocSemClass         = { link = '@type' },
-  CocSemComment       = { link = '@comment' },
   CocSemEnum          = { link = '@type' },
   CocSemEnumMember    = { link = '@constant' },
-  CocSemFunction      = { link = '@function' },
-  CocSemMacro         = { link = '@macro' },
-  CocSemMethod        = { link = '@function' },
-  CocSemNamespace     = { link = '@namespace' },
-  CocSemParameter     = { link = '@parameter.reference' },
-  CocSemProperty      = { link = '@property' },
-  CocSemType          = { link = '@type' },
   CocSemTypeParameter = { link = '@type' },
-  CocSemVariable      = { link = '@variable' },
-  CocSemDeprecated    = { link = '@text.strike' },
-
-  CocSemDeclarationVariable = { link = 'Identifier' },
-  CocSemDeclarationParameter = { link = '@parameter' },
 
   -- Miscellaneous
   FzfLuaBorder = { link = 'FloatBorder' },
@@ -49,7 +35,9 @@ local cmd = vim.cmd
 
 local function apply_highlights()
   for name, hl in pairs(hl_map) do
-    hl.default = true
+    if not vim.tbl_isempty(hl) then
+      hl.default = true
+    end
     api.nvim_set_hl(0, name, hl)
   end
 end

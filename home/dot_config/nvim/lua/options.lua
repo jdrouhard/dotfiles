@@ -42,7 +42,6 @@ opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
 
-
 local disabled_providers = {
   'ruby',
   'node',
