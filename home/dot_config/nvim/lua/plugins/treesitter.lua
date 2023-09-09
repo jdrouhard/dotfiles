@@ -51,11 +51,6 @@ M.opts = {
 
 function M.config(_, opts)
   require('nvim-treesitter.configs').setup(opts)
-  vim.o.foldmethod     = 'expr'
-  vim.o.foldexpr       = 'v:lua.vim.treesitter.foldexpr()'
-  vim.o.foldlevel      = 99
-  vim.o.foldlevelstart = 99
-  vim.o.foldenable     = true
 end
 
 return M

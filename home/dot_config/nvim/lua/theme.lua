@@ -1,7 +1,6 @@
 local hl_map = {
   ['@keyword.access']   = { link = 'Statement' },
   ['@statement']        = { link = 'Statement' },
-  ['@structure']        = { link = '@keyword' },
   ['@deprecated']       = { link = '@text.strike' },
   ['@text.strike']      = { strikethrough = true },
   ['@lsp.type.comment'] = {},

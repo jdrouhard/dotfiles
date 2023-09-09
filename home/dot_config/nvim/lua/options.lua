@@ -18,6 +18,7 @@ o.foldenable    = false
 o.number        = true
 o.numberwidth   = 5
 o.signcolumn    = 'yes'
+o.foldcolumn    = '1'
 --o.cmdheight     = 2
 --o.cul           = true
 o.smartcase     = true
@@ -26,7 +27,7 @@ o.ignorecase    = true
 
 o.expandtab     = true
 o.shiftround    = true
-o.shiftwidth    = 4
+o.shiftwidth    = 2
 o.matchtime     = 3
 o.scrolloff     = 3
 o.linebreak     = true

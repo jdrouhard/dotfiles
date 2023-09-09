@@ -23,7 +23,7 @@ ViewConfig.keys.profile_sort = '<M-s>'
 require('lazy').setup('plugins', {
   defaults = { lazy = true },
   install = { colorscheme = { 'tokyonight', 'habamax' } },
-  checker = { enabled = true },
+  --checker = { enabled = true },
   performance = {
     rtp = {
       disabled_plugins = {

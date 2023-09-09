@@ -30,6 +30,8 @@ local M = {
 }
 
 function M.config()
+  lsp.set_log_level('OFF')
+
   local util = require('plugins.lsp.util')
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
@@ -40,6 +42,14 @@ function M.config()
   status.setup(not use_float_progress)
   if use_float_progress then
     require('plugins.lsp.float_progress').setup()
+  end
+
+  local ok, wf = pcall(require, "vim.lsp._watchfiles")
+  if ok then
+    -- disable lsp watcher. too slow on linux
+    wf._watchfunc = function()
+      return function() end
+    end
   end
 
   local function on_attach(client, bufnr)
@@ -110,10 +120,6 @@ function M.config()
         callback = lsp.buf.clear_references,
         desc = 'lsp.buf.clear_references',
       })
-    end
-
-    if client.server_capabilities.documentSymbolProvider then
-      require('nvim-navic').attach(client, bufnr)
     end
 
     api.nvim_create_autocmd('CursorHold', {
@@ -189,6 +195,7 @@ function M.config()
   }
 
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
 
   for client, config in pairs(servers) do
     config.capabilities = vim.tbl_deep_extend(

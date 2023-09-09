@@ -2,6 +2,12 @@
 
 (operator_cast) [ "operator" ] @function
 
+(alignas_specifier (identifier) @type)
+
+[
+ "alignas"
+] @keyword
+
 [
  "private"
  "protected"

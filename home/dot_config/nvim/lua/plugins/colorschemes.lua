@@ -70,6 +70,7 @@ return {
           DiffDelete = { bg = darken(colors.red, 0.15) },
           DiffChange = { bg = darken(colors.cyan, 0.15) },
           DiffText = { bg = darken(colors.cyan, 0.35) },
+          ['@lsp.type.typeParameter'] = { link = '@type' },
         }
       end,
     }
