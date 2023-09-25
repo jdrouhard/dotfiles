@@ -3,15 +3,13 @@ local hl_map = {
   ['@statement']        = { link = 'Statement' },
   ['@deprecated']       = { link = '@text.strike' },
   ['@text.strike']      = { strikethrough = true },
-  ['@lsp.type.comment'] = {},
+  ['@lsp.type.comment'] = {}, -- treesitter has better comment handling
 
   -- Native LSP groups
   ['@lsp.mod.deprecated'] = { link = '@text.strike' },
 
   --- clangd
   ['@lsp.mod.constructorOrDestructor'] = { link = '@constructor' },
-  ['@lsp.type.comment.c']              = { link = '@comment' },
-  ['@lsp.type.comment.cpp']            = { link = '@comment' },
 
   -- Coc specific groups
   -- Misc

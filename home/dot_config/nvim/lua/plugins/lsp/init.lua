@@ -169,6 +169,7 @@ function M.config()
     clangd = {
       cmd = { 'clangd', '--header-insertion=never' },
       handlers = clangd_ext.handlers,
+      capabilities = clangd_ext.capabilities,
       init_options = {
         clangdFileStatus = true,
         fallbackFlags = {
