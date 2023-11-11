@@ -5,14 +5,14 @@ local install_path = fn.stdpath('data') .. '/lazy/lazy.nvim'
 
 if not vim.loop.fs_stat(install_path) then
   vim.notify('Installing lazy.nvim')
-  fn.system({
+  vim.system({
     'git',
     'clone',
     '--filter=blob:none',
     '--single-branch',
     lazy_repo,
     install_path
-  })
+  }, { text = true }):wait()
 end
 vim.opt.runtimepath:prepend(install_path)
 

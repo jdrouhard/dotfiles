@@ -1,5 +1,4 @@
 local api = vim.api
-local cmd = vim.cmd
 local fn = vim.fn
 
 api.nvim_create_user_command('StripTrailingWhitespace', '<line1>,<line2>s/\\s\\+$//e | noh | norm! ``', { range = '%' })
@@ -19,7 +18,20 @@ for _, autocmd in ipairs(autocmds) do
   api.nvim_create_autocmd(autocmd[1], vim.tbl_extend('force', { group = init }, autocmd[2]))
 end
 
-local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
-if fn.filereadable(local_init) > 0 then
-  cmd('luafile ' .. local_init)
-end
+-- Copy yanked text to system clipboard
+-- If we are connected over ssh also copy using OSC52
+api.nvim_create_autocmd('TextYankPost', {
+  group = init,
+  desc = '[osc52] Copy to clipboard/OSC52',
+  callback = function()
+    if vim.v.operator == 'y' then
+      local yank_data = fn.getreg(vim.v.event.regname)
+      if fn.has('clipboard') == 1 then
+        pcall(fn.setreg, '+', yank_data)
+      end
+      if vim.env.SSH_CONNECTION then
+        require('vim.clipboard.osc52').copy({ yank_data })
+      end
+    end
+  end
+})
