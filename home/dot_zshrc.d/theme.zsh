@@ -1,5 +1,5 @@
 # Color theme
-BASE16_THEME_DEFAULT="gruvbox-dark-soft"
+BASE16_THEME_DEFAULT="onedark"
 
 function theme() {
     local theme_name variant found

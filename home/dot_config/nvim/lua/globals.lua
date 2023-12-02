@@ -7,7 +7,8 @@ local M = {
   --theme = 'duskfox',
   --theme = 'kanagawa',
   --theme = 'nightfox',
-  theme = 'tokyonight',
+  theme = 'onedark',
+  --theme = 'tokyonight',
 }
 
 return M

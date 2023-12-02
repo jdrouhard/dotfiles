@@ -3,6 +3,7 @@ return {
   'bluz71/vim-moonfly-colors',
   'bluz71/vim-nightfly-guicolors',
   'rebelot/kanagawa.nvim',
+  'navarasu/onedark.nvim',
 
   {
     'catppuccin/nvim',
