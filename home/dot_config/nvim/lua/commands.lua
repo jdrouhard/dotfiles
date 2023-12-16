@@ -30,7 +30,7 @@ api.nvim_create_autocmd('TextYankPost', {
         pcall(fn.setreg, '+', yank_data)
       end
       if vim.env.SSH_CONNECTION then
-        require('vim.clipboard.osc52').copy({ yank_data })
+        require('vim.ui.clipboard.osc52').copy({ yank_data })
       end
     end
   end
