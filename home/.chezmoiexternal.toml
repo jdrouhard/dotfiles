@@ -2,7 +2,3 @@
     type = "git-repo"
     url = "https://github.com/tarjoilija/zgen.git"
     refreshPeriod = "168h"
-[".config/base16-shell"]
-    type = "git-repo"
-    url = "https://github.com/base16-project/base16-shell.git"
-    refreshPeriod = "168h"

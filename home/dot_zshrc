@@ -23,6 +23,8 @@ if [ $platform = Linux -a ! -S "$SSH_AUTH_SOCK" ]; then
 fi
 
 # Plugins
+# Color theme
+BASE16_THEME_DEFAULT="onedark"
 source ~/.zgenrc
 
 # Environment variables
