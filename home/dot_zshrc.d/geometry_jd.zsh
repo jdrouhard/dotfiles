@@ -4,6 +4,8 @@
 # avit: https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/avit.zsh-theme
 # pure: https://github.com/sindresorhus/pure
 
+return 0
+
 autoload -Uz vcs_info
 
 PROMPT_SYMBOL='▲'

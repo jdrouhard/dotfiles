@@ -8,6 +8,7 @@ zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
 zmodule zsh-users/zsh-history-substring-search
 
+zmodule romkatv/powerlevel10k --use degit
 zmodule tinted-theming/base16-shell --branch main
 
 # Load some oh-my-zsh plugins
