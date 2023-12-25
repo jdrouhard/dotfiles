@@ -1,0 +1,31 @@
+# vim:ft=zsh
+#
+zmodule zsh-users/zsh-completions --fpath src
+zmodule completion
+zmodule utility
+
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-autosuggestions
+zmodule zsh-users/zsh-history-substring-search
+
+zmodule tinted-theming/base16-shell --branch main
+
+# Load some oh-my-zsh plugins
+#zmodule ohmyzsh/ohmyzsh --root plugins/colored-man-pages
+zmodule ohmyzsh/ohmyzsh --root plugins/git
+zmodule ohmyzsh/ohmyzsh --root plugins/pip
+zmodule ohmyzsh/ohmyzsh --root plugins/python
+zmodule ohmyzsh/ohmyzsh --root plugins/sudo
+zmodule ohmyzsh/ohmyzsh --root plugins/tmux
+zmodule ohmyzsh/ohmyzsh --root plugins/vi-mode
+zmodule ohmyzsh/ohmyzsh --root plugins/z
+
+# This must come after the vi-mode plugin
+zmodule ohmyzsh/ohmyzsh --root plugins/fzf
+
+if [ $(uname) = Darwin ]; then
+    # Load OSX-specific plugins
+    zmodule ohmyzsh/ohmyzsh --root plugins/brew
+    zmodule ohmyzsh/ohmyzsh --root plugins/macos
+fi
+

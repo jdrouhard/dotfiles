@@ -1,4 +1,0 @@
-[".local/share/zgen"]
-    type = "git-repo"
-    url = "https://github.com/tarjoilija/zgen.git"
-    refreshPeriod = "168h"
