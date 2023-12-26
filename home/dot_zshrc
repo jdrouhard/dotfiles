@@ -23,7 +23,7 @@ fi
 # Options
 setopt correct
 unsetopt correctall
-setopt NO_NOMATCH
+setopt no_nomatch
 setopt rm_star_silent
 
 platform=$(uname)
@@ -86,34 +86,21 @@ done
 
 
 # aliases
-alias which="builtin which"
 alias glom="git log HEAD..origin/\$(git_main_branch)"
 
 # set some history options
-setopt append_history
-setopt extended_history
 setopt hist_expire_dups_first
-setopt hist_ignore_all_dups
-setopt hist_ignore_dups
-setopt hist_ignore_space
+#setopt hist_ignore_all_dups
 setopt hist_reduce_blanks
-setopt hist_save_no_dups
-setopt hist_verify
 
 # set some more options
-setopt pushd_ignore_dups
-setopt pushd_silent
+setopt clobber # allow > redirection to truncate existing files
 
 # Keep a ton of history.
-HISTSIZE=100000
+HISTSIZE=200000
 SAVEHIST=100000
 HISTFILE=~/.zsh_history
 export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
-
-# Long running processes should return time after they complete. Specified
-# in seconds.
-#REPORTTIME=2
-#TIMEFMT="%U user %S system %P cpu %*Es total"
 
 # Completion
 zstyle ':completion:*' accept-exact '*(N)'

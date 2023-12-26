@@ -2,6 +2,7 @@
 #
 zmodule zsh-users/zsh-completions --fpath src
 zmodule completion
+zmodule environment
 zmodule utility
 
 zmodule zsh-users/zsh-syntax-highlighting
@@ -9,7 +10,7 @@ zmodule zsh-users/zsh-autosuggestions
 zmodule zsh-users/zsh-history-substring-search
 
 zmodule romkatv/powerlevel10k --use degit
-zmodule tinted-theming/base16-shell --branch main
+zmodule tinted-theming/base16-shell
 
 # Load some oh-my-zsh plugins
 #zmodule ohmyzsh/ohmyzsh --root plugins/colored-man-pages
