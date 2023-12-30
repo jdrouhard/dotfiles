@@ -21,11 +21,12 @@
 				"priority": 50
 			},
 			{
-				"function": "powerline.segments.common.wthr.weather",
+				"function": "powerline_owmweather.weather",
 				"priority": 50,
 				"args": {
-					"unit": "F",
-					"location_query": "66061"
+					"openweathermap_api_key": "{{ (index (onepassword "yzzuvpxc3zv2txjzswoc4w774y").fields 8).value }}",
+					"units": "F",
+					"location_query": "Olathe, US"
 				}
 			},
 			{
