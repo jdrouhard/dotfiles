@@ -8,7 +8,7 @@ g.alternateNoDefaultAlternate = true
 o.ttimeoutlen   = 0
 o.updatetime    = 100
 o.undofile      = true
-o.path          = vim.env.PWD .. '/**'
+o.path          = vim.fn.getcwd(-1, -1) .. '/**'
 
 o.showtabline   = 2
 o.showmode      = false
