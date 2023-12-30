@@ -23,6 +23,7 @@ M.opts = {
     'regex',
     'rust',
     'vim',
+    'vimdoc',
     'yaml',
   },
   highlight = { enable = true, },
