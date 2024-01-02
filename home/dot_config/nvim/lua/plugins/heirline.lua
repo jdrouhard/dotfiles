@@ -285,41 +285,6 @@ function M.config()
     hl = { bold = true }
   }
 
-  local GPS = {
-    condition = function()
-      if package.loaded['nvim-navic'] then
-        return require('nvim-navic').is_available()
-      end
-      return false
-    end,
-    init = function(self)
-      local data = require('nvim-navic').get_data() or {}
-      local children = {}
-      -- create a child for each level
-      for _, d in ipairs(data) do
-        table.insert(children, {
-          {
-            provider = ' > ',
-            hl = 'NavicSeparator',
-          },
-          {
-            provider = d.icon,
-            hl = 'NavicIcons' .. d.type,
-          },
-          {
-            provider = d.name:gsub('%%', '%%%%'):gsub('%s*->%s*', ''),
-            hl = 'NavicText',
-          },
-        })
-      end
-      -- instantiate the new child, overwriting the previous one
-      self.child = self:new(children, 1)
-    end,
-    provider = function(self)
-      return self.child:eval()
-    end,
-    update = 'CursorMoved',
-  }
 
   local FileProperties = {
     condition = function(self)
@@ -563,9 +528,8 @@ function M.config()
 
   local Coc = {
     condition = function()
-      return false
-      --local info = _G.packer_plugins['coc.nvim']
-      --return info and info.loaded
+      local coc_plugin = require('lazy.core.config').plugins['coc.nvim']
+      return coc_plugin and coc_plugin._.loaded ~= nil
     end,
     hl = { fg = 'cyan', bold = true },
     provider = function()
