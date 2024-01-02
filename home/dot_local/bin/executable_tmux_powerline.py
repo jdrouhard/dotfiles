@@ -11,29 +11,25 @@ def find_powerline():
     # if it wasn't found, it might be in a system site-package dir, but we'll
     # just import it and get its location
     if not os.path.exists(powerline_dir):
-        powerline_dir = ""
         try:
             import powerline
             powerline_dir = os.path.dirname(powerline.__file__)
         except:
-            pass
+            powerline_dir = ""
 
     return powerline_dir
 
 powerline_location = find_powerline()
 
 if not os.path.exists(powerline_location):
-    # powerline likely not installed.
-    powerline_location = ""
-
-    # if still not found, install both it and the weather segment with pip
-    import sys
+    # powerline likely not installed. install both it and the weather segment with pip
     try:
+        import sys
         subprocess.check_call([sys.executable, "-m", "pip", "install", "powerline-status", "powerline-owmweather"])
         powerline_location = find_powerline()
     except:
-        pass
+        powerline_location = ""
 
 if powerline_location != "":
-    subprocess.Popen(['powerline-daemon', '-q'])
+    #subprocess.Popen(["powerline-daemon", "-q"])
     os.execlp("tmux", "tmux", "source-file", os.path.join(powerline_location, "bindings", "tmux", "powerline.conf"))

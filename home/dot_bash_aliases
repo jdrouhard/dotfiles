@@ -5,23 +5,6 @@ export LC_ALL="$LANG"
 
 export EDITOR=nvim
 
-BASE16_THEME_DEFAULT="colors"
-
-#function gvim() { (/usr/bin/gvim -f "$@" &) }
-
-POWERLINE_DIR=$($HOME/.local/bin/find_powerline.sh)
-if [ -n "$POWERLINE_DIR" ]; then
-    #powerline-daemon -q
-    POWERLINE_BASH_CONTINUATION=1
-    POWERLINE_BASH_SELECT=1
-    . $POWERLINE_DIR/bindings/bash/powerline.sh
-fi
-
-
-#alias tmux="TERM=screen-256color-bce tmux"
-#alias vim="vim --servername vim"
-alias sudo="sudo -E"
-
 stty -ixoff
 stty -ixon
 
@@ -39,30 +22,3 @@ function tmup() {
     unset IFS;
     echo "Done"
 }
-
-function theme() {
-    local theme_name=${1}
-    local variant=${2:-dark}
-    local theme_paths=("$HOME/.config/base16-shell/base16-$theme_name.$variant.sh" \
-                       "$HOME/.config/base16-shell/$theme_name.$variant.sh")
-    local found=false
-
-    for path in "${theme_paths[@]}"; do
-        if [ -f "$path" ]; then
-            ln -sf $path $HOME/.theme
-            . $HOME/.theme
-            found=true
-            break
-        fi
-    done
-
-    if [ "$found" != true ]; then
-        echo "Could not find theme base16-$theme_name.$variant.sh or $theme_name.$variant.sh"
-    fi
-}
-
-if [ ! -f "$HOME/.theme" ]; then
-    theme $BASE16_THEME_DEFAULT
-else
-    . $HOME/.theme
-fi
