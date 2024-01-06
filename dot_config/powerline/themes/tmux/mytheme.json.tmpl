@@ -24,7 +24,7 @@
 				"function": "powerline_owmweather.weather",
 				"priority": 50,
 				"args": {
-					"openweathermap_api_key": "{{ (index (onepassword "yzzuvpxc3zv2txjzswoc4w774y").fields 8).value }}",
+					"openweathermap_api_key": {{ joinPath .chezmoi.sourceDir "owm_api_key.txt.age" | include | decrypt | quote }},
 					"units": "F",
 					"location_query": "Olathe, US"
 				}
