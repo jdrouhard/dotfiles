@@ -285,7 +285,6 @@ function M.config()
     hl = { bold = true }
   }
 
-
   local FileProperties = {
     condition = function(self)
       local encoding = (vim.bo.fileencoding ~= '' and vim.bo.fileencoding) or vim.o.encoding
@@ -511,10 +510,12 @@ function M.config()
   }
 
   local Lsp = {
-    condition = conditions.lsp_attached,
+    condition = function()
+      return next(vim.lsp.get_clients({ bufnr = 0 })) ~= nil
+    end,
     init = function(self)
       local names = {}
-      for _, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+      for _, server in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
         table.insert(names, server.name)
       end
       self.lsp_names = names
@@ -601,7 +602,6 @@ function M.config()
     SearchResults,
     FileNameBlock,
     Space,
-    --GPS,
     Align,
     Coc,
     Lsp,

@@ -204,7 +204,7 @@ end
 
 local function get_status(bufnr)
   local msgs = {}
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
     local name = client.name
     local status = client.status
     if status then
@@ -224,7 +224,7 @@ end
 function M.statusline(bufnr)
   bufnr = (not bufnr or bufnr == 0) and api.nvim_get_current_buf() or bufnr
 
-  if #vim.lsp.get_active_clients({ bufnr = bufnr }) == 0 then
+  if #vim.lsp.get_clients({ bufnr = bufnr }) == 0 then
     return {}
   end
 

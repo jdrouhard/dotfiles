@@ -1,2 +1,6 @@
+CanonicalizeHostname yes
+CanonicalDomains jmdtech.org localdomain
 AddKeysToAgent yes
-ForwardAgent yes
+
+Host *.jmdtech.org *.localdomain
+  ForwardAgent yes
