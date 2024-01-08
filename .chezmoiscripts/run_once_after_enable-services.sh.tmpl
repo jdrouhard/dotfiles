@@ -1,0 +1,25 @@
+{{- if and .os.linux (ne .chezmoi.username "root") -}}
+#!/bin/sh
+
+{{ $services := list
+     "ssh-agent.socket"
+-}}
+
+{{ range $services -}}
+systemctl --user enable --now {{ . }}
+{{ end -}}
+
+{{- end -}}
+
+{{- if .os.darwin -}}
+#!/bin/sh
+
+{{ $services := list
+     "com.openssh.ssh-agent"
+-}}
+
+{{ range $services -}}
+launchctl enable gui/$(id -u)/com.openssh.ssh-agent
+{{ end -}}
+
+{{- end -}}

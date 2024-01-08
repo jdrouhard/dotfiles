@@ -7,20 +7,20 @@
 
 encryption = "age"
 [age]
-    identity = {{ joinPath .chezmoi.homeDir ".config/chezmoi/key.txt" | quote }}
-    recipient = "age1ck9h2tvrffqedqn53s3zckp06pn3sj5najffjle896m2ncpv542q8qapyz"
+  identity = {{ joinPath .chezmoi.homeDir ".config/chezmoi/key.txt" | quote }}
+  recipient = "age1ck9h2tvrffqedqn53s3zckp06pn3sj5najffjle896m2ncpv542q8qapyz"
 
 [data]
-email = {{ $email | quote }}
+  email = {{ $email | quote }}
 
 [data.os]
-id = {{ $osID | quote }}
-darwin = {{ (eq .chezmoi.os "darwin") }}
-freebsd = {{ (eq .chezmoi.os "freebsd") }}
-linux = {{ (eq .chezmoi.os "linux") }}
-unix = {{ (eq .chezmoi.os "darwin" "freebsd" "linux") }}
-windows = {{ (eq .chezmoi.os "windows") }}
-wsl = {{ (and
-  (eq .chezmoi.os "linux")
-  (.chezmoi.kernel.osrelease | lower | contains "microsoft")
-) | not | not }}
+  id = {{ $osID | quote }}
+  darwin = {{ (eq .chezmoi.os "darwin") }}
+  freebsd = {{ (eq .chezmoi.os "freebsd") }}
+  linux = {{ (eq .chezmoi.os "linux") }}
+  unix = {{ (eq .chezmoi.os "darwin" "freebsd" "linux") }}
+  windows = {{ (eq .chezmoi.os "windows") }}
+  wsl = {{ (and
+    (eq .chezmoi.os "linux")
+    (.chezmoi.kernel.osrelease | lower | contains "microsoft")
+  ) | not | not }}
