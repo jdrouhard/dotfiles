@@ -90,7 +90,7 @@ function M.config()
         function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list(false)) end)
     end
 
-    buf_map('n', '<leader>ac', lsp.buf.code_action)
+    buf_map({'n', 'v'}, '<leader>ac', lsp.buf.code_action)
     buf_map('n', '<leader>rn', lsp.buf.rename)
     buf_map('n', ']e', vim.diagnostic.goto_next)
     buf_map('n', '[e', vim.diagnostic.goto_prev)

@@ -42,6 +42,7 @@ if [ $platform = Linux -a ! -S "$SSH_AUTH_SOCK" ]; then
 fi
 
 # Plugins
+VI_MODE_SET_CURSOR=true
 BASE16_THEME_DEFAULT="onedark"
 source ${ZIM_HOME}/init.zsh
 
