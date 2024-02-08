@@ -17,7 +17,6 @@ endif
 call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
-Plug 'antoinemadec/coc-fzf'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'bluz71/vim-nightfly-guicolors'
@@ -29,7 +28,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-dirvish'
 Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'scrooloose/nerdcommenter'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch' | Plug 'radenling/vim-dispatch-neovim'
@@ -57,15 +55,6 @@ set wrap                             " wrap overlong lines
 "-------------------------------------------------------------------------------
 " UI settings
 "-------------------------------------------------------------------------------
-
-augroup color_overrides
-    autocmd!
-    au ColorScheme * hi! link CocSemVariable      None
-                 \ | hi! link CocErrorHighlight   DiagnosticUnderlineError
-                 \ | hi! link CocWarningHighlight DiagnosticUnderlineWarn
-                 \ | hi! link CocInfoHighlight    DiagnosticUnderlineInfo
-                 \ | hi! link CocHintHighlight    DiagnosticUnderlineHint
-augroup END
 
 set background=dark
 set termguicolors
@@ -247,24 +236,6 @@ nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
-" coc.nvim mappings
-nmap <silent> <leader>jd <plug>(coc-definition)
-nmap <silent> gD         <plug>(coc-declaration)
-nmap <silent> gd         <plug>(coc-definition)
-nmap <silent> gi         <plug>(coc-implementation)
-nmap <silent> gr         <plug>(coc-references)
-nmap <silent> <F3>       <plug>(coc-references)
-nmap <silent> K          :call CocActionAsync('doHover')<CR>
-nmap <silent> <leader>ac :CocAction<CR>
-
-xmap if <plug>(coc-funcobj-i)
-omap if <plug>(coc-funcobj-i)
-xmap ic <plug>(coc-classobj-i)
-omap ic <plug>(coc-classobj-i)
-
-xmap <leader>f <plug>(coc-format-selected)
-nmap <leader>f <plug>(coc-format)
-
 " vim-fugitive mappings
 nnoremap <silent> <leader>gg :Git blame<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -302,10 +273,6 @@ command! -range=% StripTrailingWhitespace <line1>,<line2>s/\s\+$//e | norm! ``
 
 augroup vimrc_autocmd
     autocmd!
-
-    " Update signature help on jump placeholder.
-    au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    au CursorHold * silent call CocActionAsync('highlight')
 
     " Modify default tabstop and textwidth/formatting
     au FileType cmake,xml setlocal tabstop=2

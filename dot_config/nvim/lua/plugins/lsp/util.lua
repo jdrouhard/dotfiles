@@ -46,7 +46,7 @@ end
 function M.toggle_tokens(bufnr)
   bufnr = bufnr or api.nvim_get_current_buf()
   local highlighter = tokens.__STHighlighter.active[bufnr]
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
     if not highlighter then
       tokens.start(bufnr, client.id)
     else

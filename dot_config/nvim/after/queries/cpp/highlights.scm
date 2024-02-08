@@ -23,13 +23,8 @@
 ] @keyword.function
 
 [
- "static"
- "volatile"
- "extern"
- "const"
- "mutable"
  "constexpr"
  "constinit"
  "consteval"
  "thread_local"
-] @storageclass
+] @type.qualifier

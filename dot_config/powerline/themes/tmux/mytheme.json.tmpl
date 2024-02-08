@@ -1,4 +1,14 @@
 {
+	"dividers": {
+		"left": {
+			"hard": "  ",
+			"soft": "▏ "
+		},
+		"right": {
+			"hard": "  ",
+			"soft": " ▕ "
+		}
+	},
 	"segment_data": {
 		"powerline.segments.common.sys.system_load": {
 			"args": {
@@ -25,6 +35,7 @@
 				"priority": 50,
 				"args": {
 					"openweathermap_api_key": {{ joinPath .chezmoi.sourceDir "owm_api_key.txt.age" | include | decrypt | quote }},
+					"show": "condition,temp",
 					"units": "F",
 					"location_query": "Olathe, US"
 				}

@@ -12,6 +12,9 @@ local M = {
     {
       'folke/neodev.nvim',
       opts = {
+        library = {
+          types = false,
+        },
         lspconfig = true,
         pathStrict = true,
       },
@@ -172,10 +175,7 @@ function M.config()
       capabilities = clangd_ext.capabilities,
       init_options = {
         clangdFileStatus = true,
-        fallbackFlags = {
-          '-std=c++20',
-          '-fsized-deallocation',
-        },
+        fallbackFlags = { '-std=c++20' },
       },
     },
     pyright = {},
@@ -184,7 +184,6 @@ function M.config()
       handlers = lua_ls_ext.handlers,
       settings = {
         Lua = {
-          diagnostics = { globals = { 'vim' } },
           workspace = { checkThirdParty = false },
           telemetry = { enable = false },
         },

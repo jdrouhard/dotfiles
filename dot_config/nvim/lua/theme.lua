@@ -10,6 +10,7 @@ local hl_map = {
 
   --- clangd
   ['@lsp.mod.constructorOrDestructor'] = { link = '@constructor' },
+  ClangdInactive = { link = 'ColorColumn' },
 
   -- Coc specific groups
   -- Misc

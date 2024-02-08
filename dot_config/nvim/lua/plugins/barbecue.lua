@@ -17,6 +17,9 @@ M.opts = {
   create_autocmd = false,
   show_modified = true,
   show_dirname = false,
+  theme = {
+    basename = { bold = true },
+  },
 }
 
 function M.config(_, opts)

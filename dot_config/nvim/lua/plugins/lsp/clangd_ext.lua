@@ -33,9 +33,10 @@ local inactive_regions_update = function(_, message, _, _)
     local end_lnum = range['end'].line
 
     vim.api.nvim_buf_set_extmark(bufnr, inactive_ns, lnum, 0, {
-      line_hl_group = 'ColorColumn',
-      hl_eol = true,
+      line_hl_group = 'ClangdInactive',
       end_row = end_lnum,
+      hl_eol = true,
+      strict = false,
       priority = vim.highlight.priorities.semantic_tokens,
     })
   end

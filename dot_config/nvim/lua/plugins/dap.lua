@@ -14,8 +14,6 @@ function M.config()
   map('n', '<F10>', dap.step_over)
   map('n', '<F11>', dap.step_into)
   map('n', '<F12>', dap.step_out)
-  map('n', '<leader>dr', dap.repl.open)
-  map('n', '<leader>dl', dap.run_last)
   map({ 'n', 'v' }, '<M-k>', dapui.eval)
 
   map('n', '<leader>B', function()

@@ -11,15 +11,15 @@ local M = {
 
 function M.config()
   require('bufferline').setup {
-    highlights = require('globals').theme == 'catppuccin' and require('catppuccin.groups.integrations.bufferline').get(),
     options = {
+      style_preset = require('bufferline').style_preset.minimal,
       themable = false,
       numbers = 'ordinal',
       show_tab_indicators = true,
       show_buffer_close_icons = false,
       show_close_icon = false,
       max_name_length = 64,
-      separator_style = 'slant',
+      separator_style = 'think',
       diagnostics = 'nvim_lsp',
     },
   }
