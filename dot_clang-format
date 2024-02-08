@@ -1,27 +1,61 @@
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
 ---
 Language:      Cpp
 BasedOnStyle:  Mozilla
-AccessModifierOffset: -4
 AlignConsecutiveMacros: true
-AlignConsecutiveBitFields: true
 AlignEscapedNewlines: Left
-AllowShortBlocksOnASingleLine: Empty
-AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: InlineOnly
 AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortLambdasOnASingleLine: All
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
-BreakBeforeBraces: Stroustrup
-BreakStringLiterals: false
-Cpp11BracedListStyle: true
-ColumnLimit:     132
+BinPackArguments: true
+BinPackParameters: true
+BraceWrapping:
+  AfterCaseLabel:        false
+  AfterClass:            false
+  AfterControlStatement: Never
+  AfterEnum:             false
+  AfterFunction:         false
+  AfterNamespace:        false
+  AfterObjCDeclaration:  false
+  AfterStruct:           false
+  AfterUnion:            false
+  AfterExternBlock:      false
+  BeforeCatch:           true
+  BeforeElse:            true
+  BeforeLambdaBody:      false
+  BeforeWhile:           false
+  IndentBraces:          false
+  SplitEmptyFunction:    true
+  SplitEmptyRecord:      true
+  SplitEmptyNamespace:   true
+BreakBeforeBraces: Custom
+ColumnLimit: 132
+CommentPragmas:  '^ IWYU pragma:'
 ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
+ContinuationIndentWidth: 2
+Cpp11BracedListStyle: true
 FixNamespaceComments: true
-IndentWidth:     4
-PenaltyReturnTypeOnItsOwnLine: 500
-PointerAlignment: Middle
+IncludeBlocks:   Regroup
+IncludeCategories:
+  - Regex:            '^<(boost|fmt).*>'
+    Priority:         4
+    SortPriority:     0
+    CaseSensitive:    true
+  - Regex:            '^<.*\.h>'
+    Priority:         6
+    SortPriority:     0
+  - Regex:            '^<.*>'
+    Priority:         5
+    SortPriority:     0
+  - Regex:            '^".*"'
+    Priority:         1
+    SortPriority:     0
+IncludeIsMainRegex: '(Test)?$'
+IncludeIsMainSourceRegex: ''
+IndentWidth: 2
+PointerAlignment: Right
+QualifierAlignment: Leave
 SpaceAfterCStyleCast: true
 SpaceAfterTemplateKeyword: true
-SpaceAroundPointerQualifiers: Both
