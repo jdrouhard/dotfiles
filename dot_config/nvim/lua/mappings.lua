@@ -12,7 +12,7 @@ map('v', '>', '>gv')
 -- buffers
 map('n', '<c-s>',      '<cmd>w<CR>')
 map('',  '<leader>w',  '<c-w>')
-map('',  '<F4>',       '<cmd>A<CR>')
+map('',  '<F4>',       require('alternate').jump_alternate)
 
 -- misc
 local resolved_plugins = fn.resolve(fn.stdpath('config') .. '/lua/plugins/init.lua')
