@@ -27,7 +27,7 @@ M.opts = {
     'yaml',
   },
   highlight = { enable = true, },
-  context_commentstring = { enable = true, enable_autocmd = false },
+  --context_commentstring = { enable = false, enable_autocmd = false },
   incremental_selection = {
     enable = true,
     keymaps = {

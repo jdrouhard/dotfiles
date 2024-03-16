@@ -88,6 +88,7 @@ done
 
 # aliases
 alias glom="git log HEAD..origin/\$(git_main_branch)"
+alias git_current_branch="git rev-parse --abbrev-ref HEAD"
 
 # set some history options
 setopt hist_expire_dups_first

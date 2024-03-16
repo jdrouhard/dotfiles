@@ -46,38 +46,53 @@ function M.locations(opts)
   return core.fzf_exec(entries, opts)
 end
 
-M.opts = {
-  fzf_layout = 'default',
-  winopts = {
-    width = 0.9,
-  },
-  keymap = {
-    fzf = {
-      ['f2'] = 'toggle-preview',
-      ['alt-a'] = 'select-all',
-      ['alt-d'] = 'deselect-all',
-      ['up'] = 'preview-up',
-      ['down'] = 'preview-down',
-      ['ctrl-b'] = 'preview-page-up',
-      ['ctrl-f'] = 'preview-page-down'
-    },
-    builtin = {
-      ['<f2>'] = 'toggle-preview',
-      ['<f4>'] = 'toggle-fullscreen',
-      ['<c-b>'] = 'preview-page-up',
-      ['<c-f>'] = 'preview-page-down',
-    }
-  },
-  grep = {
-    rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
-    no_esc = true,
-  },
-  lsp = {
-    jump_to_single_result = true,
-  },
-}
+function M.config()
+  local function hl_validate(hl)
+    return not require('fzf-lua.utils').is_hl_cleared(hl) and hl or nil
+  end
 
-function M.config(_, opts)
+  local opts = {
+    'telescope',
+    hls = {
+      border         = hl_validate('TelescopePromptBorder'),
+      title          = hl_validate('TelescopePromptTitle'),
+      help_border    = hl_validate('TelescopePromptBorder'),
+      preview_border = hl_validate('TelescopePreviewBorder'),
+      preview_title  = hl_validate('TelescopePreviewTitle'),
+    },
+    fzf_colors = {
+      ['border'] = { 'fg', 'TelescopePromptBorder' },
+      ['header'] = { 'fg', 'TelescopePromptTitle' },
+    },
+    winopts = {
+      width = 0.9,
+    },
+    keymap = {
+      fzf = {
+        ['f2'] = 'toggle-preview',
+        ['alt-a'] = 'select-all',
+        ['alt-d'] = 'deselect-all',
+        ['up'] = 'preview-up',
+        ['down'] = 'preview-down',
+        ['ctrl-b'] = 'preview-page-up',
+        ['ctrl-f'] = 'preview-page-down'
+      },
+      builtin = {
+        ['<f2>'] = 'toggle-preview',
+        ['<f4>'] = 'toggle-fullscreen',
+        ['<c-b>'] = 'preview-page-up',
+        ['<c-f>'] = 'preview-page-down',
+      }
+    },
+    grep = {
+      rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
+      no_esc = true,
+    },
+    lsp = {
+      jump_to_single_result = true,
+    },
+  }
+
   -- workaround a bug where window-local options set by treesitter spec's
   -- config() function are not persisted if it's loaded via fzf-lua's builtin
   -- previewer code. TODO: figure out why this happens.

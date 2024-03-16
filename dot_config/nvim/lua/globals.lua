@@ -2,13 +2,14 @@ local M = {
   native_lsp = true,
   telescope = false,
 
-  --theme = 'catppuccin',
+  theme = 'catppuccin',
   --theme = 'dracula',
   --theme = 'duskfox',
   --theme = 'kanagawa',
   --theme = 'nightfox',
-  theme = 'onedark',
+  --theme = 'onedark',
   --theme = 'tokyonight',
+  --theme = 'retrobox',
 }
 
 return M
