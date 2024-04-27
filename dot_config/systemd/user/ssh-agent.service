@@ -3,7 +3,6 @@
 [Unit]
 Description=OpenSSH key agent
 Documentation=man:ssh-agent(1) man:ssh-add(1) man:ssh(1)
-Requires=ssh-agent.socket
 
 [Service]
 Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
@@ -13,4 +12,4 @@ SuccessExitStatus=2
 Type=exec
 
 [Install]
-Also=ssh-agent.socket
+WantedBy=default.target

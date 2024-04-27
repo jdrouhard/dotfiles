@@ -1,0 +1,9 @@
+{{- if and .os.linux (ne .chezmoi.username "root") -}}
+#!/bin/bash
+
+if systemctl --user list-unit-files ssh-agent.socket &>/dev/null; then
+  systemctl --user disable ssh-agent.socket
+fi
+
+{{- end -}}
+
