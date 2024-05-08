@@ -1,7 +1,12 @@
 local M = {
   'mfussenegger/nvim-dap',
   event = 'BufReadPost',
-  dependencies = 'rcarriga/nvim-dap-ui',
+  dependencies = {
+    'rcarriga/nvim-dap-ui',
+    dependencies = {
+      'nvim-neotest/nvim-nio',
+    },
+  },
 }
 
 function M.config()
