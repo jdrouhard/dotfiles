@@ -45,7 +45,7 @@ end
 local function update_progress(progress_event)
   local data = progress_event.data
   local client_id = data.client_id
-  local progress = data.result
+  local progress = data.params or data.result
   local value = progress.value
   local token = progress.token
 
