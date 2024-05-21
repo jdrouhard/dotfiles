@@ -1,6 +1,6 @@
 local M = {
   'tpope/vim-dispatch',
-  cmd = { 'Dispatch', 'Make', 'Focus', 'Start' },
+  cmd = { 'Dispatch', 'Make', 'Focus', 'Start', 'Spawn' },
   dependencies = {
     'radenling/vim-dispatch-neovim',
   },

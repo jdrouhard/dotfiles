@@ -11,16 +11,24 @@ function M.locations(opts)
   local config = require('fzf-lua.config')
   local make_entry = require('fzf-lua.make_entry')
   local path = require('fzf-lua.path')
+  local utils = require('fzf-lua.utils')
 
   opts = config.normalize_opts(opts, config.globals.lsp)
   if not opts then return end
   if not opts.cwd or #opts.cwd == 0 then
     opts.cwd = vim.loop.cwd()
   end
-  if not opts.prompt then
-    opts.prompt = 'Locations'
+
+  -- `title_prefix` is prioritized over both `prompt` and `prompt_prefix`
+  if (not opts.winopts or opts.winopts.title == nil) and opts.title_prefix then
+    utils.map_set(opts,
+      "winopts.title", { {
+        string.format(" %s %s ", opts.title_prefix, opts.label),
+        opts.hls.title
+      } })
+  elseif opts.prompt == nil and opts.prompt_postfix then
+    opts.prompt = opts.label .. (opts.prompt_postfix or '')
   end
-  opts.prompt = opts.prompt .. (opts.prompt_postfix or '')
 
   if opts.force_uri == nil then opts.force_uri = true end
   opts = core.set_fzf_field_index(opts)
@@ -46,53 +54,49 @@ function M.locations(opts)
   return core.fzf_exec(entries, opts)
 end
 
-function M.config()
-  local function hl_validate(hl)
-    return not require('fzf-lua.utils').is_hl_cleared(hl) and hl or nil
-  end
+M.opts = {
+  'telescope',
+  hls = {
+    border         = 'TelescopeResultsBorder',
+    title          = 'TelescopeResultsTitle',
+    help_border    = 'TelescopePromptBorder',
+    preview_border = 'TelescopePreviewBorder',
+    preview_title  = 'TelescopePreviewTitle',
+    cursorline     = 'TelescopePreviewLine',
+  },
+  fzf_colors = {
+    ['border'] = { 'fg', 'TelescopeResultsBorder' },
+    ['header'] = { 'fg', 'TelescopeResultsTitle' },
+  },
+  winopts = {
+    width = 0.9,
+  },
+  keymap = {
+    fzf = {
+      ['f2'] = 'toggle-preview',
+      ['alt-a'] = 'select-all',
+      ['alt-d'] = 'deselect-all',
+      ['up'] = 'preview-up',
+      ['down'] = 'preview-down',
+      ['ctrl-b'] = 'preview-page-up',
+      ['ctrl-f'] = 'preview-page-down'
+    },
+    builtin = {
+      ['<f2>'] = 'toggle-preview',
+      ['<f4>'] = 'toggle-fullscreen',
+      ['<c-b>'] = 'preview-page-up',
+      ['<c-f>'] = 'preview-page-down',
+    }
+  },
+  grep = {
+    rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
+  },
+  lsp = {
+    jump_to_single_result = true,
+  },
+}
 
-  local opts = {
-    'telescope',
-    hls = {
-      border         = hl_validate('TelescopePromptBorder'),
-      title          = hl_validate('TelescopePromptTitle'),
-      help_border    = hl_validate('TelescopePromptBorder'),
-      preview_border = hl_validate('TelescopePreviewBorder'),
-      preview_title  = hl_validate('TelescopePreviewTitle'),
-    },
-    fzf_colors = {
-      ['border'] = { 'fg', 'TelescopePromptBorder' },
-      ['header'] = { 'fg', 'TelescopePromptTitle' },
-    },
-    winopts = {
-      width = 0.9,
-    },
-    keymap = {
-      fzf = {
-        ['f2'] = 'toggle-preview',
-        ['alt-a'] = 'select-all',
-        ['alt-d'] = 'deselect-all',
-        ['up'] = 'preview-up',
-        ['down'] = 'preview-down',
-        ['ctrl-b'] = 'preview-page-up',
-        ['ctrl-f'] = 'preview-page-down'
-      },
-      builtin = {
-        ['<f2>'] = 'toggle-preview',
-        ['<f4>'] = 'toggle-fullscreen',
-        ['<c-b>'] = 'preview-page-up',
-        ['<c-f>'] = 'preview-page-down',
-      }
-    },
-    grep = {
-      rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
-      no_esc = true,
-    },
-    lsp = {
-      jump_to_single_result = true,
-    },
-  }
-
+function M.config(_, opts)
   -- workaround a bug where window-local options set by treesitter spec's
   -- config() function are not persisted if it's loaded via fzf-lua's builtin
   -- previewer code. TODO: figure out why this happens.
@@ -131,7 +135,7 @@ function M.init()
     pattern = 'CocLocationsChange',
     callback = function()
       local items = vim.lsp.util.locations_to_items(vim.g.coc_jump_locations, 'utf-8')
-      require('plugins.fzf-lua').locations({ prompt = 'CocLocations', items = items })
+      require('plugins.fzf-lua').locations({ title_prefix = 'Coc', label = 'Locations', items = items })
     end,
     nested = true,
   })

@@ -63,12 +63,10 @@ let g:gruvbox_italic=1
 let g:gruvbox_contrast_dark='soft'
 let g:oceanic_next_terminal_italic=1
 let g:oceanic_next_terminal_bold=1
-"let g:airline_theme='gruvbox'
-"colorscheme gruvbox
-let g:airline_theme='oceanicnext'
-colorscheme OceanicNext
-"let g:airline_theme='nightfly'
-"colorscheme nightfly
+"let g:airline_theme='oceanicnext'
+"colorscheme OceanicNext
+let g:airline_theme='nightfly'
+colorscheme nightfly
 
 set t_se=[27m                        " set escape codes for standout mode
 set t_ZH=[3m                         " set escape codes for italics mode

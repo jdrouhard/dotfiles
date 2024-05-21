@@ -1,6 +1,6 @@
 local M = {
   'hrsh7th/nvim-cmp',
-  event = { 'InsertEnter', 'CmdlineEnter' },
+  event = { 'VeryLazy' },
   cond = require('globals').native_lsp,
   dependencies = {
     'L3MON4D3/LuaSnip',

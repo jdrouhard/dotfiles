@@ -25,6 +25,7 @@ return {
             information = { 'undercurl' },
           },
         },
+        telescope = true,
       },
       custom_highlights = function(colors)
         return {

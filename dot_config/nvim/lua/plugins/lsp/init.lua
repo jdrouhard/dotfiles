@@ -4,8 +4,8 @@ local lsp = vim.lsp
 
 local M = {
   'neovim/nvim-lspconfig',
-  event = 'BufReadPost',
-  cond = require('globals').native_lsp,
+  event = 'VeryLazy',
+  cond = require('globals').native_lsp and not vim.g.vscode,
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',
 
@@ -47,14 +47,6 @@ function M.config()
     require('plugins.lsp.float_progress').setup()
   end
 
-  local ok, wf = pcall(require, "vim.lsp._watchfiles")
-  if ok then
-    -- disable lsp watcher. too slow on linux
-    wf._watchfunc = function()
-      return function() end
-    end
-  end
-
   local function on_attach(client, bufnr)
     local au_group = api.nvim_create_augroup('lsp_aucmds:' .. bufnr, {})
 
@@ -63,11 +55,11 @@ function M.config()
       map(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
-    local fzf_list = function(jump_single)
+    local fzf_list = function(label, jump_single)
       return {
         on_list = function(result)
           fzf_config.locations({
-            prompt = result.title,
+            label = label,
             items = result.items,
             jump_to_single_result = jump_single
           })
@@ -84,16 +76,16 @@ function M.config()
       buf_map('n', 'gr', builtins.lsp_references)
       buf_map('n', 'gws', builtins.lsp_workspace_symbols)
     else
-      buf_map('n', 'gD', function() lsp.buf.declaration(fzf_list()) end)
-      buf_map('n', 'gd', function() lsp.buf.definition(fzf_list()) end)
-      buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list()) end)
-      buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list()) end)
-      buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list(false)) end)
+      buf_map('n', 'gD', function() lsp.buf.declaration(fzf_list('Declarations')) end)
+      buf_map('n', 'gd', function() lsp.buf.definition(fzf_list('Definitions')) end)
+      buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list('Implementations')) end)
+      buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list('Type Definitions')) end)
+      buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list('References', false)) end)
       buf_map('n', 'gws',
-        function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list(false)) end)
+        function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list('Workspace Symbols', false)) end)
     end
 
-    buf_map({'n', 'v'}, '<leader>ac', lsp.buf.code_action)
+    buf_map({ 'n', 'v' }, '<leader>ac', lsp.buf.code_action)
     buf_map('n', '<leader>rn', lsp.buf.rename)
     buf_map('n', ']e', vim.diagnostic.goto_next)
     buf_map('n', '[e', vim.diagnostic.goto_prev)
