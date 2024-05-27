@@ -10,8 +10,6 @@ return {
     name = 'catppuccin',
     opts = {
       integrations = {
-        notify = true,
-        leap = true,
         dap = {
           enabled = true,
           enable_ui = true,
@@ -25,6 +23,7 @@ return {
             information = { 'undercurl' },
           },
         },
+        notify = true,
         telescope = true,
       },
       custom_highlights = function(colors)
