@@ -16,10 +16,10 @@
 
 [
  "inline"
- "virtual"
  "explicit"
  "override"
  "final"
+ (virtual)
 ] @keyword.function
 
 [
