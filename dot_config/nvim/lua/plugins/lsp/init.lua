@@ -10,16 +10,15 @@ local M = {
     'hrsh7th/cmp-nvim-lsp',
 
     {
-      'folke/neodev.nvim',
+      'folke/lazydev.nvim',
+      ft = 'lua',
       opts = {
         library = {
-          types = false,
+          'luvit-meta/library',
         },
-        lspconfig = true,
-        pathStrict = true,
       },
     },
-
+    { 'Bilal2453/luvit-meta', lazy = true },
     {
       'kosayoda/nvim-lightbulb',
       opts = {
