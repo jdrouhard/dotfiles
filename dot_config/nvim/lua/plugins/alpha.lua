@@ -89,9 +89,6 @@ function M.config(_, dashboard)
   vim.api.nvim_create_autocmd('User', {
     pattern = 'AlphaReady',
     callback = function(ev)
-      -- See https://github.com/justinmk/vim-dirvish/issues/221
-      vim.keymap.set('n', '-', ':bwipe <bar> Dirvish<cr>', { silent = true, buffer = ev.buf })
-
       vim.api.nvim_buf_create_user_command(ev.buf, 'G', 'bwipe <bar> Git', { force = true })
     end,
   })

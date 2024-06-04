@@ -4,7 +4,7 @@ local lsp = vim.lsp
 
 local M = {
   'neovim/nvim-lspconfig',
-  event = 'VeryLazy',
+  event = { 'VeryLazy', 'BufReadPost', 'BufWritePost', 'BufNewFile' },
   cond = require('globals').native_lsp and not vim.g.vscode,
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',

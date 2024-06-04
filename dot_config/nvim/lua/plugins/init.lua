@@ -15,11 +15,6 @@ local M = {
   },
 
   {
-    'justinmk/vim-dirvish',
-    lazy = false,
-  },
-
-  {
     'tpope/vim-eunuch',
     cmd = { 'Delete', 'Unlink', 'Move', 'Rename', 'Mkdir' }
   },
