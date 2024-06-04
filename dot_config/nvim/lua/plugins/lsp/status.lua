@@ -27,11 +27,8 @@ local function update_timer()
     end))
   elseif status_timer:is_active() then
     status_timer:stop()
-  end
-
-  vim.schedule(function()
     vim.api.nvim__redraw({ statusline = true })
-  end)
+  end
 end
 
 local function invalidate_progress()
