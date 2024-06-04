@@ -2,7 +2,7 @@
 
 (operator_cast) [ "operator" ] @function
 
-(alignas_specifier (identifier) @type)
+(alignas_qualifier (identifier) @type)
 
 [
  "alignas"
