@@ -1,6 +1,10 @@
 key.txt.age
 owm_api_key.txt.age
 
+{{ if not .os.darwin }}
+.hammerspoon
+{{ end }}
+
 {{ if not .os.linux }}
 **/systemd
 {{ end }}

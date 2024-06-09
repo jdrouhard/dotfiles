@@ -15,6 +15,7 @@ local M = {
       opts = {
         library = {
           'luvit-meta/library',
+          '~/.hammerspoon/Spoons/EmmyLua.spoon/annotations',
         },
       },
     },
