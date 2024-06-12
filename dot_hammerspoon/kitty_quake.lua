@@ -1,10 +1,13 @@
 local BUNDLE_ID = 'net.kovidgoyal.kitty'
 local PATH = hs.application.pathForBundleID(BUNDLE_ID)
-local TITLE = 'KittyQuake'
 local GROUP = 'quake'
 local GEOMETRY = hs.geometry({ x = 0, y = 0, w = 1, h = 0.4 })
 
-local M = {}
+---@type hs.task|nil
+local task = nil
+
+---@type boolean
+local hasBeenFocused = false
 
 ---@return hs.window
 local function getMainWindow(app)
@@ -37,79 +40,60 @@ local function moveWindow(kitty, space, screen)
   win:focus()
 end
 
----@return hs.application|nil
-local function findKittyQuake()
-  for _, app in ipairs(hs.application.applicationsForBundleID(BUNDLE_ID)) do
-    if getMainWindow(app):title() == TITLE then
-      return app
-    end
-  end
-end
-
-local pid = nil
-M.hideWatcher = hs.application.watcher.new(function(_, event, app)
-  if pid and event == hs.application.watcher.terminated then
-    pid = nil
-  end
-
-  if app:bundleID() == BUNDLE_ID and app:getWindow(TITLE) then
+local kittyMonitor = hs.application.watcher.new(function(_, event, app)
+  if task and app:pid() == task:pid() then
     if event == hs.application.watcher.deactivated then
-      if pid then
+      if hasBeenFocused then
         app:hide()
       else
-        pid = app:pid()
+        hasBeenFocused = true
       end
     end
-  end
-end)
 
--- must be on module for lifetime purposes
-M.startWatcher = hs.application.watcher.new(function(_, event, app)
-  if app:bundleID() ~= BUNDLE_ID then
-    return
-  end
+    if event == hs.application.watcher.launching then
+      local win = getMainWindow(app)
 
-  if event == hs.application.watcher.launching then
-    local win = getMainWindow(app)
-    if win:title() ~= TITLE then
-      return
+      win:move(GEOMETRY)
+      app:hide()
+
+      local space = hs.spaces.focusedSpace()
+      local screen = hs.screen.mainScreen()
+      moveWindow(app, space, screen)
     end
-
-    win:move(GEOMETRY)
-    app:hide()
-
-    local space = hs.spaces.focusedSpace()
-    local screen = hs.screen.mainScreen()
-    moveWindow(app, space, screen)
-    M.startWatcher:stop()
   end
 end)
 
 local function launchKittyQuake()
-  local t = hs.task.new(PATH .. '/Contents/MacOS/kitty', nil, function() return false end, {
-    '-1', '-T', TITLE, '--instance-group', GROUP, '-d', '$HOME', '-o', 'hide_window_decorations=titlebar-and-corners',
-    '-o', 'background_opacity=0.9', '-o', 'macos_quit_when_last_window_closed=true', '-o', 'macos_hide_from_tasks=true',
-  })
-
-  M.startWatcher:start()
-  return t:start()
+  task = hs.task.new(PATH .. '/Contents/MacOS/kitty',
+    function()
+      task = nil
+      hasBeenFocused = false
+    end,
+    function() return false end, {
+      '-1', '--instance-group', GROUP, '-d', '$HOME', '-o', 'hide_window_decorations=titlebar-and-corners',
+      '-o', 'background_opacity=0.9', '-o', 'background_blur=10', '-o', 'macos_quit_when_last_window_closed=true', '-o',
+      'macos_hide_from_tasks=true',
+    }):start() or nil
 end
 
+local M = {}
+
 function M.init()
-  M.hideWatcher:start()
+  kittyMonitor:start()
 end
 
 function M.toggle()
-  local kitty = findKittyQuake()
-
-  if not kitty then
+  if not task then
     launchKittyQuake()
-  elseif kitty:isFrontmost() then
-    kitty:hide()
   else
-    local space = hs.spaces.focusedSpace()
-    local screen = hs.screen.mainScreen()
-    moveWindow(kitty, space, screen)
+    local kitty = hs.application.applicationForPID(task:pid())
+    if kitty:isFrontmost() then
+      kitty:hide()
+    else
+      local space = hs.spaces.focusedSpace()
+      local screen = hs.screen.mainScreen()
+      moveWindow(kitty, space, screen)
+    end
   end
 end
 
