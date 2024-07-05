@@ -55,21 +55,13 @@ function M.locations(opts)
 end
 
 M.opts = {
-  'telescope',
-  hls = {
-    border         = 'TelescopeResultsBorder',
-    title          = 'TelescopeResultsTitle',
-    help_border    = 'TelescopePromptBorder',
-    preview_border = 'TelescopePreviewBorder',
-    preview_title  = 'TelescopePreviewTitle',
-    cursorline     = 'TelescopePreviewLine',
-  },
-  fzf_colors = {
-    ['border'] = { 'fg', 'TelescopeResultsBorder' },
-    ['header'] = { 'fg', 'TelescopeResultsTitle' },
-  },
+  'default-title',
+  fzf_opts = { ['--layout'] = 'default', },
   winopts = {
     width = 0.9,
+    preview = {
+      horizontal = 'right:55%',
+    },
   },
   keymap = {
     fzf = {
@@ -88,8 +80,12 @@ M.opts = {
       ['<c-f>'] = 'preview-page-down',
     }
   },
+  files = {
+    formatter = { 'path.dirname_first', 2 },
+  },
   grep = {
-    rg_opts = [[--vimgrep --smart-case --color=always -g '!{.git,node_modules}/*']],
+    formatter = { 'path.dirname_first', 2 },
+    no_esc = true,
   },
   lsp = {
     jump_to_single_result = true,

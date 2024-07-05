@@ -40,10 +40,10 @@ return {
   {
     'folke/tokyonight.nvim',
     opts = {
-      style = 'moon',
+      style = 'night',
       on_highlights = function(hl, c)
         hl['@lsp.typemod.parameter.reference'] = {
-          fg = require('tokyonight.util').lighten(c.yellow, 0.25)
+          fg = require('tokyonight.util').lighten(c.yellow, 0.45)
         }
       end,
     }
