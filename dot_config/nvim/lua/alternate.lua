@@ -1,5 +1,6 @@
 local api = vim.api
 local fn = vim.fn
+local fs = vim.fs
 
 local alt_map = {
   hpp = { 'cpp', 'c', 'cxx', },
@@ -45,11 +46,11 @@ function M.find_alternates(bufnr)
 
   local function scan_dir(scan)
     local files = {}
-    local iter = vim.fs.dir(scan, {
+    local iter = fs.dir(scan, {
       depth = 10,
       skip = function(name)
-        name = vim.fs.joinpath(scan, name)
-        if checked[name] ~= nil or vim.fs.basename(name):match('^%.') then
+        name = fs.joinpath(scan, name)
+        if checked[name] ~= nil or fs.basename(name):match('^%.') then
           return false
         end
         checked[name] = true
@@ -61,7 +62,7 @@ function M.find_alternates(bufnr)
       if (type == 'file' or type == 'link') then
         local _, entry_base, entry_ext = split_filename(entry)
         if entry_base == base and vim.list_contains(alt_exts, entry_ext) then
-          files[#files + 1] = vim.fs.joinpath(scan, entry)
+          files[#files + 1] = fs.joinpath(scan, entry)
         end
       end
     end
@@ -73,7 +74,7 @@ function M.find_alternates(bufnr)
     if #matching_files > 0 then
       return matching_files
     end
-    dir = vim.fs.dirname(dir) or base_dir
+    dir = fs.dirname(dir) or base_dir
   until dir == base_dir
 
   return {}
