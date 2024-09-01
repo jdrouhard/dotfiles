@@ -45,6 +45,9 @@ return {
         hl['@lsp.typemod.parameter.reference'] = {
           fg = require('tokyonight.util').lighten(c.yellow, 0.45)
         }
+        hl['FzfLuaDirPart'] = {
+          link = 'Comment',
+        }
       end,
     }
   },
