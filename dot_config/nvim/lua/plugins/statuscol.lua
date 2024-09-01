@@ -1,7 +1,6 @@
 local M = {
   'luukvbaal/statuscol.nvim',
   event = 'VeryLazy',
-  branch = '0.10',
 }
 
 function M.config()
