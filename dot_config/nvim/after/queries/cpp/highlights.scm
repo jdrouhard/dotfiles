@@ -19,7 +19,7 @@
  "explicit"
  "override"
  "final"
- (virtual)
+ "virtual"
 ] @keyword.function
 
 [
