@@ -23,11 +23,11 @@ local function update_timer()
   if need_timer then
     status_timer:start(100, 100, vim.schedule_wrap(function()
       index = (index + 1) % #spinner_frames
-      vim.api.nvim__redraw({ statusline = true })
+      vim.cmd.redrawstatus({ bang = true })
     end))
   elseif status_timer:is_active() then
     status_timer:stop()
-    vim.api.nvim__redraw({ statusline = true })
+    vim.cmd.redrawstatus({ bang = true })
   end
 end
 

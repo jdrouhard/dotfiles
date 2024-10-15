@@ -41,7 +41,7 @@ function M.config()
       type = 'lldb',
       request = 'launch',
       program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        return require('dap.utils').pick_file()
       end,
       args = {},
       cwd = '${workspaceFolder}',
@@ -51,7 +51,7 @@ function M.config()
       type = 'gdb',
       request = 'launch',
       program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        return require('dap.utils').pick_file()
       end,
       args = {},
       cwd = '${workspaceFolder}',
@@ -62,7 +62,7 @@ function M.config()
 
   dap.adapters.lldb = {
     type = 'executable',
-    command = 'lldb-vscode',
+    command = 'lldb-dap',
   }
 
   dap.adapters.gdb = {

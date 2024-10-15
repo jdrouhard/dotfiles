@@ -26,10 +26,6 @@ require('lazy').setup('plugins', {
   --checker = { enabled = true },
   performance = {
     rtp = {
-      -- workaround for lazy hardcoding 'lib' instead of using 'lib64' on certain platforms
-      paths = {
-        vim.fn.fnamemodify(vim.v.progpath, ':p:h:h') .. '/lib64/nvim',
-      },
       disabled_plugins = {
         'gzip',
         'matchit',

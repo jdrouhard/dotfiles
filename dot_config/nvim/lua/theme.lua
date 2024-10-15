@@ -22,14 +22,11 @@ local hl_map = {
   CocSemClass                          = { link = '@type' },
   CocSemEnum                           = { link = '@type' },
   CocSemEnumMember                     = { link = '@constant' },
-  CocSemTypeParameter                  = { link = '@type' },
+  CocSemTypeTypeParameter              = { link = '@type' },
 
-  -- FZF/Telescope
-  FzfLuaBorder                         = { link = 'FloatBorder' },
-  FzfLuaTitle                          = { link = 'FloatTitle' },
-
-  TelescopePreviewLine                 = { link = "Visual" },
-  TelescopePreviewMatch                = { link = "Search" },
+  -- Telescope
+  TelescopePreviewLine                 = { link = 'Visual' },
+  TelescopePreviewMatch                = { link = 'Search' },
 
   TelescopeBorder                      = { link = 'TelescopeNormal' },
   TelescopePromptBorder                = { link = 'TelescopeBorder' },

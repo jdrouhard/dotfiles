@@ -5,13 +5,11 @@ local M = {
   dependencies = {
     'L3MON4D3/LuaSnip',
     'onsails/lspkind.nvim',
-    'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-cmdline',
     'dmitmel/cmp-cmdline-history',
     'hrsh7th/cmp-path',
-    'saadparwaiz1/cmp_luasnip',
   },
 }
 
@@ -84,9 +82,7 @@ function M.config()
     }),
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = 'nvim_lua' },
       { name = 'path' },
-      { name = 'luasnip' },
     }, {
       { name = 'buffer' },
     }),
@@ -107,7 +103,6 @@ function M.config()
       { name = 'cmdline' },
     }),
   })
-
 end
 
 return M

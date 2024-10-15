@@ -7,7 +7,7 @@ function M.config()
   local util = require('Comment.utils')
   local lrepl = '[>'
   local rrepl = '<]'
-  local use_padding = false
+  local use_padding = true
 
   local post_hook = function(ctx)
     local srow = ctx.range.srow

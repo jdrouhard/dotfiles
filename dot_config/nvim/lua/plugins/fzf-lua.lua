@@ -56,6 +56,7 @@ end
 
 M.opts = {
   'default-title',
+  fzf_colors = true,
   fzf_opts = { ['--layout'] = 'default', },
   winopts = {
     width = 0.9,
@@ -81,10 +82,10 @@ M.opts = {
     }
   },
   files = {
-    formatter = { 'path.dirname_first', 2 },
+    formatter = { 'path.filename_first', 2 },
   },
   grep = {
-    formatter = { 'path.dirname_first', 2 },
+    formatter = { 'path.filename_first', 2 },
     no_esc = true,
   },
   lsp = {

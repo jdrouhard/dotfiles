@@ -30,7 +30,7 @@ platform=$(uname)
 
 # add a couple homebrew paths for macos systems
 if [ $platform = Darwin ]; then
-  export PATH=/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin${PATH:+:${PATH}}
+  export PATH=/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/make/libexec/gnubin${PATH:+:${PATH}}
 fi
 
 export FZF_BASE=$HOME/.local/share/nvim/lazy/fzf

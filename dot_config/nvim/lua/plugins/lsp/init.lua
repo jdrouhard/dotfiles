@@ -18,17 +18,11 @@ local M = {
           '~/.hammerspoon/Spoons/EmmyLua.spoon/annotations',
         },
       },
-    },
-    { 'Bilal2453/luvit-meta', lazy = true },
-    {
-      'kosayoda/nvim-lightbulb',
-      opts = {
-        sign = {
-          text = '󰌶',
-          hl = 'DiagnosticSignWarn',
-        },
+      dependencies = {
+        { 'Bilal2453/luvit-meta' },
       }
     },
+
   },
 }
 
@@ -87,8 +81,10 @@ function M.config()
 
     buf_map({ 'n', 'v' }, '<leader>ac', lsp.buf.code_action)
     buf_map('n', '<leader>rn', lsp.buf.rename)
-    buf_map('n', ']e', vim.diagnostic.goto_next)
-    buf_map('n', '[e', vim.diagnostic.goto_prev)
+    buf_map('n', ']e',
+      function() vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
+    buf_map('n', '[e',
+      function() vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
 
     buf_map({ 'n', 'i', 's' }, '<C-g>', lsp.buf.signature_help)
 
@@ -116,13 +112,6 @@ function M.config()
         desc = 'lsp.buf.clear_references',
       })
     end
-
-    api.nvim_create_autocmd('CursorHold', {
-      group = au_group,
-      buffer = bufnr,
-      callback = function() require('nvim-lightbulb').update_lightbulb() end,
-      desc = 'nvim-lightbulb.update_lightbulb',
-    })
   end
 
   local au_group = api.nvim_create_augroup('lsp_aucmds', {})
@@ -170,7 +159,7 @@ function M.config()
         fallbackFlags = { '-std=c++20' },
       },
     },
-    pyright = {},
+    basedpyright = {},
     lua_ls = {
       cmd = { 'lua-language-server' },
       handlers = lua_ls_ext.handlers,
