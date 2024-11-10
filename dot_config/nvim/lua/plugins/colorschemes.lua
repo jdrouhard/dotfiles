@@ -49,6 +49,9 @@ return {
           link = 'Comment',
         }
       end,
+      plugins = {
+        cmp = true,
+      }
     }
   },
 

@@ -1,7 +1,9 @@
+local globals = require('globals')
+
 local M = {
   'hrsh7th/nvim-cmp',
   event = { 'VeryLazy' },
-  cond = require('globals').native_lsp,
+  cond = globals.native_lsp and not globals.blink_cmp,
   dependencies = {
     'L3MON4D3/LuaSnip',
     'onsails/lspkind.nvim',

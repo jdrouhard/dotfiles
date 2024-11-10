@@ -7,7 +7,10 @@ local M = {
   event = { 'VeryLazy', 'BufReadPost', 'BufWritePost', 'BufNewFile' },
   cond = require('globals').native_lsp and not vim.g.vscode,
   dependencies = {
-    'hrsh7th/cmp-nvim-lsp',
+    {
+      'hrsh7th/cmp-nvim-lsp',
+      cond = not require('globals').blink_cmp,
+    },
 
     {
       'folke/lazydev.nvim',
@@ -175,8 +178,13 @@ function M.config()
     },
   }
 
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
+  local capabilities
+  if not require('globals').blink_cmp then
+    capabilities = require('cmp_nvim_lsp').default_capabilities()
+    capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
+  else
+    capabilities = vim.lsp.protocol.make_client_capabilities()
+  end
 
   for client, config in pairs(servers) do
     config.capabilities = vim.tbl_deep_extend(
