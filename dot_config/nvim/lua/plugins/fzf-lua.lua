@@ -47,7 +47,7 @@ function M.locations(opts)
 
   if #entries == 1 and opts.jump_to_single_result then
     local location = path.entry_to_file(entries[1], opts, opts.force_uri)
-    vim.lsp.util.jump_to_location(location, 'utf-8')
+    vim.lsp.util.show_document(location, 'utf-8', { focus = true })
     return
   end
 
