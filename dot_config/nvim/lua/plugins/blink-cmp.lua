@@ -1,6 +1,7 @@
 local M = {
   'saghen/blink.cmp',
   event = 'VeryLazy',
+  enabled = require('globals').blink_cmp,
   -- dev = true,
 
   version = 'v0.*',
@@ -26,6 +27,7 @@ M.opts = {
   -- accept = { auto_brackets = { enabled = true, kind_resolution = { enabled = false } } }
 
   trigger = { signature_help = { enabled = true, }, },
+  fuzzy = { sorts = { 'score' } }
 }
 
 return M

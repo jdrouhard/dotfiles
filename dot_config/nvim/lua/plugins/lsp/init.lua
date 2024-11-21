@@ -164,12 +164,10 @@ function M.config()
     },
     basedpyright = {},
     lua_ls = {
-      cmd = { 'lua-language-server' },
       handlers = lua_ls_ext.handlers,
       settings = {
         Lua = {
           workspace = { checkThirdParty = false },
-          telemetry = { enable = false },
         },
       },
     },
@@ -179,12 +177,12 @@ function M.config()
   }
 
   local capabilities
-  if not require('globals').blink_cmp then
-    capabilities = require('cmp_nvim_lsp').default_capabilities()
-    capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
+  if require('globals').blink_cmp then
+    capabilities = require('blink.cmp').get_lsp_capabilities({}, true)
   else
-    capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').default_capabilities()
   end
+  capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
 
   for client, config in pairs(servers) do
     config.capabilities = vim.tbl_deep_extend(
