@@ -37,7 +37,7 @@ function M.cancel_pending_requests(bufnr)
     local client = vim.lsp.get_client_by_id(client_id)
     if client then
       for id, _ in pairs(reqs) do
-        client.cancel_request(id)
+        client:cancel_request(id)
       end
     end
   end
