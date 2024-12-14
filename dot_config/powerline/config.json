@@ -1,10 +1,10 @@
 {
 	"common": {
-		"term_truecolor": false
+		"term_truecolor": true
 	},
 	"ext": {
 		"tmux": {
-			"colorscheme": "base16",
+			"colorscheme": "tokyonight",
 			"theme": "mytheme"
 		}
 	}

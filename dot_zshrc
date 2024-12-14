@@ -43,7 +43,6 @@ fi
 
 # Plugins
 VI_MODE_SET_CURSOR=true
-BASE16_THEME_DEFAULT="catppuccin"
 source ${ZIM_HOME}/init.zsh
 
 zmodload zsh/complist

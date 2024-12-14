@@ -1,0 +1,14 @@
+{
+	"groups": {
+		"active_window_status": { "fg": "tokyonight:blue",   "bg": "tokyonight:base00", "attrs": []       },
+		"window_status":        { "fg": "tokyonight:base04", "bg": "tokyonight:base00", "attrs": []       },
+		"activity_status":      { "fg": "tokyonight:yellow", "bg": "tokyonight:base00", "attrs": []       },
+		"bell_status":          { "fg": "tokyonight:red",    "bg": "tokyonight:base00", "attrs": []       },
+		"window":               { "fg": "tokyonight:base04", "bg": "tokyonight:base00", "attrs": []       },
+		"window:divider":       { "fg": "tokyonight:base02", "bg": "tokyonight:base00", "attrs": []       },
+		"window:current":       { "fg": "tokyonight:base07", "bg": "tokyonight:base02", "attrs": []       },
+		"window_name":          { "fg": "tokyonight:base07", "bg": "tokyonight:base02", "attrs": ["bold"] },
+		"session":              { "fg": "tokyonight:base07", "bg": "tokyonight:base02", "attrs": []       },
+		"session:prefix":       { "fg": "tokyonight:base02", "bg": "tokyonight:base07", "attrs": []       }
+	}
+}
