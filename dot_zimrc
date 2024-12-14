@@ -10,7 +10,7 @@ zmodule zsh-users/zsh-autosuggestions
 zmodule zsh-users/zsh-history-substring-search
 
 zmodule romkatv/powerlevel10k
-zmodule tinted-theming/base16-shell
+#zmodule tinted-theming/base16-shell
 
 # Load some oh-my-zsh plugins
 #zmodule ohmyzsh/ohmyzsh --root plugins/colored-man-pages
