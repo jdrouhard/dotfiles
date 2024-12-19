@@ -2,7 +2,7 @@
 #!/bin/bash
 
 if systemctl --user list-unit-files ssh-agent.socket &>/dev/null; then
-  systemctl --user disable ssh-agent.socket
+  systemctl --user disable ssh-agent.socket || exit 0
 fi
 
 {{- end -}}

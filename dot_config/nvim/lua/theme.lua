@@ -1,12 +1,7 @@
 local hl_map = {
   ['@keyword.access']                  = { link = 'Statement' },
   ['@statement']                       = { link = 'Statement' },
-  ['@deprecated']                      = { link = '@text.strike' },
-  ['@text.strike']                     = { strikethrough = true },
   ['@lsp.type.comment']                = {}, -- treesitter has better comment handling
-
-  -- Native LSP groups
-  ['@lsp.mod.deprecated']              = { link = '@text.strike' },
 
   --- clangd
   ['@lsp.mod.constructorOrDestructor'] = { link = '@constructor' },
@@ -23,20 +18,6 @@ local hl_map = {
   CocSemEnum                           = { link = '@type' },
   CocSemEnumMember                     = { link = '@constant' },
   CocSemTypeTypeParameter              = { link = '@type' },
-
-  -- Telescope
-  TelescopePreviewLine                 = { link = 'Visual' },
-  TelescopePreviewMatch                = { link = 'Search' },
-
-  TelescopeBorder                      = { link = 'TelescopeNormal' },
-  TelescopePromptBorder                = { link = 'TelescopeBorder' },
-  TelescopeResultsBorder               = { link = 'TelescopeBorder' },
-  TelescopePreviewBorder               = { link = 'TelescopeBorder' },
-
-  TelescopeTitle                       = { link = 'TelescopeBorder' },
-  TelescopePromptTitle                 = { link = 'TelescopeTitle' },
-  TelescopeResultsTitle                = { link = 'TelescopeTitle' },
-  TelescopePreviewTitle                = { link = 'TelescopeTitle' },
 }
 
 local api = vim.api

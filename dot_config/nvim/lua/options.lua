@@ -43,6 +43,20 @@ opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
 
+local osc52 = require('vim.ui.clipboard.osc52')
+
+g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = osc52.copy('+'),
+    ['*'] = osc52.copy('*'),
+  },
+  paste = {
+    ['+'] = osc52.paste('+'),
+    ['*'] = osc52.paste('*'),
+  },
+}
+
 local disabled_providers = {
   'ruby',
   'node',

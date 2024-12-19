@@ -18,18 +18,14 @@ for _, autocmd in ipairs(autocmds) do
 end
 
 -- Copy yanked text to system clipboard
--- If we are connected over ssh also copy using OSC52
 api.nvim_create_autocmd('TextYankPost', {
   group = init,
-  desc = '[osc52] Copy to clipboard/OSC52',
+  desc = 'Copy to clipboard',
   callback = function()
     if vim.v.operator == 'y' then
       local yank_data = fn.getreg(vim.v.event.regname)
       if fn.has('clipboard') == 1 then
         pcall(fn.setreg, '+', yank_data)
-      end
-      if vim.env.SSH_CONNECTION then
-        require('vim.ui.clipboard.osc52').copy({ yank_data })
       end
     end
   end

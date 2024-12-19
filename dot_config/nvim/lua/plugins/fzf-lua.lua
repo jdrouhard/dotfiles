@@ -90,16 +90,9 @@ M.opts = {
   },
   lsp = {
     jump_to_single_result = true,
+    formatter = { 'path.filename_first', 2 },
   },
 }
-
-function M.config(_, opts)
-  -- workaround a bug where window-local options set by treesitter spec's
-  -- config() function are not persisted if it's loaded via fzf-lua's builtin
-  -- previewer code. TODO: figure out why this happens.
-  require('nvim-treesitter')
-  require('fzf-lua').setup(opts)
-end
 
 function M.init()
   if require('globals').telescope then

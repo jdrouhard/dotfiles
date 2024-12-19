@@ -35,7 +35,7 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
       append('links to', 'MoreMsg')
       append(' ')
       append(data.hl_group_link, data.hl_group_link)
-      append(' ')
+      append('   ')
     end
     if comment then
       append(comment, 'Comment')
@@ -43,14 +43,24 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
     nl()
   end
 
+  -- treesitter
   if #items.treesitter > 0 then
     append('Treesitter', 'Title')
     nl()
     for _, capture in ipairs(items.treesitter) do
-      item(capture, capture.lang)
+      item(
+        capture,
+        string.format(
+          'priority: %d  language: %s',
+          capture.metadata.priority or vim.hl.priorities.treesitter,
+          capture.lang
+        )
+      )
     end
     nl()
   end
+
+  -- semantic tokens
   if #items.semantic_tokens > 0 then
     append('Semantic Tokens', 'Title')
     nl()
@@ -64,6 +74,8 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
     end
     nl()
   end
+
+  -- syntax
   if #items.syntax > 0 then
     append('Syntax', 'Title')
     nl()
@@ -72,6 +84,8 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
     end
     nl()
   end
+
+  -- extmarks
   if #items.extmarks > 0 then
     append('Extmarks', 'Title')
     nl()
@@ -87,6 +101,10 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
     nl()
   end
 
+  if #lines[#lines] == 0 then
+    table.remove(lines)
+  end
+
   if #lines == 1 and lines[1] == '' then
     lines[1] = 'No items found at position '
         .. items.row
@@ -96,7 +114,7 @@ function M.show_highlights_at_pos(bufnr, row, col, filter)
         .. items.buffer
   end
 
-  local scratchbuf, _ = vim.lsp.util.open_floating_preview(lines, nil, { stylize_markdown = false })
+  local scratchbuf, _ = vim.lsp.util.open_floating_preview(lines, '', { stylize_markdown = false })
   for _, mark in ipairs(marks) do
     api.nvim_buf_set_extmark(scratchbuf, ns, mark.line, mark.col, {
       end_col = mark.end_col,
