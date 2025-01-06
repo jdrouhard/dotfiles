@@ -1,0 +1,46 @@
+-- vim: ft=lua
+
+local function fzf_chezmoi()
+  local fzf_lua = require('fzf-lua')
+  local results = require('chezmoi.commands').list({})
+  local chezmoi = require('chezmoi.commands')
+
+  local opts = {
+    fzf_opts = {},
+    fzf_colors = true,
+    actions = {
+      ['default'] = function(selected)
+        chezmoi.edit({
+          targets = { '~/' .. selected[1] },
+          args = { '--watch' },
+        })
+      end,
+    },
+  }
+  fzf_lua.fzf_exec(results, opts)
+end
+
+local M = {
+  'xvzc/chezmoi.nvim',
+  cmd = { 'ChezmoiEdit', 'ChezmoiList' },
+  keys = {
+    { '<leader>ev', '<cmd>e {{ .chezmoi.sourceDir }}/dot_config/nvim/init.lua<CR>' },
+    { '<leader>ep', '<cmd>e {{ .chezmoi.sourceDir }}/dot_config/nvim/lua/plugins/init.lua<CR>' },
+    { '<leader>ec', fzf_chezmoi },
+  },
+  dependencies = 'nvim-lua/plenary.nvim',
+}
+
+function M.init()
+  -- run chezmoi edit on file enter
+  vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+    pattern = '{{ .chezmoi.sourceDir }}/*',
+    callback = function(ev)
+      vim.schedule(function()
+        require('chezmoi.commands.__edit').watch(ev.buf)
+      end)
+    end,
+  })
+end
+
+return M
