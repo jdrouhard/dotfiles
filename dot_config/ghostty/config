@@ -1,6 +1,7 @@
 # font settings
 # font-family = "JetBrains Mono"
-# font-thicken = true
+font-thicken = true
+font-thicken-strength = 127
 font-size = 12
 
 adjust-cell-width = -5%
