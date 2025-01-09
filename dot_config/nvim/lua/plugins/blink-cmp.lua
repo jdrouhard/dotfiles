@@ -17,9 +17,6 @@ local M = {
 ---@module 'blink.cmp'
 ---@type blink.cmp.Config
 M.opts = {
-  sources = {
-    cmdline = {}, -- until it's more stable
-  },
   snippets = {
     expand = function(snippet) require('luasnip').lsp_expand(snippet) end,
     active = function(filter)
@@ -39,7 +36,10 @@ M.opts = {
   },
   completion = {
     list = {
-      selection = 'auto_insert',
+      selection = {
+        preselect = false,
+        auto_insert = true,
+      },
     },
     documentation = {
       auto_show = true,
