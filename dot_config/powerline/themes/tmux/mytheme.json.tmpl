@@ -31,12 +31,11 @@
 				"priority": 50
 			},
 			{
-				"function": "powerline_owmweather.weather",
+				"function": "powerline.segments.common.wthr.weather",
 				"priority": 50,
 				"args": {
-					"openweathermap_api_key": {{ joinPath .chezmoi.sourceDir "owm_api_key.txt.age" | include | decrypt | quote }},
-					"show": "condition,temp",
-					"units": "F",
+					"weather_api_key": {{ joinPath .chezmoi.sourceDir "owm_api_key.txt.age" | include | decrypt | quote }},
+					"unit": "F",
 					"location_query": "Olathe, US"
 				}
 			},

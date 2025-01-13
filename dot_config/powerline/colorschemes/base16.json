@@ -36,7 +36,6 @@
 		"system_load_gradient":       { "fg": "base16_green_yellow_orange_red", "bg": "base16:base01", "attrs": [] },
 		"weather_temp_gradient":      { "fg": "blue_red", "bg": "base16:base01", "attrs": [] },
 		"weather":                    { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] },
-                "owmweather":                 { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] },
 		"uptime":                     { "fg": "base16:base04", "bg": "base16:base01", "attrs": [] }
 	}
 }

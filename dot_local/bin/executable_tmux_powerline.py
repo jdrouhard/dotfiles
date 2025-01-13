@@ -25,7 +25,7 @@ if not os.path.exists(powerline_location):
     # powerline likely not installed. install both it and the weather segment with pip
     try:
         import sys
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", "powerline-status", "powerline-owmweather"])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", "git+https://github.com/jdrouhard/powerline.git@weather-segment-updates"])
         powerline_location = find_powerline()
     except:
         powerline_location = ""
