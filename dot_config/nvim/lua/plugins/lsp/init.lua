@@ -159,7 +159,7 @@ function M.config()
       capabilities = clangd_ext.capabilities,
       init_options = {
         clangdFileStatus = true,
-        fallbackFlags = { '-std=c++20' },
+        fallbackFlags = { '-std=c++23' },
       },
     },
     basedpyright = {},
