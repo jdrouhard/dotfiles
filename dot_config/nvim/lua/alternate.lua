@@ -3,12 +3,13 @@ local fn = vim.fn
 local fs = vim.fs
 
 local alt_map = {
-  hpp = { 'cpp', 'c', 'cxx', },
-  hxx = { 'cxx', 'c', 'cpp', },
-  h = { 'c', 'cpp', 'cxx', },
-  cpp = { 'hpp', 'h', 'hxx', },
-  cxx = { 'hxx', 'h', 'hpp', },
-  cc = { 'h', 'hpp', 'hxx', },
+  hpp = { 'cpp', 'cc', 'cxx', 'C', 'c', },
+  hxx = { 'cxx', 'cpp', 'cc', 'C', 'c', },
+  hh = { 'cc', 'cpp', 'cxx', 'C', 'c', },
+  h = { 'c', 'cpp', 'cxx', 'cc', 'C', },
+  cpp = { 'hpp', 'hh', 'hxx', 'H', 'h' },
+  cxx = { 'hxx', 'hpp', 'hh', 'H', 'h', },
+  cc = { 'hh', 'hpp', 'hxx', 'H', 'h', },
   c = { 'h' },
 }
 
@@ -32,55 +33,82 @@ end
 local M = {}
 
 --- @param bufnr integer|nil
+--- @param limit integer|nil
+--- @param root_marker (string|string[]|fun(name: string, pattern:string): boolean|nil)
 --- @return string[] alternates
-function M.find_alternates(bufnr)
+function M.find_alternates(bufnr, limit, root_marker)
   if not bufnr then
     bufnr = 0
   end
 
-  local base_dir = fn.getcwd()
+  if not limit then
+    limit = math.huge
+  end
+
+  if not root_marker then
+    root_marker = { '.git' }
+  end
+
+  if type(root_marker) == 'string' then
+    root_marker = { root_marker }
+  end
+
+  local root = fs.root(bufnr, root_marker)
   local path = api.nvim_buf_get_name(bufnr)
-  local dir, base, ext = split_filename(path)
+  local _, base, ext = split_filename(path)
   local alt_exts = alt_map[ext] or {}
   local checked = {}
 
   local function scan_dir(scan)
+    local dirs = { scan }
     local files = {}
-    local iter = fs.dir(scan, {
-      depth = 10,
-      skip = function(name)
-        name = fs.joinpath(scan, name)
-        if checked[name] ~= nil or fs.basename(name):match('^%.') then
-          return false
-        end
-        checked[name] = true
-        return true
-      end,
-    })
 
-    for entry, type in iter do
-      if (type == 'file' or type == 'link') then
-        local _, entry_base, entry_ext = split_filename(entry)
-        if entry_base == base and vim.list_contains(alt_exts, entry_ext) then
-          files[#files + 1] = fs.joinpath(scan, entry)
+    local function add(match)
+      files[#files + 1] = fs.normalize(match)
+      if #files == limit then
+        return true
+      end
+    end
+
+    while #dirs > 0 do
+      local dir = table.remove(dirs, 1)
+      checked[dir] = true
+      for entry, type in fs.dir(dir) do
+        local f = fs.joinpath(dir, entry)
+        if not entry:match('^%.') then
+          if (type == 'file' or type == 'link') then
+            local _, entry_base, entry_ext = split_filename(entry)
+            if entry_base == base and vim.list_contains(alt_exts, entry_ext) then
+              if add(f) then
+                return files
+              end
+            end
+          end
+          if type == 'directory' and not checked[f] then
+            dirs[#dirs + 1] = f
+          end
         end
       end
     end
     return files
   end
 
-  repeat
+  for dir in fs.parents(path) do
     local matching_files = scan_dir(dir)
     if #matching_files > 0 then
       return matching_files
     end
-    dir = fs.dirname(dir) or base_dir
-  until dir == base_dir
+    if dir == root then
+      break
+    end
+  end
 
   return {}
 end
 
-function M.jump_alternate(bufnr)
+--- @param bufnr integer|nil
+--- @param root_marker (string|string[]|fun(name: string, path: string): boolean|nil)
+function M.jump_alternate(bufnr, root_marker)
   if not bufnr or bufnr == 0 then
     bufnr = api.nvim_get_current_buf()
   end
@@ -98,7 +126,7 @@ function M.jump_alternate(bufnr)
   if vim.b[bufnr].alternate then
     jump(vim.b[bufnr].alternate)
   else
-    local alternates = M.find_alternates(bufnr)
+    local alternates = M.find_alternates(bufnr, 1, root_marker)
     if #alternates > 0 then
       local alt_bufnr = fn.bufadd(alternates[1])
       if not alt_bufnr then return end

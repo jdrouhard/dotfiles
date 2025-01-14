@@ -1,5 +1,4 @@
 local map = vim.keymap.set
-local fn  = vim.fn
 
 -- editing
 map('i', 'jk', '<ESC>')
