@@ -24,7 +24,6 @@ return {
           },
         },
         notify = true,
-        telescope = true,
       },
       custom_highlights = function(colors)
         return {

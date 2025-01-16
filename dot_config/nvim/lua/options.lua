@@ -10,7 +10,7 @@ o.updatetime    = 100
 o.undofile      = true
 o.path          = vim.fn.getcwd(-1, -1) .. '/**'
 
-o.showtabline   = 2
+o.showtabline   = 1
 o.showmode      = false
 o.ruler         = false
 o.hidden        = true

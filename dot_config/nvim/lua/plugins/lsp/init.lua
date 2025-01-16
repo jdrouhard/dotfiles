@@ -64,23 +64,13 @@ function M.config()
       }
     end
 
-    if require('globals').telescope then
-      local builtins = require('telescope.builtin')
-      --buf_map('n', 'gD', builtins.lsp_declarations)
-      buf_map('n', 'gd', builtins.lsp_definitions)
-      buf_map('n', 'gi', builtins.lsp_implementations)
-      buf_map('n', 'gTD', builtins.lsp_type_definitions)
-      buf_map('n', 'gr', builtins.lsp_references)
-      buf_map('n', 'gws', builtins.lsp_workspace_symbols)
-    else
-      buf_map('n', 'gD', function() lsp.buf.declaration(fzf_list('Declarations')) end)
-      buf_map('n', 'gd', function() lsp.buf.definition(fzf_list('Definitions')) end)
-      buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list('Implementations')) end)
-      buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list('Type Definitions')) end)
-      buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list('References', false)) end)
-      buf_map('n', 'gws',
-        function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list('Workspace Symbols', false)) end)
-    end
+    buf_map('n', 'gD', function() lsp.buf.declaration(fzf_list('Declarations')) end)
+    buf_map('n', 'gd', function() lsp.buf.definition(fzf_list('Definitions')) end)
+    buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list('Implementations')) end)
+    buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list('Type Definitions')) end)
+    buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list('References', false)) end)
+    buf_map('n', 'gws',
+      function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list('Workspace Symbols', false)) end)
 
     buf_map({ 'n', 'v' }, '<leader>ac', lsp.buf.code_action)
     buf_map('n', '<leader>rn', lsp.buf.rename)

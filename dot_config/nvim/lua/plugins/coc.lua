@@ -21,16 +21,13 @@ function M.config()
   map('n', 'gD', '<plug>(coc-declaration)')
   map('n', 'gd', '<plug>(coc-definition)')
   map('n', 'gi', '<plug>(coc-implementation)')
+  map('n', 'gr', '<plug>(coc-references)')
   map('n', 'gTD', '<plug>(coc-type-definition)')
   map('n', '<leader>rn', '<plug>(coc-rename)')
   map('n', 'K', "<cmd>call CocActionAsync('definitionHover')<CR>")
   map('n', '<leader>ac', '<plug>(coc-codeaction-cursor)')
   map('n', ']e', '<plug>(coc-diagnostic-next)')
   map('n', '[e', '<plug>(coc-diagnostic-prev)')
-
-  if not require('globals').telescope then
-    map('n', 'gr', '<plug>(coc-references)')
-  end
 
   map({ 'x', 'o' }, 'if', '<plug>(coc-funcobj-i)')
   map({ 'x', 'o' }, 'ic', '<plug>(coc-classobj-i)')

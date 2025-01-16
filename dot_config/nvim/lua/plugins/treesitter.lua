@@ -26,7 +26,7 @@ M.opts = {
     'vimdoc',
     'yaml',
   },
-  highlight = { enable = false, },
+  highlight = { enable = true, },
   --context_commentstring = { enable = false, enable_autocmd = false },
   incremental_selection = {
     enable = true,
@@ -51,26 +51,7 @@ M.opts = {
 }
 
 function M.config(_, opts)
-  local configs = require('nvim-treesitter.configs')
-  configs.setup(opts)
-
-  local config_mod = configs.get_module('highlight')
-  if not config_mod then
-    return
-  end
-
-  vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup("Nvim-Treesitter-highlight", {}),
-    callback = function(ev)
-      vim.schedule(function()
-        configs.reattach_module('highlight', ev.buf, ev.match)
-      end)
-    end,
-    desc = "attach nvim-treesitter-highlight"
-  })
-
-  config_mod.enable = true
-  config_mod.enabled_buffers = nil
+  require('nvim-treesitter.configs').setup(opts)
 end
 
 return M

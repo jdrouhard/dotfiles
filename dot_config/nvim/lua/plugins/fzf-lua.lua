@@ -95,10 +95,6 @@ M.opts = {
 }
 
 function M.init()
-  if require('globals').telescope then
-    return
-  end
-
   local map = vim.keymap.set
 
   map('n', '<leader>s', '<cmd>FzfLua grep<CR>')

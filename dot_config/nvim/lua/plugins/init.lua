@@ -1,10 +1,5 @@
 local M = {
   {
-    'mhinz/vim-sayonara',
-    keys = { { '<c-q>', '<cmd>Sayonara!<cr>', mode = '' } },
-  },
-
-  {
     'junegunn/fzf',
     build = './install --bin',
   },

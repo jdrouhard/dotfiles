@@ -2,11 +2,7 @@ local M = {
   'stevearc/dressing.nvim',
 }
 
-if require('globals').telescope then
-  M.opts = { select = { backend = 'telescope' } }
-else
-  M.opts = { select = { backend = 'fzf_lua' } }
-end
+M.opts = { select = { backend = 'fzf_lua' } }
 
 function M.init()
   ---@diagnostic disable-next-line: duplicate-set-field

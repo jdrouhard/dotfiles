@@ -22,3 +22,5 @@ map('n', '<C-j>',      '<cmd>cn<CR>')
 -- map('n', '<leader>ev', '<cmd>e $MYVIMRC<CR>')
 -- map('n', '<leader>ep', '<cmd>e ' .. resolved_plugins .. '<CR>')
 map('n', '<leader>d',  vim.diagnostic.open_float)
+
+map('t', '<c-j>', '<c-j>')
