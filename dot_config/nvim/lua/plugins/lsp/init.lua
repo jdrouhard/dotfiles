@@ -36,7 +36,6 @@ function M.config()
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local lua_ls_ext = require('plugins.lsp.lua_ls_ext')
-  local fzf_config = require('plugins.fzf-lua')
 
   local use_float_progress = false
   status.setup(not use_float_progress)
@@ -52,25 +51,14 @@ function M.config()
       map(mode, lhs, rhs, { buffer = true, silent = true })
     end
 
-    local fzf_list = function(label, jump_single)
-      return {
-        on_list = function(result)
-          fzf_config.locations({
-            label = label,
-            items = result.items,
-            jump_to_single_result = jump_single
-          })
-        end
-      }
-    end
-
-    buf_map('n', 'gD', function() lsp.buf.declaration(fzf_list('Declarations')) end)
-    buf_map('n', 'gd', function() lsp.buf.definition(fzf_list('Definitions')) end)
-    buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list('Implementations')) end)
-    buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list('Type Definitions')) end)
-    buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list('References', false)) end)
-    buf_map('n', 'gws',
-      function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list('Workspace Symbols', false)) end)
+    local picker = require('snacks.picker')
+    local opts = { jump = { reuse_win = false } }
+    buf_map('n', 'gD', function() picker.lsp_declarations(opts) end)
+    buf_map('n', 'gd', function() picker.lsp_definitions(opts) end)
+    buf_map('n', 'gi', function() picker.lsp_implementations(opts) end)
+    buf_map('n', 'gTD', function() picker.lsp_type_definitions(opts) end)
+    buf_map('n', 'gr', function() picker.lsp_references(opts) end)
+    -- buf_map('n', 'gws', function() Snacks.picker.lsp_workspace_symbols() end) -- not implemented yet
 
     buf_map({ 'n', 'v' }, '<leader>ac', lsp.buf.code_action)
     buf_map('n', '<leader>rn', lsp.buf.rename)

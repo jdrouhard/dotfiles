@@ -2,8 +2,8 @@
 
 local function fzf_chezmoi()
   local fzf_lua = require('fzf-lua')
-  local results = require('chezmoi.commands').list({})
   local chezmoi = require('chezmoi.commands')
+  local results = chezmoi.list({})
 
   local opts = {
     fzf_opts = {},
@@ -20,13 +20,38 @@ local function fzf_chezmoi()
   fzf_lua.fzf_exec(results, opts)
 end
 
+local function snacks_chezmoi()
+  local chezmoi = require('chezmoi.commands')
+
+  local items = vim.tbl_map(function(file)
+    return {
+      text = file,
+      file = '~/' .. file,
+    }
+  end, chezmoi.list({}))
+
+  ---@type snacks.picker.Config
+  local picker_opts = {
+    items = items,
+    format = 'text',
+    confirm = function(picker, item)
+      picker:close()
+      chezmoi.edit({
+        targets = { item.file },
+        args = { '--watch' },
+      })
+    end,
+  }
+  require('snacks.picker').pick('chezmoi', picker_opts)
+end
+
 local M = {
   'xvzc/chezmoi.nvim',
   cmd = { 'ChezmoiEdit', 'ChezmoiList' },
   keys = {
     { '<leader>ev', '<cmd>e {{ .chezmoi.sourceDir }}/dot_config/nvim/init.lua<CR>' },
     { '<leader>ep', '<cmd>e {{ .chezmoi.sourceDir }}/dot_config/nvim/lua/plugins/init.lua<CR>' },
-    { '<leader>ec', fzf_chezmoi },
+    { '<leader>ec', snacks_chezmoi },
   },
   dependencies = 'nvim-lua/plenary.nvim',
 }
