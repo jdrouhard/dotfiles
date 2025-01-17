@@ -6,10 +6,12 @@ local alt_map = {
   hpp = { 'cpp', 'cc', 'cxx', 'C', 'c', },
   hxx = { 'cxx', 'cpp', 'cc', 'C', 'c', },
   hh = { 'cc', 'cpp', 'cxx', 'C', 'c', },
+  H = { 'C', 'cpp', 'cxx', 'cc', 'c', },
   h = { 'c', 'cpp', 'cxx', 'cc', 'C', },
   cpp = { 'hpp', 'hh', 'hxx', 'H', 'h' },
   cxx = { 'hxx', 'hpp', 'hh', 'H', 'h', },
   cc = { 'hh', 'hpp', 'hxx', 'H', 'h', },
+  C = { 'H', 'hpp', 'hh', 'hxx', 'h' },
   c = { 'h' },
 }
 
@@ -73,20 +75,21 @@ function M.find_alternates(bufnr, limit, root_marker)
     while #dirs > 0 do
       local dir = table.remove(dirs, 1)
       checked[dir] = true
-      for entry, type in fs.dir(dir) do
+      local skip = function(check_dir)
+        return not check_dir:match('^%.')
+      end
+      for entry, type in fs.dir(dir, { skip = skip }) do
         local f = fs.joinpath(dir, entry)
-        if not entry:match('^%.') then
-          if (type == 'file' or type == 'link') then
-            local _, entry_base, entry_ext = split_filename(entry)
-            if entry_base == base and vim.list_contains(alt_exts, entry_ext) then
-              if add(f) then
-                return files
-              end
+        if (type == 'file' or type == 'link') then
+          local _, entry_base, entry_ext = split_filename(entry)
+          if entry_base == base and vim.list_contains(alt_exts, entry_ext) then
+            if add(f) then
+              return files
             end
           end
-          if type == 'directory' and not checked[f] then
-            dirs[#dirs + 1] = f
-          end
+        end
+        if type == 'directory' and not checked[f] then
+          dirs[#dirs + 1] = f
         end
       end
     end
