@@ -4,7 +4,6 @@ local M = {
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
-  enabled = false,
 }
 
 function M.locations(opts)
@@ -95,23 +94,25 @@ M.opts = {
   },
 }
 
-M.keys = {
-  { '<leader>s',   '<cmd>FzfLua grep<CR>' },
-  { '<leader>ag',  '<cmd>FzfLua grep_cword<CR>' },
-  { '<leader>rg',  '<cmd>FzfLua live_grep<CR>' },
-  { '<leader>AG',  '<cmd>FzfLua grep_cWORD<CR>' },
-  { '<leader>ag',  '<cmd>FzfLua grep_visual<CR>' },
+if require('globals').fzflua then
+  M.keys = {
+    { '<leader>s',   '<cmd>FzfLua grep<CR>' },
+    { '<leader>ag',  '<cmd>FzfLua grep_cword<CR>' },
+    { '<leader>rg',  '<cmd>FzfLua live_grep<CR>' },
+    { '<leader>AG',  '<cmd>FzfLua grep_cWORD<CR>' },
+    { '<leader>ag',  '<cmd>FzfLua grep_visual<CR>', mode = 'x' },
 
-  { '<c-p>',       '<cmd>FzfLua files<CR>' },
-  { '<leader>l',   '<cmd>FzfLua buffers<CR>' },
-  { '<leader>gf',  '<cmd>FzfLua git_files<CR>' },
-  { '<leader>h',   '<cmd>FzfLua commands<CR>' },
-  { '<leader>?',   '<cmd>FzfLua help_tags<CR>' },
-  { '<leader>qf',  '<cmd>FzfLua quickfix<CR>' },
-  { '<leader>gs',  '<cmd>FzfLua git_status<CR>' },
-  { '<leader>gl',  '<cmd>FzfLua git_commits<CR>' },
-  { '<leader>gbl', '<cmd>FzfLua git_bcommits<CR>' },
-}
+    { '<c-p>',       '<cmd>FzfLua files<CR>' },
+    { '<leader>l',   '<cmd>FzfLua buffers<CR>' },
+    { '<leader>gf',  '<cmd>FzfLua git_files<CR>' },
+    { '<leader>h',   '<cmd>FzfLua commands<CR>' },
+    { '<leader>?',   '<cmd>FzfLua help_tags<CR>' },
+    { '<leader>qf',  '<cmd>FzfLua quickfix<CR>' },
+    { '<leader>gs',  '<cmd>FzfLua git_status<CR>' },
+    { '<leader>gl',  '<cmd>FzfLua git_commits<CR>' },
+    { '<leader>gbl', '<cmd>FzfLua git_bcommits<CR>' },
+  }
+end
 
 function M.init()
   vim.g.coc_enable_locationlist = false

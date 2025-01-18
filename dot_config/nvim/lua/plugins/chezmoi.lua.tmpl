@@ -36,13 +36,18 @@ local function snacks_chezmoi()
     format = 'text',
     confirm = function(picker, item)
       picker:close()
-      chezmoi.edit({
-        targets = { item.file },
-        args = { '--watch' },
-      })
+      chezmoi.edit({ targets = { item.file } })
     end,
   }
-  require('snacks.picker').pick('chezmoi', picker_opts)
+  Snacks.picker.pick('chezmoi', picker_opts)
+end
+
+local function chezmoi_files()
+  if require('globals').fzflua then
+    fzf_chezmoi()
+  else
+    snacks_chezmoi()
+  end
 end
 
 local M = {
@@ -51,7 +56,7 @@ local M = {
   keys = {
     { '<leader>ev', '<cmd>e {{ .chezmoi.sourceDir }}/dot_config/nvim/init.lua<CR>' },
     { '<leader>ep', '<cmd>e {{ .chezmoi.sourceDir }}/dot_config/nvim/lua/plugins/init.lua<CR>' },
-    { '<leader>ec', snacks_chezmoi },
+    { '<leader>ec', chezmoi_files },
   },
   dependencies = 'nvim-lua/plenary.nvim',
 }
