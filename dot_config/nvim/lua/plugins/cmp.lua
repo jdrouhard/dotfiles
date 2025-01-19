@@ -15,6 +15,10 @@ local M = {
   },
 }
 
+if not M.cond then
+  return M
+end
+
 function M.config()
   local api = vim.api
   local cmp = require('cmp')

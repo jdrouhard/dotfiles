@@ -20,13 +20,13 @@ M.keys = {
 }
 
 if not require('globals').fzflua then
-  M.keys = vim.tbl_deep_extend('force', M.keys or {}, {
+  vim.list_extend(M.keys, {
     -- pickers
     { "<leader>s",   search, { desc = "grep" } },
     { "<leader>ag",  function() Snacks.picker.grep_word() end, mode = { "n", "x" } },
     { "<leader>rg",  function() Snacks.picker.grep() end },
 
-    { "<c-p>",       function() Snacks.picker.files({ hidden = true }) end },
+    { "<c-p>",       function() Snacks.picker.files() end },
     { "<leader>d",   function() Snacks.picker.diagnostics_buffer() end },
     { "<leader>l",   function() Snacks.picker.buffers() end },
     { "<leader>h",   function() Snacks.picker.commands() end },
@@ -127,6 +127,7 @@ if not require('globals').fzflua then
       },
     },
     sources = {
+      files = { hidden = true, follow = true },
       git_log = { confirm = "show_commit", },
       git_log_file = { confirm = "edit_at_commit", },
       git_log_line = { confirm = "edit_at_commit", },

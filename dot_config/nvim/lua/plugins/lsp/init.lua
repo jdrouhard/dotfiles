@@ -80,7 +80,7 @@ function M.config()
       buf_map('n', 'gi', function() picker.lsp_implementations(opts) end)
       buf_map('n', 'gTD', function() picker.lsp_type_definitions(opts) end)
       buf_map('n', 'gr', function() picker.lsp_references(opts) end)
-      -- buf_map('n', 'gws', function() Snacks.picker.lsp_workspace_symbols() end) -- not implemented yet
+      buf_map('n', 'gws', function() picker.lsp_workspace_symbols() end)
     end
 
     buf_map({ 'n', 'v' }, '<leader>ac', lsp.buf.code_action)
