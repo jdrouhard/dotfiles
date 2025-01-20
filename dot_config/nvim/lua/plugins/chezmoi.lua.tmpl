@@ -1,52 +1,33 @@
 -- vim: ft=lua
 
-local function fzf_chezmoi()
-  local fzf_lua = require('fzf-lua')
+local function chezmoi_files()
   local chezmoi = require('chezmoi.commands')
   local results = chezmoi.list({})
 
-  local opts = {
-    fzf_opts = {},
-    fzf_colors = true,
-    actions = {
-      ['default'] = function(selected)
-        chezmoi.edit({
-          targets = { '~/' .. selected[1] },
-          args = { '--watch' },
-        })
-      end,
-    },
-  }
-  fzf_lua.fzf_exec(results, opts)
-end
-
-local function snacks_chezmoi()
-  local chezmoi = require('chezmoi.commands')
-
-  local items = vim.tbl_map(function(file)
-    return {
-      text = file,
-      file = '~/' .. file,
-    }
-  end, chezmoi.list({}))
-
-  ---@type snacks.picker.Config
-  local picker_opts = {
-    items = items,
-    format = 'text',
-    confirm = function(picker, item)
-      picker:close()
-      chezmoi.edit({ targets = { item.file } })
-    end,
-  }
-  Snacks.picker.pick('chezmoi', picker_opts)
-end
-
-local function chezmoi_files()
   if require('globals').fzflua then
-    fzf_chezmoi()
+    require('fzf-lua').fzf_exec(results, {
+      fzf_opts = {},
+      fzf_colors = true,
+      actions = {
+        ['default'] = function(selected)
+          chezmoi.edit({ targets = { '~/' .. selected[1] } })
+        end,
+      },
+    })
   else
-    snacks_chezmoi()
+    Snacks.picker.pick('chezmoi', {
+      format = 'text',
+      items = vim.tbl_map(function(file)
+        return {
+          text = file,
+          file = '~/' .. file,
+        }
+      end, results),
+      confirm = function(picker, item)
+        picker:close()
+        chezmoi.edit({ targets = { item.file } })
+      end,
+    })
   end
 end
 
@@ -59,6 +40,7 @@ local M = {
     { '<leader>ec', chezmoi_files },
   },
   dependencies = 'nvim-lua/plenary.nvim',
+  pick = chezmoi_files,
 }
 
 function M.init()
