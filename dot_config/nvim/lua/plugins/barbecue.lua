@@ -1,5 +1,3 @@
-local api = vim.api
-
 local M = {
   'utilyre/barbecue.nvim',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -23,6 +21,8 @@ M.opts = {
 }
 
 function M.config(_, opts)
+  local api = vim.api
+
   require('barbecue').setup(opts)
   vim.o.laststatus = 3
   vim.o.winbar = '%#barbecue_basename#%t%X'

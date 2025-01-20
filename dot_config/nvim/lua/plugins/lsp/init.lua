@@ -1,7 +1,3 @@
-local api = vim.api
-local fn = vim.fn
-local lsp = vim.lsp
-
 local M = {
   'neovim/nvim-lspconfig',
   event = { 'VeryLazy', 'BufReadPost', 'BufWritePost', 'BufNewFile' },
@@ -25,17 +21,20 @@ local M = {
         { 'Bilal2453/luvit-meta' },
       }
     },
-
   },
 }
 
 function M.config()
-  lsp.set_log_level('OFF')
+  local api = vim.api
+  local fn = vim.fn
+  local lsp = vim.lsp
 
   local util = require('plugins.lsp.util')
   local status = require('plugins.lsp.status')
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local lua_ls_ext = require('plugins.lsp.lua_ls_ext')
+
+  lsp.set_log_level('OFF')
 
   local use_float_progress = false
   status.setup(not use_float_progress)
