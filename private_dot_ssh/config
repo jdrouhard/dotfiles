@@ -1,3 +1,5 @@
+# vim: ft=sshconfig
+
 CanonicalizeHostname yes
 CanonicalDomains jmdtech.org localdomain
 AddKeysToAgent yes
