@@ -41,6 +41,9 @@ return {
     opts = {
       style = 'night',
       on_highlights = function(hl, c)
+        hl['@lsp.typemod.namespace.defaultLibrary'] = {
+          link = '@module.builtin',
+        }
         hl['@lsp.typemod.parameter.reference'] = {
           fg = require('tokyonight.util').lighten(c.yellow, 0.45)
         }
