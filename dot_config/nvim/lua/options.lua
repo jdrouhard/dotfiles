@@ -2,6 +2,7 @@ local g   = vim.g
 local o   = vim.o
 local opt = vim.opt
 
+g.clipboard = 'osc52'
 g.mapleader = [[ ]]
 g.alternateNoDefaultAlternate = true
 
@@ -42,20 +43,6 @@ opt.shortmess   :append('cI')
 opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
-
-local osc52 = require('vim.ui.clipboard.osc52')
-
-g.clipboard = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = osc52.copy('+'),
-    ['*'] = osc52.copy('*'),
-  },
-  paste = {
-    ['+'] = osc52.paste('+'),
-    ['*'] = osc52.paste('*'),
-  },
-}
 
 local disabled_providers = {
   'ruby',
