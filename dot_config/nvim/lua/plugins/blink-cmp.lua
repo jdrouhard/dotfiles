@@ -10,23 +10,13 @@ local M = {
     version = 'v2.*',
   },
 
-  version = 'v0.*',
+  version = '1.*',
   -- build = 'cargo build --release',
 }
 
 ---@module 'blink.cmp'
 ---@type blink.cmp.Config
 M.opts = {
-  snippets = {
-    expand = function(snippet) require('luasnip').lsp_expand(snippet) end,
-    active = function(filter)
-      if filter and filter.direction then
-        return require('luasnip').jumpable(filter.direction)
-      end
-      return require('luasnip').in_snippet()
-    end,
-    jump = function(direction) require('luasnip').jump(direction) end,
-  },
   keymap = {
     preset = 'default',
     ['<CR>'] = { 'accept', 'fallback' },
@@ -47,6 +37,9 @@ M.opts = {
   },
   signature = {
     enabled = true,
+  },
+  snippets = {
+    preset = 'luasnip',
   },
   appearance = {
     use_nvim_cmp_as_default = true,
