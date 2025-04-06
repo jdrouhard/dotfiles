@@ -37,12 +37,12 @@ o.showbreak     = '↪'
 o.showmatch     = true
 o.inccommand    = 'nosplit'
 o.list          = true
-o.smoothscroll  = true
 
 opt.shortmess   :append('cI')
 opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
+opt.mousescroll = { 'ver:1', 'hor:6' }
 
 local disabled_providers = {
   'ruby',

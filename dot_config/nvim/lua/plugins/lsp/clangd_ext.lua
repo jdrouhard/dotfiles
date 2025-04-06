@@ -37,7 +37,7 @@ local inactive_regions_update = function(_, message, _, _)
       end_row = end_lnum,
       hl_eol = true,
       strict = false,
-      priority = vim.highlight.priorities.semantic_tokens,
+      priority = vim.hl.priorities.semantic_tokens,
     })
   end
 end
