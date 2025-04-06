@@ -1,15 +1,16 @@
-# font settings
-# font-family = "JetBrains Mono"
-font-thicken = true
-font-thicken-strength = 127
+# theme
+theme = tokyonight
+
+# rendering
 font-size = 12
-
 adjust-cell-width = -5%
+alpha-blending = linear-corrected
 
+# window settings
 window-width = 160
 window-height = 45
 window-vsync = false
 window-colorspace = display-p3
 
-# theme
-theme = tokyonight
+# miscellaneous
+mouse-scroll-multiplier = 10
