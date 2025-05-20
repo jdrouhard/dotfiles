@@ -1,3 +1,5 @@
+# vim:ft=zsh:
+
 ZIM_HOME=${XDG_CACHE_HOME:-$HOME/.cache}/zim
 
 # Download zimfw plugin manager if missing.
@@ -43,6 +45,7 @@ fi
 
 # Plugins
 VI_MODE_SET_CURSOR=true
+ZSH_TMUX_AUTOREFRESH=true
 source ${ZIM_HOME}/init.zsh
 
 zmodload zsh/complist
