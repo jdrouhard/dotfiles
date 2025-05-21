@@ -16,6 +16,8 @@
 
 (alignas_qualifier (identifier) @type)
 
+(lambda_specifier) @keyword.modifier
+
 [
  "alignas"
 ] @keyword

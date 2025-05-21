@@ -1,23 +1,24 @@
 local hl_map = {
-  ['@keyword.access']                  = { link = 'Statement' },
-  ['@statement']                       = { link = 'Statement' },
-  ['@lsp.type.comment']                = {}, -- treesitter has better comment handling
+  ['@keyword.access']                       = { link = 'Statement' },
+  ['@statement']                            = { link = 'Statement' },
+  ['@lsp.type.comment']                     = {}, -- treesitter has better comment handling
+  ['@lsp.typemod.namespace.defaultLibrary'] = { link = '@module.builtin' },
 
   --- clangd
-  ['@lsp.mod.constructorOrDestructor'] = { link = '@constructor' },
-  ClangdInactive                       = { link = 'ColorColumn' },
+  ['@lsp.mod.constructorOrDestructor']      = { link = '@constructor' },
+  ClangdInactive                            = { link = 'ColorColumn' },
 
   -- Coc specific groups
   -- Misc
-  CocHighlightText                     = { link = 'LspReferenceText' },
-  CocHighlightRead                     = { link = 'LspReferenceRead' },
-  CocHighlightWrite                    = { link = 'LspReferenceWrite' },
+  CocHighlightText                          = { link = 'LspReferenceText' },
+  CocHighlightRead                          = { link = 'LspReferenceRead' },
+  CocHighlightWrite                         = { link = 'LspReferenceWrite' },
 
   -- LSP
-  CocSemClass                          = { link = '@type' },
-  CocSemEnum                           = { link = '@type' },
-  CocSemEnumMember                     = { link = '@constant' },
-  CocSemTypeTypeParameter              = { link = '@type' },
+  CocSemClass                               = { link = '@type' },
+  CocSemEnum                                = { link = '@type' },
+  CocSemEnumMember                          = { link = '@constant' },
+  CocSemTypeTypeParameter                   = { link = '@type' },
 }
 
 local api = vim.api

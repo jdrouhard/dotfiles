@@ -6,7 +6,7 @@ local M = {
 M.opts = {
   numhl = true,
   on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
+    local gs = require('gitsigns')
 
     local function map(mode, l, r, opts)
       opts = opts or {}
@@ -16,21 +16,25 @@ M.opts = {
 
     -- Navigation
     map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(gs.next_hunk)
-      return '<Ignore>'
-    end, { expr = true })
+      if vim.wo.diff then
+        vim.cmd.normal({ ']c', bang = true })
+      else
+        gs.nav_hunk('next')
+      end
+    end)
+
     map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(gs.prev_hunk)
-      return '<Ignore>'
-    end, { expr = true })
+      if vim.wo.diff then
+        vim.cmd.normal({ '[c', bang = true })
+      else
+        gs.nav_hunk('prev')
+      end
+    end)
 
     -- Actions
     map({ 'n', 'v' }, '<leader>hs', gs.stage_hunk)
     map({ 'n', 'v' }, '<leader>hr', gs.reset_hunk)
     map('n', '<leader>hS', gs.stage_buffer)
-    map('n', '<leader>hu', gs.undo_stage_hunk)
     map('n', '<leader>hR', gs.reset_buffer)
     map('n', '<leader>hp', gs.preview_hunk)
     map('n', '<leader>hb', function() gs.blame_line { full = true } end)

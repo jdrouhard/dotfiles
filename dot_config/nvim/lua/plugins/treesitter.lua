@@ -1,63 +1,62 @@
 local M = {
   'nvim-treesitter/nvim-treesitter',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-  },
+  -- dependencies = {
+  --   'nvim-treesitter/nvim-treesitter-textobjects',
+  -- },
   event = { 'VeryLazy', 'BufReadPost', 'BufWritePost', 'BufNewFile' },
+  branch = 'main',
   build = ':TSUpdate',
 }
 
-M.opts = {
-  ensure_installed = {
-    'bash',
-    'c',
-    'cmake',
-    'comment',
-    'cpp',
-    'javascript',
-    'jinja',
-    'jinja_inline',
-    'json',
-    'lua',
-    'luadoc',
-    'make',
-    'markdown',
-    'markdown_inline',
-    'python',
-    'query',
-    'regex',
-    'rust',
-    'ssh_config',
-    'vim',
-    'vimdoc',
-    'yaml',
-  },
-  highlight = { enable = true, },
-  --context_commentstring = { enable = false, enable_autocmd = false },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<C-space>',
-      node_incremental = '<C-space>',
-      node_decremental = '<bs>',
-      scope_incremental = false,
-    },
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      keymaps = {
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-      },
-    },
-  },
+local parser_list = {
+  'bash',
+  'c',
+  'cmake',
+  'comment',
+  'cpp',
+  'javascript',
+  'jinja',
+  'jinja_inline',
+  'json',
+  'lua',
+  'luadoc',
+  'make',
+  'markdown',
+  'markdown_inline',
+  'python',
+  'query',
+  'regex',
+  'rust',
+  'ssh_config',
+  'vim',
+  'vimdoc',
+  'yaml',
 }
 
 function M.config(_, opts)
-  require('nvim-treesitter.configs').setup(opts)
+  local ts = require('nvim-treesitter')
+  ts.setup(opts)
+
+  local backup = vim.api.nvim_echo
+  vim.api.nvim_echo = function(chunks, ...)
+    for _, chunk in ipairs(chunks) do
+      if not string.find(chunk[1], 'Installed') then
+        backup(chunks, ...)
+      end
+    end
+  end
+  ts.install(parser_list)
+  vim.api.nvim_echo = backup
+
+  vim.api.nvim_create_autocmd('FileType', {
+    callback = function(args)
+      local ft = args.match or vim.bo[args.buf].filetype
+      local parser_lang = vim.treesitter.language.get_lang(ft)
+      if vim.tbl_contains(parser_list, parser_lang) then
+        vim.treesitter.start(args.buf or 0, parser_lang)
+      end
+    end,
+  })
 end
 
 return M

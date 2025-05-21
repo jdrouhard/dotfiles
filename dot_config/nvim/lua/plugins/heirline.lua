@@ -477,7 +477,7 @@ function M.config()
         if #names == 1 then
           names = names[1]
         else
-          names = table.concat(vim.tbl_flatten({ '[', names, ']' }), ' ')
+          names = vim.iter({ '[', names, ']' }):flatten():join(' ')
         end
         return names
       end,
@@ -503,7 +503,7 @@ function M.config()
         if #msgs == 1 then
           return msgs[1]
         else
-          return table.concat(vim.tbl_flatten({ '[', msgs, ']' }), ' ')
+          return vim.iter({ '[', msgs, ']' }):flatten():join(' ')
         end
       end,
     },

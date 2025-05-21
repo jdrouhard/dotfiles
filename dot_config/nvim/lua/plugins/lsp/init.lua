@@ -132,7 +132,7 @@ function M.config()
     group = au_group,
     callback = function(ev)
       local token = ev.data.token
-      if token.type == 'parameter' and not token.modifiers.declaration then
+      if token.type == 'parameter' and not token.modifiers.declaration and not token.modifiers.definition then
         local name = '@lsp.typemod.parameter.reference.' .. vim.bo[ev.buf].filetype
         lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, name)
       end
@@ -176,21 +176,16 @@ function M.config()
     },
   }
 
-  local capabilities
+  local capabilities = { textDocument = { foldingRange = { dynamicRegistration = false, lineFoldingOnly = true } } }
   if require('globals').blink_cmp then
-    capabilities = require('blink.cmp').get_lsp_capabilities({}, true)
-  else
-    capabilities = require('cmp_nvim_lsp').default_capabilities()
+    capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
   end
-  capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
 
   for client, config in pairs(servers) do
-    config.capabilities = vim.tbl_deep_extend(
-      'keep',
-      config.capabilities or {},
-      capabilities
-    )
-    require('lspconfig')[client].setup(config)
+    local server_opts = vim.tbl_deep_extend('force', {
+      capabilities = vim.deepcopy(capabilities),
+    }, config or {})
+    require('lspconfig')[client].setup(server_opts)
   end
 end
 

@@ -11,20 +11,20 @@ M.keys = {
 
 if not require('globals').fzflua then
   local function search()
-    -- Snacks.picker.grep()
+    Snacks.picker.grep({ hidden = true })
 
-    Snacks.input({
-      prompt = "Grep For",
-      win = {
-        relative = "editor",
-        row = -2,
-        col = false -- false so it merges to a falsey value
-      }
-    }, function(input)
-      if input and input ~= '' then
-        Snacks.picker.grep({ live = false, search = input })
-      end
-    end)
+    -- Snacks.input({
+    --   prompt = "Grep For",
+    --   win = {
+    --     relative = "editor",
+    --     row = -2,
+    --     col = false -- false so it merges to a falsey value
+    --   }
+    -- }, function(input)
+    --   if input and input ~= '' then
+    --     Snacks.picker.grep({ live = false, search = input })
+    --   end
+    -- end)
   end
 
   vim.list_extend(M.keys, {
@@ -50,6 +50,7 @@ end
 M.opts = {
   bigfile = { enabled = true },
   input = { enabled = true },
+  image = { force = true },
   quickfile = { enabled = true },
 }
 
@@ -102,7 +103,7 @@ if not require('globals').fzflua then
       end,
     },
     formatters = {
-      file = { filename_first = true, },
+      file = { filename_first = true, truncate = 120, },
     },
     actions = {
       confirm = function(picker, item, action)
@@ -130,6 +131,8 @@ if not require('globals').fzflua then
           ["<a-a>"] = { "select_all", mode = { "n", "i" } },
           ["<F2>"] = "toggle_preview",
           ["<F4>"] = "toggle_maximize",
+          ["<S-Tab>"] = { "select_and_next", mode = { "n", "i" } },
+          ["<Tab>"] = { "select_and_prev", mode = { "n", "i" } },
         },
       },
     },
