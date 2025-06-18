@@ -132,6 +132,14 @@ function M.config()
     group = au_group,
     callback = function(ev)
       local token = ev.data.token
+      local captures = vim.treesitter.get_captures_at_pos(ev.buf, token.line, token.start_col)
+      for _, capture in ipairs(captures) do
+        if capture.capture == 'variable.builtin' then
+          lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id,
+            '@variable.builtin.' .. vim.bo[ev.buf].filetype)
+          return
+        end
+      end
       if token.type == 'parameter' and not token.modifiers.declaration and not token.modifiers.definition then
         local name = '@lsp.typemod.parameter.reference.' .. vim.bo[ev.buf].filetype
         lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, name)

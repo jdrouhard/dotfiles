@@ -6,6 +6,17 @@ return {
   'navarasu/onedark.nvim',
 
   {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    opts = {
+      highlight_groups = {
+        ["@variable"] = { italic = false },
+        ["@property"] = { italic = false },
+      }
+    }
+  },
+
+  {
     'catppuccin/nvim',
     name = 'catppuccin',
     opts = {

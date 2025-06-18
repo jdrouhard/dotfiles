@@ -43,6 +43,7 @@ opt.diffopt     :append('linematch:60')
 opt.wildignore  = { '*.o', '*.obj', '*.dwo' }
 opt.listchars   = { tab = '▸ ', trail = '·' }
 opt.mousescroll = { 'ver:1', 'hor:6' }
+opt.jumpoptions = { 'view' }
 
 local disabled_providers = {
   'ruby',

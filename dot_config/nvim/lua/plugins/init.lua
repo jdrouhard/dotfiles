@@ -16,7 +16,7 @@ local M = {
 
   {
     'tpope/vim-fugitive',
-    cmd = { 'G', 'Git', 'Gedit', 'Gdiff', 'Gdiffsplit', 'Gvdiff', 'Gvdiffsplit', 'Ghdiffsplit', },
+    cmd = { 'G', 'Git', 'Gedit', 'Gdiff', 'Gdiffsplit', 'Gvdiff', 'Gvdiffsplit', 'Ghdiffsplit', 'GBrowse', },
     keys = {
       { '<leader>gg', '<cmd>Git blame<cr>' },
       { '<leader>gd', '<cmd>Gdiff<cr>' },

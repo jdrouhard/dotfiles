@@ -36,17 +36,7 @@ local parser_list = {
 function M.config(_, opts)
   local ts = require('nvim-treesitter')
   ts.setup(opts)
-
-  local backup = vim.api.nvim_echo
-  vim.api.nvim_echo = function(chunks, ...)
-    for _, chunk in ipairs(chunks) do
-      if not string.find(chunk[1], 'Installed') then
-        backup(chunks, ...)
-      end
-    end
-  end
   ts.install(parser_list)
-  vim.api.nvim_echo = backup
 
   vim.api.nvim_create_autocmd('FileType', {
     callback = function(args)
