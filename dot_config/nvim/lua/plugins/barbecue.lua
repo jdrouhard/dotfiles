@@ -1,6 +1,7 @@
 local M = {
   'utilyre/barbecue.nvim',
   event = { 'BufReadPost', 'BufNewFile' },
+  enabled = false,
   dependencies = {
     'nvim-tree/nvim-web-devicons',
 
