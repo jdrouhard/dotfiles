@@ -20,6 +20,9 @@
 
 [
  "alignas"
+ "constinit"
+ "consteval"
+ "thread_local"
 ] @keyword
 
 [
@@ -29,22 +32,9 @@
 ] @keyword.import
 
 [
- "private"
- "protected"
- "public"
-] @keyword.access
-
-[
  "inline"
  "explicit"
  "override"
  "final"
  "virtual"
 ] @keyword.function
-
-[
- "constexpr"
- "constinit"
- "consteval"
- "thread_local"
-] @type.qualifier

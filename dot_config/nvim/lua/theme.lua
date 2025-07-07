@@ -1,6 +1,4 @@
 local hl_map = {
-  ['@keyword.access']                       = { link = 'Statement' },
-  ['@statement']                            = { link = 'Statement' },
   ['@lsp.type.comment']                     = {}, -- treesitter has better comment handling
   ['@lsp.typemod.namespace.defaultLibrary'] = { link = '@module.builtin' },
 
