@@ -26,6 +26,10 @@
 ] @keyword
 
 [
+ "extern"
+] @keyword.modifier
+
+[
  "module"
  "import"
  "export"

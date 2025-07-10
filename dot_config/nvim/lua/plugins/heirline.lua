@@ -685,6 +685,8 @@ function M.config()
     group = 'Heirline',
   })
 
+  vim.o.laststatus = 3
+
   heirline.setup({ statusline = StatusLines })
 end
 
