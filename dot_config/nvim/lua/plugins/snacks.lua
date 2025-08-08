@@ -95,54 +95,52 @@ M.opts.dashboard = {
   },
 }
 
-if not require('globals').fzflua then
-  M.opts.picker = {
-    layout = {
-      preset = function()
-        return vim.o.columns >= 120 and "telescope" or "vertical"
-      end,
-    },
-    formatters = {
-      file = { filename_first = true, truncate = 120, },
-    },
-    actions = {
-      confirm = function(picker, item, action)
-        local actions = require("snacks.picker.actions")
-        local items = picker:selected()
-        if #items > 0 then
-          return actions.qflist(picker, item, action)
-        else
-          return actions.jump(picker, item, action)
-        end
-      end,
-      show_commit = function(picker, item, _)
-        picker:close()
-        vim.cmd("Git show " .. item.commit)
-      end,
-      edit_at_commit = function(picker, item, _)
-        picker:close()
-        vim.cmd("Gedit " .. item.commit .. ":" .. item.file)
-      end,
-    },
-    win = {
-      input = {
-        keys = {
-          ["<Esc>"] = { "close", mode = { "n", "i" } },
-          ["<a-a>"] = { "select_all", mode = { "n", "i" } },
-          ["<F2>"] = "toggle_preview",
-          ["<F4>"] = "toggle_maximize",
-          ["<S-Tab>"] = { "select_and_next", mode = { "n", "i" } },
-          ["<Tab>"] = { "select_and_prev", mode = { "n", "i" } },
-        },
+M.opts.picker = {
+  layout = {
+    preset = function()
+      return vim.o.columns >= 120 and "telescope" or "vertical"
+    end,
+  },
+  formatters = {
+    file = { filename_first = true, truncate = 120, },
+  },
+  actions = {
+    confirm = function(picker, item, action)
+      local actions = require("snacks.picker.actions")
+      local items = picker:selected()
+      if #items > 0 then
+        return actions.qflist(picker, item, action)
+      else
+        return actions.jump(picker, item, action)
+      end
+    end,
+    show_commit = function(picker, item, _)
+      picker:close()
+      vim.cmd("Git show " .. item.commit)
+    end,
+    edit_at_commit = function(picker, item, _)
+      picker:close()
+      vim.cmd("Gedit " .. item.commit .. ":" .. item.file)
+    end,
+  },
+  win = {
+    input = {
+      keys = {
+        ["<Esc>"] = { "close", mode = { "n", "i" } },
+        ["<a-a>"] = { "select_all", mode = { "n", "i" } },
+        ["<F2>"] = "toggle_preview",
+        ["<F4>"] = "toggle_maximize",
+        ["<S-Tab>"] = { "select_and_next", mode = { "n", "i" } },
+        ["<Tab>"] = { "select_and_prev", mode = { "n", "i" } },
       },
     },
-    sources = {
-      files = { hidden = true, follow = true },
-      git_log = { confirm = "show_commit", },
-      git_log_file = { confirm = "edit_at_commit", },
-      git_log_line = { confirm = "edit_at_commit", },
-    }
+  },
+  sources = {
+    files = { hidden = true, follow = true },
+    git_log = { confirm = "show_commit", },
+    git_log_file = { confirm = "edit_at_commit", },
+    git_log_line = { confirm = "edit_at_commit", },
   }
-end
+}
 
 return M

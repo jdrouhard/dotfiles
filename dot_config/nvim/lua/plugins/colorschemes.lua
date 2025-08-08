@@ -38,7 +38,6 @@ return {
       },
       custom_highlights = function(colors)
         return {
-          ['@property.cpp'] = { link = '@property' },
           ['@lsp.typemod.parameter.reference'] = {
             fg = require('catppuccin.utils.colors').lighten(colors.maroon, 0.75),
           },

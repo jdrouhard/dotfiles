@@ -58,7 +58,7 @@ function M.config()
             fzf_config.locations({
               label = label,
               items = result.items,
-              jump_to_single_result = jump_single
+              jump1 = jump_single
             })
           end
         }
@@ -88,8 +88,6 @@ function M.config()
       function() vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
     buf_map('n', '[e',
       function() vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
-
-    buf_map({ 'n', 'i', 's' }, '<C-g>', lsp.buf.signature_help)
 
     buf_map('n', '<leader>tt', util.toggle_tokens)
 
@@ -189,11 +187,15 @@ function M.config()
     capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
   end
 
-  for client, config in pairs(servers) do
+  local function setup(server)
     local server_opts = vim.tbl_deep_extend('force', {
       capabilities = vim.deepcopy(capabilities),
-    }, config or {})
-    require('lspconfig')[client].setup(server_opts)
+    }, servers[server] or {})
+    require('lspconfig')[server].setup(server_opts)
+  end
+
+  for server, server_opts in pairs(servers) do
+    setup(server)
   end
 end
 

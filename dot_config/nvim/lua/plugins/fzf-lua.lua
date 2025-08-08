@@ -45,7 +45,7 @@ function M.locations(opts)
     end
   end
 
-  if #entries == 1 and opts.jump_to_single_result then
+  if #entries == 1 and opts.jump1 then
     local location = path.entry_to_file(entries[1], opts, opts.force_uri)
     vim.lsp.util.show_document(location, 'utf-8', { focus = true })
     return
@@ -59,9 +59,8 @@ M.opts = {
   fzf_colors = true,
   fzf_opts = { ['--layout'] = 'default', },
   winopts = {
-    width = 0.9,
     preview = {
-      horizontal = 'right:55%',
+      horizontal = 'right:50%',
     },
   },
   keymap = {
@@ -89,16 +88,15 @@ M.opts = {
     no_esc = true,
   },
   lsp = {
-    jump_to_single_result = true,
+    jump1 = true,
     formatter = { 'path.filename_first', 2 },
   },
 }
 
 if require('globals').fzflua then
   M.keys = {
-    { '<leader>s',   '<cmd>FzfLua grep<CR>' },
+    { '<leader>s',   '<cmd>FzfLua live_grep<CR>' },
     { '<leader>ag',  '<cmd>FzfLua grep_cword<CR>' },
-    { '<leader>rg',  '<cmd>FzfLua live_grep<CR>' },
     { '<leader>AG',  '<cmd>FzfLua grep_cWORD<CR>' },
     { '<leader>ag',  '<cmd>FzfLua grep_visual<CR>', mode = 'x' },
 

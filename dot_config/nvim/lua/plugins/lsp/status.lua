@@ -9,10 +9,10 @@ local progress_state = {}
 local request_state = vim.defaulttable()
 
 local ignore_methods = {
-  'documentHighlight',
-  'semanticTokens',
   'codeAction',
-  'documentSymbol'
+  'documentHighlight',
+  'documentSymbol',
+  'semanticTokens',
 }
 
 local M = {}
