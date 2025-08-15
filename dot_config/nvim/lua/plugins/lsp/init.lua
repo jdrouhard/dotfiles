@@ -187,15 +187,15 @@ function M.config()
     capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
   end
 
-  local function setup(server)
-    local server_opts = vim.tbl_deep_extend('force', {
-      capabilities = vim.deepcopy(capabilities),
-    }, servers[server] or {})
-    require('lspconfig')[server].setup(server_opts)
+  lsp.config('*', { capabilities = capabilities })
+
+  local function setup(server, opts)
+    lsp.config(server, opts or servers[server] or {})
+    lsp.enable(server)
   end
 
-  for server, server_opts in pairs(servers) do
-    setup(server)
+  for server, opts in pairs(servers) do
+    setup(server, opts)
   end
 end
 

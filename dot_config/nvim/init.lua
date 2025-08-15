@@ -10,6 +10,8 @@ vim.api.nvim_create_autocmd('User', {
     require('commands')
     require('mappings')
 
+    require('vim._extui').enable({})
+
     local fn = vim.fn
     local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
     if fn.filereadable(local_init) > 0 then
