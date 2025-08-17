@@ -4,6 +4,17 @@ local M = {
   cond = require('globals').native_lsp and not vim.g.vscode,
   dependencies = {
     {
+      'mason-org/mason.nvim',
+      keys = { { '<leader>cm', '<cmd>Mason<cr>' }, },
+      opts = {},
+    },
+
+    {
+      'mason-org/mason-lspconfig.nvim',
+      config = function() end
+    },
+
+    {
       'folke/lazydev.nvim',
       ft = 'lua',
       opts = {
@@ -29,7 +40,7 @@ function M.config()
   local clangd_ext = require('plugins.lsp.clangd_ext')
   local lua_ls_ext = require('plugins.lsp.lua_ls_ext')
 
-  lsp.set_log_level('OFF')
+  lsp.log.set_level('OFF')
 
   local use_float_progress = false
   status.setup(not use_float_progress)
@@ -155,6 +166,7 @@ function M.config()
 
   local servers = {
     clangd = {
+      mason = false,
       cmd = { 'clangd', '--header-insertion=never' },
       handlers = clangd_ext.handlers,
       capabilities = clangd_ext.capabilities,
@@ -163,7 +175,6 @@ function M.config()
         fallbackFlags = { '-std=c++23' },
       },
     },
-    basedpyright = {},
     lua_ls = {
       handlers = lua_ls_ext.handlers,
       settings = {
@@ -172,24 +183,40 @@ function M.config()
         },
       },
     },
-    rust_analyzer = {
-      cmd = { 'rustup', 'run', 'stable', 'rust-analyzer' },
-    },
+    basedpyright = {},
+    docker_language_server = {},
+    rust_analyzer = {},
+    zls = {},
   }
 
-  local capabilities = { textDocument = { foldingRange = { dynamicRegistration = false, lineFoldingOnly = true } } }
+  -- nvim-ufo adds the following capabilities
+  local capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+    }
+  }
+
+  -- mix that in with the ones provided by blink.cmp
   capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
   lsp.config('*', { capabilities = capabilities })
 
-  local function setup(server, opts)
+  local ensure_installed = {}
+  for server, opts in pairs(servers) do
+    if opts.mason ~= false then
+      ensure_installed[#ensure_installed + 1] = server
+    end
     lsp.config(server, opts or servers[server] or {})
     lsp.enable(server)
   end
 
-  for server, opts in pairs(servers) do
-    setup(server, opts)
-  end
+  require('mason-lspconfig').setup({
+    ensure_installed = ensure_installed,
+    automatic_enable = false, -- all configured servers are already enabled
+  })
 end
 
 return M
