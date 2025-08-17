@@ -1,7 +1,6 @@
 local M = {
   'saghen/blink.cmp',
   event = 'VeryLazy',
-  enabled = require('globals').blink_cmp,
   -- dev = true,
 
   -- use LuaSnip until nvim allows disabling default tab/s-tab keymaps for native snippets

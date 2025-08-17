@@ -1,6 +1,5 @@
 local M = {
   native_lsp = true,
-  blink_cmp = true,
   fzflua = false,
 
   --theme = 'carbonfox',

@@ -4,11 +4,6 @@ local M = {
   cond = require('globals').native_lsp and not vim.g.vscode,
   dependencies = {
     {
-      'hrsh7th/cmp-nvim-lsp',
-      cond = not require('globals').blink_cmp,
-    },
-
-    {
       'folke/lazydev.nvim',
       ft = 'lua',
       opts = {
@@ -183,9 +178,7 @@ function M.config()
   }
 
   local capabilities = { textDocument = { foldingRange = { dynamicRegistration = false, lineFoldingOnly = true } } }
-  if require('globals').blink_cmp then
-    capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
-  end
+  capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
   lsp.config('*', { capabilities = capabilities })
 
