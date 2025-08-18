@@ -7,11 +7,7 @@ local M = {
       'mason-org/mason.nvim',
       keys = { { '<leader>cm', '<cmd>Mason<cr>' }, },
       opts = {},
-    },
-
-    {
-      'mason-org/mason-lspconfig.nvim',
-      config = function() end
+      dependencies = 'mason-org/mason-lspconfig.nvim',
     },
 
     {
@@ -23,9 +19,7 @@ local M = {
           '~/.hammerspoon/Spoons/EmmyLua.spoon/annotations',
         },
       },
-      dependencies = {
-        { 'Bilal2453/luvit-meta' },
-      }
+      dependencies = 'Bilal2453/luvit-meta',
     },
   },
 }
@@ -184,10 +178,14 @@ function M.config()
       },
     },
     basedpyright = {},
-    docker_language_server = {},
+    neocmake = {},
     rust_analyzer = {},
     zls = {},
   }
+
+  local mlsp = require('mason-lspconfig')
+  local available = vim.tbl_keys(mlsp.get_mappings().lspconfig_to_package)
+  local ensure_installed = {} ---@type string[]
 
   -- nvim-ufo adds the following capabilities
   local capabilities = {
@@ -204,16 +202,15 @@ function M.config()
 
   lsp.config('*', { capabilities = capabilities })
 
-  local ensure_installed = {}
   for server, opts in pairs(servers) do
-    if opts.mason ~= false then
+    if opts.mason ~= false and vim.tbl_contains(available, server) then
       ensure_installed[#ensure_installed + 1] = server
     end
     lsp.config(server, opts or servers[server] or {})
     lsp.enable(server)
   end
 
-  require('mason-lspconfig').setup({
+  mlsp.setup({
     ensure_installed = ensure_installed,
     automatic_enable = false, -- all configured servers are already enabled
   })
