@@ -91,6 +91,16 @@ M.opts = {
     jump1 = true,
     formatter = { 'path.filename_first', 2 },
   },
+  git = {
+    commits = {
+      actions = {
+        ["enter"] = function(selected, opts)
+          if #selected == 0 then return end
+          vim.cmd("Git show " .. selected[1]:match("[^ ]+"))
+        end
+      }
+    }
+  }
 }
 
 if require('globals').fzflua then
@@ -125,6 +135,22 @@ function M.init()
     end,
     nested = true,
   })
+end
+
+function M.config(_, opts)
+  local actions = require('fzf-lua.actions')
+  local path = require('fzf-lua.path')
+
+  ---@diagnostic disable-next-line: redefined-local
+  ---@diagnostic disable-next-line: duplicate-set-field
+  actions.git_buf_edit = function(selected, opts)
+    if #selected == 0 then return end
+    local file = path.relative_to(path.normalize(vim.fn.expand("%:p")), path.git_root(opts, true))
+    local hash = selected[1]:match("[^ ]+")
+    vim.cmd("Gedit " .. hash .. ":" .. file)
+  end
+
+  require('fzf-lua').setup(opts)
 end
 
 return M
