@@ -121,7 +121,7 @@ function M.config()
     group = au_group,
     callback = function(ev)
       local bufnr = ev.buf
-      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      local client = lsp.get_client_by_id(ev.data.client_id)
       on_attach(client, bufnr)
     end
   })
@@ -177,7 +177,13 @@ function M.config()
         },
       },
     },
-    basedpyright = {},
+    basedpyright = {
+      settings = {
+        basedpyright = {
+          analysis = { typeCheckingMode = 'standard' },
+        },
+      },
+    },
     neocmake = {},
     rust_analyzer = {},
     zls = {},
@@ -200,7 +206,14 @@ function M.config()
   -- mix that in with the ones provided by blink.cmp
   capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
-  lsp.config('*', { capabilities = capabilities })
+  lsp.config('*', {
+    capabilities = capabilities,
+    root_dir = function(bufnr, on_dir)
+      if not vim.fn.bufname(bufnr):match('fugitive://') then
+        on_dir(vim.fn.getcwd())
+      end
+    end
+  })
 
   for server, opts in pairs(servers) do
     if opts.mason ~= false and vim.tbl_contains(available, server) then
