@@ -1,5 +1,5 @@
 # theme
-theme = tokyonight
+theme = rose-pine
 
 # rendering
 font-size = 12
@@ -13,4 +13,4 @@ window-vsync = false
 window-colorspace = display-p3
 
 # miscellaneous
-mouse-scroll-multiplier = 10
+mouse-scroll-multiplier = 1
