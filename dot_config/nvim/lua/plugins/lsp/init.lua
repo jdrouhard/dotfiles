@@ -152,9 +152,19 @@ function M.config()
     desc = 'lsp.track_request',
   })
 
-  api.nvim_create_autocmd({ 'CursorMoved', 'BufLeave' }, {
+  api.nvim_create_autocmd('CursorMoved', {
     group = au_group,
     callback = function(ev) util.cancel_pending_requests(ev.buf) end,
+    desc = 'lsp.cancel_pending_requests',
+  })
+
+  api.nvim_create_autocmd('BufEnter', {
+    group = au_group,
+    callback = function(ev)
+      if api.nvim_get_option_value('filetype', { buf = ev.buf }) ~= 'snacks_picker_input' then
+        util.cancel_pending_requests(fn.bufnr(0))
+      end
+    end,
     desc = 'lsp.cancel_pending_requests',
   })
 
