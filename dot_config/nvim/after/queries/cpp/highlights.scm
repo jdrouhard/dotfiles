@@ -42,3 +42,10 @@
  "final"
  "virtual"
 ] @keyword.function
+
+[
+ "[:"
+ ":]"
+] @punctuation.bracket
+
+"^^" @operator
