@@ -96,6 +96,7 @@ M.opts.dashboard = {
 }
 
 M.opts.picker = {
+  show_delay = 2000,
   layout = {
     preset = function()
       return vim.o.columns >= 120 and "telescope" or "vertical"
