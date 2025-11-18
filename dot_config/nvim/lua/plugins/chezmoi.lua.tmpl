@@ -1,33 +1,10 @@
 -- vim: ft=lua
 
 local function chezmoi_files()
-  local chezmoi = require('chezmoi.commands')
-  local results = chezmoi.list({})
-
   if require('globals').fzflua then
-    require('fzf-lua').fzf_exec(results, {
-      fzf_opts = {},
-      fzf_colors = true,
-      actions = {
-        ['default'] = function(selected)
-          chezmoi.edit({ targets = { '~/' .. selected[1] } })
-        end,
-      },
-    })
+    require('chezmoi.pick').fzf()
   else
-    Snacks.picker.pick('chezmoi', {
-      format = 'text',
-      items = vim.tbl_map(function(file)
-        return {
-          text = file,
-          file = '~/' .. file,
-        }
-      end, results),
-      confirm = function(picker, item)
-        picker:close()
-        chezmoi.edit({ targets = { item.file } })
-      end,
-    })
+    require('chezmoi.pick').snacks()
   end
 end
 
