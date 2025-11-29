@@ -3,8 +3,7 @@ theme = Rose Pine
 
 # rendering
 font-size = 12
-adjust-cell-width = -5%
-alpha-blending = linear-corrected
+# alpha-blending = linear-corrected
 
 # window settings
 window-width = 160
