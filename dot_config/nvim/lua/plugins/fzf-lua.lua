@@ -60,7 +60,7 @@ M.opts = {
   fzf_opts = { ['--layout'] = 'default', },
   winopts = {
     preview = {
-      horizontal = 'right:50%',
+      horizontal = 'right:45%',
     },
   },
   keymap = {
@@ -82,6 +82,7 @@ M.opts = {
   },
   files = {
     formatter = { 'path.filename_first', 2 },
+    follow = true,
   },
   grep = {
     formatter = { 'path.filename_first', 2 },
