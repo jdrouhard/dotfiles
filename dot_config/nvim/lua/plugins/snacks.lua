@@ -43,6 +43,10 @@ if not require('globals').fzflua then
     { "<leader>gs",  function() Snacks.picker.git_status() end },
     { "<leader>gl",  function() Snacks.picker.git_log() end },
     { "<leader>gbl", function() Snacks.picker.git_log_file() end },
+    { "<leader>gp",  function() Snacks.picker.gh_pr() end },
+    { "<leader>gP",  function() Snacks.picker.gh_pr({ state = 'all' }) end },
+    { "<leader>gi",  function() Snacks.picker.gh_issue() end },
+    { "<leader>gI",  function() Snacks.picker.gh_issue({ state = 'all' }) end },
   })
 end
 
@@ -97,11 +101,11 @@ M.opts.dashboard = {
 
 M.opts.picker = {
   show_delay = 2000,
-  layout = {
-    preset = function()
-      return vim.o.columns >= 120 and "telescope" or "vertical"
-    end,
-  },
+  -- layout = {
+  --   preset = function()
+  --     return vim.o.columns >= 120 and "telescope" or "vertical"
+  --   end,
+  -- },
   formatters = {
     file = { filename_first = true, truncate = 120, },
   },
@@ -131,8 +135,8 @@ M.opts.picker = {
         ["<a-a>"] = { "select_all", mode = { "n", "i" } },
         ["<F2>"] = "toggle_preview",
         ["<F4>"] = "toggle_maximize",
-        ["<S-Tab>"] = { "select_and_next", mode = { "n", "i" } },
-        ["<Tab>"] = { "select_and_prev", mode = { "n", "i" } },
+        -- ["<S-Tab>"] = { "select_and_next", mode = { "n", "i" } },
+        -- ["<Tab>"] = { "select_and_prev", mode = { "n", "i" } },
       },
     },
   },
@@ -141,6 +145,8 @@ M.opts.picker = {
     git_log = { confirm = "show_commit", },
     git_log_file = { confirm = "edit_at_commit", },
     git_log_line = { confirm = "edit_at_commit", },
+    gh_diff = { auto_close = false, layout = { preset = "left", }, },
+    colorschemes = { layout = { preset = "ivy", }, },
   }
 }
 
