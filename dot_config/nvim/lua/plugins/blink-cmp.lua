@@ -37,6 +37,13 @@ M.opts = {
   signature = {
     enabled = true,
   },
+  sources = {
+    providers = {
+      lsp = {
+        async = true,
+      },
+    },
+  },
   snippets = {
     preset = 'luasnip',
   },

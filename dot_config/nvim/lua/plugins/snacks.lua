@@ -150,4 +150,23 @@ M.opts.picker = {
   }
 }
 
+function M.config(_, opts)
+  require('snacks').setup(opts)
+
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'SnacksDashboardOpened',
+    callback = function(ev)
+      -- vim.api.nvim_win_set_cursor() adds a mark to the jumplist
+      -- when moving from 1,0 to the first button when snacks is first
+      -- enabled.
+      -- seems like the startup setpcmark() adds a jump to the (1,0) pos
+      -- of the opening scratch buffer which gets kept when snacks
+      -- calls nvim_buf_set_lines followed by nvim_win_set_cursor
+      -- TODO: investigate. might be a neovim bug.
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<c-o>', true, false, true), 'n', false)
+      vim.api.nvim_buf_create_user_command(ev.buf, 'G', 'bwipe <bar> Git', { force = true })
+    end,
+  })
+end
+
 return M

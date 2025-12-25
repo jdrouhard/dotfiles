@@ -18,6 +18,11 @@ local M = {
           'luvit-meta/library',
           '~/.hammerspoon/Spoons/EmmyLua.spoon/annotations',
         },
+        integrations = {
+          cmp = false,
+        },
+        -- disable when a .luarc.json file is found
+        enabled = function(root_dir) return not vim.uv.fs_stat(root_dir .. '/.luarc.json') end,
       },
       dependencies = 'Bilal2453/luvit-meta',
     },
