@@ -1,0 +1,3 @@
+{{- $hasSocketUnit := output "sh" "-c" "systemctl --user list-unit-files ssh-agent.socket || echo false" | regexMatch "ssh-agent\\.socket" -}}
+{{- $version := output "sh" "-c" "ssh -V 2>&1 | sed -n 's/^OpenSSH_\\([0-9]\\+\\).*/\\1/p'" | trim | atoi -}}
+{{- and $hasSocketUnit (ge $version 10) -}}

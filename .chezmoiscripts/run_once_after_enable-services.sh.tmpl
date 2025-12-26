@@ -2,7 +2,10 @@
 #!/bin/sh
 
 {{ $services := list
-     "ssh-agent.service"
+     (ternary
+      "ssh-agent.socket"
+      "ssh-agent.service"
+      (includeTemplate "useSocketActivation" | eq "true"))
 -}}
 
 {{ range $services -}}
