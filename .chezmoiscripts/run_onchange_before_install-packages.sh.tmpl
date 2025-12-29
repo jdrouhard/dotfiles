@@ -16,12 +16,13 @@ set -eufo pipefail
      "discord"
      "firefox"
      "font-jetbrains-mono"
-     "iterm2"
+     "ghostty@tip"
+     "hammerspoon"
      "kitty"
      "nextcloud"
      "spotify" -}}
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --file=- <<EOF
 {{ range ($brews | sortAlpha | uniq) -}}
 brew "{{ . }}"
 {{ end -}}
