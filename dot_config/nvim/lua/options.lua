@@ -45,6 +45,34 @@ opt.listchars   = { tab = '▸ ', trail = '·' }
 opt.mousescroll = { 'ver:1', 'hor:6' }
 opt.jumpoptions = { 'view' }
 
+vim.filetype.add({
+  extension = {
+    container = 'systemd',
+    device    = 'systemd',
+    image     = 'systemd',
+    mount     = 'systemd',
+    network   = 'systemd',
+    nspawn    = 'systemd',
+    path      = 'systemd',
+    service   = 'systemd',
+    slice     = 'systemd',
+    socket    = 'systemd',
+    target    = 'systemd',
+    timer     = 'systemd',
+    volume    = 'systemd',
+  },
+  filename = {
+    ['docker-compose.yaml'] = 'yaml.docker-compose',
+    ['docker-compose.yml'] = 'yaml.docker-compose',
+    ['compose.yaml'] = 'yaml.docker-compose',
+    ['compose.yml'] = 'yaml.docker-compose',
+  },
+  pattern = {
+    ['docker%-compose%..*%.ya?ml'] = 'yaml.docker-compose',
+    ['compose%..*%.ya?ml'] = 'yaml.docker-compose',
+  },
+})
+
 local disabled_providers = {
   'ruby',
   'node',
