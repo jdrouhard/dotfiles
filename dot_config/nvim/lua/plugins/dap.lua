@@ -1,6 +1,5 @@
 local M = {
   'mfussenegger/nvim-dap',
-  event = 'BufReadPost',
   dependencies = {
     'rcarriga/nvim-dap-ui',
     dependencies = {
@@ -9,25 +8,26 @@ local M = {
   },
 }
 
+M.keys = {
+  { '<F5>', function() require('dap').continue() end },
+  { '<F9>', function() require('dap').toggle_breakpoint() end },
+  { '<F10>', function() require('dap').step_over() end },
+  { '<F11>', function() require('dap').step_into() end },
+  { '<F12>', function() require('dap').step_out() end },
+  { '<M-k>', function() require('dapui').eval() end, mode = { 'n', 'v' } },
+  { '<leader>B', function()
+      vim.ui.input({ prompt = 'Breakpoint condition: ' }, function(input)
+        if input then
+          require('dap').set_breakpoint(input)
+        end
+      end)
+    end,
+  },
+}
+
 function M.config()
   local dap = require('dap')
   local dapui = require('dapui')
-  local map = vim.keymap.set
-
-  map('n', '<F5>', dap.continue)
-  map('n', '<F9>', dap.toggle_breakpoint)
-  map('n', '<F10>', dap.step_over)
-  map('n', '<F11>', dap.step_into)
-  map('n', '<F12>', dap.step_out)
-  map({ 'n', 'v' }, '<M-k>', dapui.eval)
-
-  map('n', '<leader>B', function()
-    vim.ui.input({ prompt = 'Breakpoint condition: ' }, function(input)
-      if input then
-        dap.set_breakpoint(input)
-      end
-    end)
-  end)
 
   dap.listeners.after.event_initialized['dapui_config'] = dapui.open
   dap.listeners.before.event_terminated['dapui_config'] = dapui.close

@@ -55,7 +55,6 @@ M.opts = {
   bigfile = { enabled = true },
   input = { enabled = true },
   image = { force = true },
-  quickfile = { enabled = true },
 }
 
 M.opts.styles = {
