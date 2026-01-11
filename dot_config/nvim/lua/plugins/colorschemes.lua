@@ -94,4 +94,10 @@ return {
     }
   },
 
+  {
+    'zenbones-theme/zenbones.nvim',
+    init = function()
+      vim.g.bones_compat = true
+    end,
+  },
 }
