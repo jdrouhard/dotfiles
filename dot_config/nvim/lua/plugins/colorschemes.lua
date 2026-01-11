@@ -3,7 +3,16 @@ return {
   'bluz71/vim-moonfly-colors',
   'bluz71/vim-nightfly-guicolors',
   'rebelot/kanagawa.nvim',
-  'navarasu/onedark.nvim',
+
+  {
+    'navarasu/onedark.nvim',
+    opts = {
+      style = 'warmer',
+      highlights = {
+        ['@lsp.type.variable'] = { fg = 'none' },
+      },
+    },
+  },
 
   {
     'rose-pine/neovim',

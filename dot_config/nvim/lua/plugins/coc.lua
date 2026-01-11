@@ -2,7 +2,7 @@ local M = {
   'neoclide/coc.nvim',
   branch = 'release',
   event = 'BufReadPost',
-  cond = function() return not require('globals').native_lsp end,
+  enabled = not require('globals').native_lsp,
 }
 
 function M.config()

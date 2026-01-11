@@ -38,7 +38,16 @@ M.opts = {
     enabled = true,
   },
   sources = {
+    per_filetype = {
+      -- optionally inherit from the `default` sources
+      lua = { inherit_defaults = true, 'lazydev' },
+    },
     providers = {
+      lazydev = {
+        name = 'LazyDev',
+        module = 'lazydev.integrations.blink',
+        score_offset = 100,
+      },
       lsp = {
         async = true,
       },
