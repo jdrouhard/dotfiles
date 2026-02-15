@@ -19,10 +19,10 @@ return {
     name = 'rose-pine',
     opts = {
       highlight_groups = {
-        ["@variable"] = { italic = false },
-        ["@property"] = { italic = false },
-      }
-    }
+        ['@variable'] = { italic = false },
+        ['@property'] = { italic = false },
+      },
+    },
   },
 
   {
@@ -51,8 +51,8 @@ return {
             fg = require('catppuccin.utils.colors').lighten(colors.maroon, 0.75),
           },
         }
-      end
-    }
+      end,
+    },
   },
 
   {
@@ -61,7 +61,7 @@ return {
       style = 'night',
       on_highlights = function(hl, c)
         hl['@lsp.typemod.parameter.reference'] = {
-          fg = require('tokyonight.util').lighten(c.yellow, 0.45)
+          fg = require('tokyonight.util').lighten(c.yellow, 0.45),
         }
         hl['FzfLuaDirPart'] = {
           link = 'Comment',
@@ -69,8 +69,8 @@ return {
       end,
       plugins = {
         cmp = true,
-      }
-    }
+      },
+    },
   },
 
   {
@@ -83,7 +83,7 @@ return {
           LspReferenceRead = { link = 'CursorLine' },
           LspReferenceWrite = { link = 'CursorLine' },
           LspReferenceText = { link = 'CursorLine' },
-          DiffFile = { link = 'Directory', },
+          DiffFile = { link = 'Directory' },
           DiffAdd = { bg = darken(colors.bright_green, 0.35) },
           DiffDelete = { bg = darken(colors.red, 0.15) },
           DiffChange = { bg = darken(colors.cyan, 0.15) },
@@ -91,7 +91,7 @@ return {
           ['@lsp.type.typeParameter'] = { link = '@type' },
         }
       end,
-    }
+    },
   },
 
   {

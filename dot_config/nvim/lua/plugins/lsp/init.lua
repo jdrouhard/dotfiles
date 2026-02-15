@@ -15,7 +15,6 @@ local M = {
       ft = 'lua',
       opts = {
         library = {
-          'luvit-meta/library',
           '~/.hammerspoon/Spoons/EmmyLua.spoon/annotations',
         },
         integrations = {
@@ -24,7 +23,6 @@ local M = {
         -- disable when a .luarc.json file is found
         enabled = function(root_dir) return not vim.uv.fs_stat(root_dir .. '/.luarc.json') end,
       },
-      dependencies = 'Bilal2453/luvit-meta',
     },
   },
 }
@@ -117,12 +115,6 @@ function M.config()
         callback = lsp.buf.clear_references,
         desc = 'lsp.buf.clear_references',
       })
-    end
-
-    -- I don't like the way range was implemented. Need to make it fire range
-    -- until it gets a full document parsed to avoid the flickering when scrolling
-    if client:supports_method('textDocument/semanticTokens/full', bufnr) then
-      client.server_capabilities.semanticTokensProvider.range = false
     end
   end
 
