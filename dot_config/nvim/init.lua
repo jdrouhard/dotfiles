@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd('User', {
     require('commands')
     require('mappings')
 
-    require('vim._extui').enable({})
+    require('vim._core.ui2').enable({})
 
     local fn = vim.fn
     local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
