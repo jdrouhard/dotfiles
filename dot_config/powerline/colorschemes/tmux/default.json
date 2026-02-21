@@ -1,0 +1,8 @@
+{
+	"groups": {
+		"window:current":       {"fg": "white", "bg": "gray3",  "attrs": []},
+		"window_name":          {"fg": "white", "bg": "gray3",  "attrs": ["bold"]},
+		"session":              {"fg": "white", "bg": "gray3",  "attrs": ["bold"]},
+		"session:prefix":       {"fg": "gray0", "bg": "gray90", "attrs": ["bold"]}
+	}
+}
