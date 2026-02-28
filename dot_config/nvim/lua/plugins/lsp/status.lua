@@ -1,6 +1,6 @@
 local api = vim.api
 
-local status_timer = vim.loop.new_timer()
+local status_timer = assert(vim.loop.new_timer())
 local spinner_frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
 local index = 0
 local progress_cache = {}
@@ -17,17 +17,28 @@ local ignore_methods = {
 
 local M = {}
 
-local function update_timer()
-  local need_timer = not vim.tbl_isempty(progress_cache) or not vim.tbl_isempty(requests_cache)
+local function update_timer(bufnr)
+  local need_timer = not vim.tbl_isempty(progress_cache)
+
+  if not need_timer then
+    if bufnr then
+      need_timer = not vim.tbl_isempty(requests_cache[bufnr])
+    else
+      for _, requests in ipairs(requests_cache) do
+        need_timer = need_timer or not vim.tbl_isempty(requests)
+        if need_timer then break end
+      end
+    end
+  end
 
   if need_timer then
     status_timer:start(100, 100, vim.schedule_wrap(function()
       index = (index + 1) % #spinner_frames
-      vim.cmd.redrawstatus({ bang = true })
+      vim.cmd.redrawstatus()
     end))
   elseif status_timer:is_active() then
     status_timer:stop()
-    vim.cmd.redrawstatus({ bang = true })
+    vim.cmd.redrawstatus()
   end
 end
 
@@ -38,7 +49,7 @@ end
 
 local function invalidate_requests(bufnr)
   requests_cache[bufnr] = {}
-  update_timer()
+  update_timer(bufnr)
 end
 
 local function update_progress(progress_event)
@@ -186,7 +197,6 @@ local function rebuild_requests_cache(bufnr)
   update_timer()
 end
 
-
 local function get_progress()
   if vim.tbl_isempty(progress_cache) then
     rebuild_progress_cache()
@@ -207,13 +217,13 @@ local function get_status(bufnr)
     local name = client.name
     local status = client.status
     if status then
-      if type(status) == "table" then
+      if type(status) == 'table' then
         local uri = vim.uri_from_bufnr(bufnr)
         if status[uri] then
           msgs[name] = status[uri]
         end
       else
-        msgs[name] = status:gsub("%$%(loading~spin%)", spinner_frames[index + 1])
+        msgs[name] = status:gsub('%$%(loading~spin%)', spinner_frames[index + 1])
       end
     end
   end
