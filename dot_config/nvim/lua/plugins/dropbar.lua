@@ -39,7 +39,14 @@ function M.config(_, opts)
         'BufWinEnter',
         'BufWritePost',
         'User', -- for fugitive buffers
-      }
+      },
+      update_events = {
+        win = {
+          'CursorHold',
+          'WinEnter',
+          'WinResized',
+        },
+      },
     },
   })
 
