@@ -26,16 +26,22 @@ local function update_timer(bufnr)
     else
       for _, requests in ipairs(requests_cache) do
         need_timer = need_timer or not vim.tbl_isempty(requests)
-        if need_timer then break end
+        if need_timer then
+          break
+        end
       end
     end
   end
 
   if need_timer then
-    status_timer:start(100, 100, vim.schedule_wrap(function()
-      index = (index + 1) % #spinner_frames
-      vim.cmd.redrawstatus()
-    end))
+    status_timer:start(
+      100,
+      100,
+      vim.schedule_wrap(function()
+        index = (index + 1) % #spinner_frames
+        vim.cmd.redrawstatus()
+      end)
+    )
   elseif status_timer:is_active() then
     status_timer:stop()
     vim.cmd.redrawstatus()
@@ -98,7 +104,7 @@ local function rebuild_progress_cache()
   progress_cache = {}
 
   for client_id, client_state in pairs(progress_state) do
-    local client = vim.lsp.get_client_by_id(client_id)
+    local client = assert(vim.lsp.get_client_by_id(client_id))
     local name = client.name
 
     local result = {}
@@ -142,7 +148,7 @@ local function update_request(request_event)
       end
     end
     if not rawget(state.active, id) and not rawget(state.debouncing, id) then
-      local timer = vim.loop.new_timer()
+      local timer = assert(vim.loop.new_timer())
       state.debouncing[id] = timer
       timer:start(100, 0, function()
         state.active[id] = request
@@ -170,7 +176,7 @@ local function rebuild_requests_cache(bufnr)
   local state = request_state[bufnr]
 
   for client_id, client_state in pairs(state) do
-    local client = vim.lsp.get_client_by_id(client_id)
+    local client = assert(vim.lsp.get_client_by_id(client_id))
     local name = client.name
     local active = client_state.active
 
@@ -185,8 +191,11 @@ local function rebuild_requests_cache(bufnr)
 
       if not request_set[type][method] then
         request_set[type][method] = true
-        result[#result + 1] = string.format("%s %s", type == 'pending' and 'requesting' or 'canceling',
-          string.sub(method, string.find(method, '/') + 1))
+        result[#result + 1] = string.format(
+          '%s %s',
+          type == 'pending' and 'requesting' or 'canceling',
+          string.sub(method, string.find(method, '/') + 1)
+        )
       end
     end
     if not vim.tbl_isempty(result) then

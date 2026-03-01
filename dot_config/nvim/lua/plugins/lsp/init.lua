@@ -5,7 +5,7 @@ local M = {
   dependencies = {
     {
       'mason-org/mason.nvim',
-      keys = { { '<leader>cm', '<cmd>Mason<cr>' }, },
+      keys = { { '<leader>cm', '<cmd>Mason<cr>' } },
       opts = {},
       dependencies = 'mason-org/mason-lspconfig.nvim',
     },
@@ -61,9 +61,9 @@ function M.config()
             fzf_config.locations({
               label = label,
               items = result.items,
-              jump1 = jump_single
+              jump1 = jump_single,
             })
-          end
+          end,
         }
       end
 
@@ -72,8 +72,7 @@ function M.config()
       buf_map('n', 'gi', function() lsp.buf.implementation(fzf_list('Implementations')) end)
       buf_map('n', 'gTD', function() lsp.buf.type_definition(fzf_list('Type Definitions')) end)
       buf_map('n', 'gr', function() lsp.buf.references(nil, fzf_list('References', false)) end)
-      buf_map('n', 'gws',
-        function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list('Workspace Symbols', false)) end)
+      buf_map('n', 'gws', function() lsp.buf.workspace_symbol(fn.expand('<cword>'), fzf_list('Workspace Symbols', false)) end)
     else
       local picker = require('snacks.picker')
       local opts = { jump = { reuse_win = false } }
@@ -87,20 +86,10 @@ function M.config()
 
     buf_map({ 'n', 'v' }, '<leader>ac', lsp.buf.code_action)
     buf_map('n', '<leader>rn', lsp.buf.rename)
-    buf_map('n', ']e',
-      function() vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
-    buf_map('n', '[e',
-      function() vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
+    buf_map('n', ']e', function() vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
+    buf_map('n', '[e', function() vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.ERROR } }) end)
 
     buf_map('n', '<leader>tt', util.toggle_tokens)
-
-    if client.server_capabilities.documentFormattingProvider then
-      buf_map('n', '<leader>f', lsp.buf.format)
-    end
-
-    if client.server_capabilities.documentRangeFormattingProvider then
-      buf_map('x', '<leader>f', lsp.buf.format)
-    end
 
     if client.server_capabilities.documentHighlightProvider then
       api.nvim_create_autocmd('CursorHold', {
@@ -126,7 +115,7 @@ function M.config()
       local bufnr = ev.buf
       local client = lsp.get_client_by_id(ev.data.client_id)
       on_attach(client, bufnr)
-    end
+    end,
   })
 
   api.nvim_create_autocmd('LspTokenUpdate', {
@@ -136,8 +125,7 @@ function M.config()
       local captures = vim.treesitter.get_captures_at_pos(ev.buf, token.line, token.start_col)
       for _, capture in ipairs(captures) do
         if capture.capture == 'variable.builtin' then
-          lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id,
-            '@variable.builtin.' .. vim.bo[ev.buf].filetype)
+          lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, '@variable.builtin.' .. vim.bo[ev.buf].filetype)
           return
         end
       end
@@ -146,7 +134,7 @@ function M.config()
         lsp.semantic_tokens.highlight_token(token, ev.buf, ev.data.client_id, name)
       end
     end,
-    desc = 'lsp.custom_semantic_token_highlights'
+    desc = 'lsp.custom_semantic_token_highlights',
   })
 
   api.nvim_create_autocmd('LspRequest', {
@@ -213,7 +201,7 @@ function M.config()
         dynamicRegistration = false,
         lineFoldingOnly = true,
       },
-    }
+    },
   }
 
   -- mix that in with the ones provided by blink.cmp
@@ -225,7 +213,7 @@ function M.config()
       if not vim.fn.bufname(bufnr):match('fugitive://') then
         on_dir(vim.fn.getcwd())
       end
-    end
+    end,
   })
 
   for server, opts in pairs(servers) do
