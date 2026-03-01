@@ -13,7 +13,8 @@ local M = {
   --theme = 'retrobox',
   --theme = 'rose-pine',
   --theme = 'tokyonight',
-  theme = 'zenbones',
+  theme = 'vague',
+  --theme = 'zenbones',
 }
 
 return M

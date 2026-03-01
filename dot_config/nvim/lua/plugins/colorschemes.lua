@@ -95,9 +95,17 @@ return {
   },
 
   {
+    'vague-theme/vague.nvim',
+    opts = {
+      on_highlights = function(hl, _)
+        hl.SnacksPickerCursorLine.fg = 'none'
+        hl['@lsp.type.variable'].fg = 'none'
+      end,
+    },
+  },
+
+  {
     'zenbones-theme/zenbones.nvim',
-    init = function()
-      vim.g.bones_compat = true
-    end,
+    init = function() vim.g.bones_compat = true end,
   },
 }
