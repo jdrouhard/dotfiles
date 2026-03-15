@@ -178,14 +178,8 @@ function M.config()
         },
       },
     },
-    basedpyright = {
-      settings = {
-        basedpyright = {
-          analysis = { typeCheckingMode = 'standard' },
-        },
-      },
-    },
     neocmake = {},
+    pyrefly = {},
     rust_analyzer = {},
     zls = {},
   }
