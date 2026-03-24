@@ -91,7 +91,7 @@ function M.config()
 
     buf_map('n', '<leader>tt', util.toggle_tokens)
 
-    if client.server_capabilities.documentHighlightProvider then
+    if client:supports_method('textDocument/documentHighlight') then
       api.nvim_create_autocmd('CursorHold', {
         group = au_group,
         buffer = bufnr,
