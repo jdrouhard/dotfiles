@@ -10,8 +10,7 @@ vim.api.nvim_create_autocmd('User', {
     require('commands')
     require('mappings')
 
-    -- Performance issues still present with ui2. Re-enable when resolved.
-    -- require('vim._core.ui2').enable({})
+    require('vim._core.ui2').enable({})
 
     local fn = vim.fn
     local local_init = fn.resolve(fn.stdpath('data') .. '/site/init.lua')
