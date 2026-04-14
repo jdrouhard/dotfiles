@@ -1,20 +1,4 @@
-local fn = vim.fn
-
-local lazy_repo = 'https://github.com/folke/lazy.nvim.git'
-local install_path = fn.stdpath('data') .. '/lazy/lazy.nvim'
-
-if not vim.loop.fs_stat(install_path) then
-  vim.notify('Installing lazy.nvim')
-  vim.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    '--single-branch',
-    lazy_repo,
-    install_path
-  }, { text = true }):wait()
-end
-vim.opt.runtimepath:prepend(install_path)
+vim.pack.add({'https://github.com/folke/lazy.nvim'})
 
 local ViewConfig = require('lazy.view.config')
 ViewConfig.keys.profile_filter = '<M-f>'

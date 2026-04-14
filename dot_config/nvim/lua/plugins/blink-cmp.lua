@@ -3,12 +3,6 @@ local M = {
   event = 'VeryLazy',
   -- dev = true,
 
-  -- use LuaSnip until nvim allows disabling default tab/s-tab keymaps for native snippets
-  dependencies = {
-    'L3MON4D3/LuaSnip',
-    version = 'v2.*',
-  },
-
   version = '1.*',
   -- build = 'cargo build --release',
 }
@@ -52,9 +46,6 @@ M.opts = {
         async = true,
       },
     },
-  },
-  snippets = {
-    preset = 'luasnip',
   },
   appearance = {
     use_nvim_cmp_as_default = true,
