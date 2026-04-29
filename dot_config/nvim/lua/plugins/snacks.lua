@@ -10,26 +10,9 @@ M.keys = {
 }
 
 if not require('globals').fzflua then
-  local function search()
-    Snacks.picker.grep({ hidden = true })
-
-    -- Snacks.input({
-    --   prompt = 'Grep For',
-    --   win = {
-    --     relative = 'editor',
-    --     row = -2,
-    --     col = false -- false so it merges to a falsey value
-    --   }
-    -- }, function(input)
-    --   if input and input ~= '' then
-    --     Snacks.picker.grep({ live = false, search = input })
-    --   end
-    -- end)
-  end
-
   vim.list_extend(M.keys, {
     -- pickers
-    { '<leader>s',   search, { desc = 'grep' } },
+    { '<leader>s',   function() Snacks.picker.grep({ hidden = true }) end, { desc = 'grep' } },
     { '<leader>ag',  function() Snacks.picker.grep_word() end, mode = { 'n', 'x' } },
     { '<leader>rg',  function() Snacks.picker.grep() end },
 
@@ -66,11 +49,6 @@ M.opts.styles = {
     row = -3,
     col = 0,
   },
-}
-
-M.opts.notifier = {
-  margin = { bottom = 1 },
-  top_down = false,
 }
 
 M.opts.dashboard = {

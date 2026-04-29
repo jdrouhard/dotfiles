@@ -39,11 +39,7 @@ function M.config()
 
   lsp.log.set_level('OFF')
 
-  local use_float_progress = false
-  status.setup(not use_float_progress)
-  if use_float_progress then
-    require('plugins.lsp.float_progress').setup()
-  end
+  status.setup()
 
   local function on_attach(client, bufnr)
     local au_group = api.nvim_create_augroup('lsp_aucmds:' .. bufnr, {})

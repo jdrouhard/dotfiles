@@ -91,8 +91,15 @@ local function update_progress(progress_event)
       vim.defer_fn(function()
         state[token] = nil
         invalidate_progress()
-      end, 3000)
+      end, 1000)
     end
+
+    api.nvim_exec_autocmds('Progress', {
+      data = {
+        status = value.kind ~= 'end' and 'running' or 'success',
+        percent = value.percentage,
+      },
+    })
   elseif type(value) == 'string' then
     state.contents = value
   end
@@ -267,7 +274,7 @@ function M.statusline(bufnr)
   return msgs
 end
 
-function M.setup(enable_progress)
+function M.setup()
   local au_group = api.nvim_create_augroup('lsp_status.aucmds', {})
 
   api.nvim_create_autocmd('LspDetach', {
@@ -294,13 +301,11 @@ function M.setup(enable_progress)
     desc = 'lsp_status.update_request',
   })
 
-  if enable_progress then
-    api.nvim_create_autocmd('LspProgress', {
-      group = au_group,
-      callback = function(ev) update_progress(ev) end,
-      desc = 'lsp_status.update_progress',
-    })
-  end
+  api.nvim_create_autocmd('LspProgress', {
+    group = au_group,
+    callback = function(ev) update_progress(ev) end,
+    desc = 'lsp_status.update_progress',
+  })
 end
 
 return M
