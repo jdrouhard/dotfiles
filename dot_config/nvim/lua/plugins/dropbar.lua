@@ -41,6 +41,12 @@ function M.config(_, opts)
         'User', -- for fugitive buffers
       },
       update_events = {
+        buf = {
+          'OptionSet',
+          'FileChangedShellPost',
+          'TextChanged',
+          'ModeChanged',
+        },
         win = {
           'CursorHold',
           'WinEnter',

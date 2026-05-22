@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd('User', {
     if vim.env.TMUX then
       ---@param content string
       ---@return string
-      local function wrap_tmux(content) return string.format('\27Ptmux;\27%s\27\\', content) end
+      local function wrap_tmux(content) return string.format('\27Ptmux;%s\27\\', content:gsub('\27', '\27\27')) end
 
       local api = vim.api
       local original_ui_send = api.nvim_ui_send
